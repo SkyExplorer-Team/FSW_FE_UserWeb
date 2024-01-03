@@ -24,6 +24,9 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
+        <div style={{ width: '100%', height: '100%', padding: 18, background: '#D0D5DD', borderRadius: 14, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 12, display: 'inline-flex' }}>
+          <div style={{ alignSelf: 'stretch', textAlign: 'center', color: 'white', fontSize: 18, fontFamily: 'Plus Jakarta Sans', fontWeight: '700', lineHeight: 28, wordWrap: 'break-word' }}>Sign In</div>
+        </div>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
