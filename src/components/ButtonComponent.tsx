@@ -1,11 +1,5 @@
 import React from "react";
 import { Button } from "antd";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { ButtonProps } from "antd/lib/button";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { GoogleOutlined } from "@ant-design/icons";
-import "antd/dist/antd.css";
-import "./ButtonComponent.css";
 
 interface ButtonComponentProps {
   type: "primary" | "text" | "link" | "default" | "dashed" | "disabled";
