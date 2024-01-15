@@ -13,16 +13,22 @@ export interface PersonalFormData {
 
 export interface ContactFormData {
   email: string;
+  cellphone: string; // Added cellphone field
 }
 
 export interface VerificationFormData {
   verificationCode: string;
 }
 
+export interface PasswordFormData {
+  password: string;
+  confirmPassword: string;
+}
+
 export const personalDataAtom = atom<PersonalFormData>({
   key: "personalData",
   default: {
-    salutation: "", // Set default value as needed
+    salutation: "",
     firstMiddleName: "",
     noFirstMiddleName: false,
     lastName: "",
@@ -33,10 +39,15 @@ export const personalDataAtom = atom<PersonalFormData>({
 
 export const contactDataAtom = atom<ContactFormData>({
   key: "contactData",
-  default: { email: "" },
+  default: { email: "", cellphone: "" }, // Added default value for cellphone
 });
 
 export const verificationDataAtom = atom<VerificationFormData>({
   key: "verificationData",
   default: { verificationCode: "" },
+});
+
+export const passwordDataAtom = atom<PasswordFormData>({
+  key: "passwordData",
+  default: { password: "", confirmPassword: "" },
 });

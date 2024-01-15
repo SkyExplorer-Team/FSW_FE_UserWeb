@@ -1,3 +1,4 @@
+// src/pages/signup/SignUpPage.tsx
 import React, { useState, useEffect, useCallback } from "react";
 import {
   Steps,
@@ -57,12 +58,11 @@ const SignUpPage: React.FC = () => {
   // Add the following line to create a form instance
   const [form] = Form.useForm();
   const [isFieldsFilled, setIsFieldsFilled] = useState<boolean>(false);
+  const [verificationState, setVerificationState] = useState<boolean>(false);
 
   const handleNext = async () => {
     if (currentStep === 2) {
-      const generatedCode = Math.floor(1000 + Math.random() * 9000).toString();
-      setVerificationCode(generatedCode);
-      startCounter();
+      setVerificationState(true);
     } else {
       try {
         await form.validateFields();
@@ -263,10 +263,11 @@ const SignUpPage: React.FC = () => {
           </div>
         ) : (
           <div className="w-full md:max-w-2xl">
-            <Steps current={currentStep}>
+            <Steps current={verificationState ? 3 : currentStep}>
               <Step title="Personal" />
               <Step title="Contact" />
               <Step title="Check" />
+              <Step title="Verification" />
             </Steps>
             {currentStep === 0 && (
               <div>
@@ -447,6 +448,33 @@ const SignUpPage: React.FC = () => {
               </div>
             )}
             {currentStep === 2 && (
+              <div>
+                {/* ambil form dari step 0 dan 1 */}
+                {/* dummy form */}
+                <Text>First & Middle Name: {personalData.firstMiddleName}</Text>
+                <Text>Last Name: {personalData.lastName}</Text>
+                <Text>
+                  Date of Birth: {personalData.dob.format("YYYY-MM-DD")}
+                </Text>
+                <Text>Email: {contactData.email}</Text>
+                <Form
+                  onFinish={() => setVerificationState(true)}
+                  layout="vertical"
+                >
+                  {/* ... (your existing verification form fields) */}
+                  <Form.Item>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      disabled={!isFieldsFilled}
+                    >
+                      Next
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </div>
+            )}
+            {verificationState && (
               <div>
                 {/* ambil form dari step 0 dan 1 */}
                 {/* dummy form */}
