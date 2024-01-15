@@ -23,6 +23,7 @@ import {
   ContactFormData,
   PersonalFormData,
 } from "../../atoms/SignUpAtoms";
+import moment, { Moment } from "moment";
 
 const { Step } = Steps;
 const { Text } = Typography;
@@ -395,14 +396,34 @@ const SignUpPage: React.FC = () => {
                   <Form.Item
                     label="Date of Birth"
                     name="dob"
+                    validateTrigger={["onChange", "onBlur"]}
                     rules={[
                       {
                         required: true,
                         message: "Please select date of birth",
                       },
+                      {
+                        validator: (_, value: Moment) => {
+                          const selectedDate = value;
+                          const today = moment().startOf("day");
+                          if (
+                            selectedDate.isAfter(today) ||
+                            selectedDate.isSame(today)
+                          ) {
+                            return Promise.reject(
+                              "Please select a valid date of birth"
+                            );
+                          }
+                          return Promise.resolve();
+                        },
+                      },
                     ]}
                   >
-                    <DatePicker />
+                    <DatePicker
+                      disabledDate={(currentDate) =>
+                        currentDate && currentDate >= moment().endOf("day")
+                      }
+                    />
                   </Form.Item>
 
                   <Form.Item>
