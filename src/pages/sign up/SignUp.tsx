@@ -74,6 +74,16 @@ const SignUpPage: React.FC = () => {
     }
   };
 
+  const handleStepClick = (step: number) => {
+    if (step < currentStep && isFieldsFilled) {
+      setCurrentStep(step);
+    }
+  };
+
+  const isStepClickable = (step: number) => {
+    return step < currentStep && isFieldsFilled;
+  };
+
   const handleContinueWithGoogle = () => {
     console.log("Continue with Google clicked");
     // Implement Google authentication logic here
@@ -181,7 +191,7 @@ const SignUpPage: React.FC = () => {
     };
 
     checkFields();
-  }, [form, currentStep]);
+  }, [form, currentStep, setIsFieldsFilled]);
 
   return (
     <div className="flex flex-col md:flex-row">
@@ -265,10 +275,26 @@ const SignUpPage: React.FC = () => {
         ) : (
           <div className="w-full md:max-w-2xl">
             <Steps current={verificationState ? 3 : currentStep}>
-              <Step title="Personal" />
-              <Step title="Contact" />
-              <Step title="Check" />
-              <Step title="Verification" />
+              <Step
+                title="Personal"
+                onClick={() => handleStepClick(0)}
+                disabled={!isStepClickable(0)}
+              />
+              <Step
+                title="Contact"
+                onClick={() => handleStepClick(1)}
+                disabled={!isStepClickable(1)}
+              />
+              <Step
+                title="Check"
+                onClick={() => handleStepClick(2)}
+                disabled={!isStepClickable(2)}
+              />
+              <Step
+                title="Verification"
+                onClick={() => handleStepClick(3)}
+                disabled={!isStepClickable(3)}
+              />
             </Steps>
             {currentStep === 0 && (
               <div>
@@ -450,10 +476,13 @@ const SignUpPage: React.FC = () => {
                         required: true,
                         message: "Please enter your phone number",
                       },
-                      // You can add additional validation rules for the phone number
                     ]}
                   >
-                    <Input.Group compact>
+                    <Input.Group
+                      compact
+                      style={{ display: "flex", gap: "8px" }}
+                    >
+                      {" "}
                       {/* Select for Country Code */}
                       <Form.Item
                         name={["phoneNumber", "countryCode"]}
@@ -471,10 +500,13 @@ const SignUpPage: React.FC = () => {
                           {/* Add more country codes as needed */}
                         </Select>
                       </Form.Item>
-
                       {/* Input for Phone Number */}
-                      <Form.Item name={["phoneNumber", "number"]} noStyle>
-                        <Input style={{ width: "75%" }} />
+                      <Form.Item
+                        name={["phoneNumber", "number"]}
+                        noStyle
+                        style={{ flex: 1 }}
+                      >
+                        <Input />
                       </Form.Item>
                     </Input.Group>
                   </Form.Item>
@@ -533,7 +565,6 @@ const SignUpPage: React.FC = () => {
             )}
             {verificationState && (
               <div>
-                {/* ambil form dari step 0 dan 1 */}
                 {/* dummy form */}
                 <Text>Enter the verification code we send you on </Text>
                 <Form onFinish={onVerificationFormFinish} layout="vertical">
