@@ -421,7 +421,43 @@ const SignUpPage: React.FC = () => {
               <div>
                 {/* dummy form */}
                 <Form onFinish={onContactFormFinish} layout="vertical">
-                  {/* tambah nomor hp */}
+                  <Form.Item
+                    label="Phone Number"
+                    name="phoneNumber"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please enter your phone number",
+                      },
+                      // You can add additional validation rules for the phone number
+                    ]}
+                  >
+                    <Input.Group compact>
+                      {/* Select for Country Code */}
+                      <Form.Item
+                        name={["phoneNumber", "countryCode"]}
+                        noStyle
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select country code",
+                          },
+                        ]}
+                      >
+                        <Select style={{ width: "25%" }}>
+                          {/* Add your country code options here */}
+                          <Option value="+62">+62</Option>
+                          {/* Add more country codes as needed */}
+                        </Select>
+                      </Form.Item>
+
+                      {/* Input for Phone Number */}
+                      <Form.Item name={["phoneNumber", "number"]} noStyle>
+                        <Input style={{ width: "75%" }} />
+                      </Form.Item>
+                    </Input.Group>
+                  </Form.Item>
+
                   <Form.Item
                     label="Email"
                     name="email"

@@ -13,7 +13,10 @@ export interface PersonalFormData {
 
 export interface ContactFormData {
   email: string;
-  cellphone: string; // Added cellphone field
+  phoneNumber: {
+    countryCode: string;
+    number: string;
+  };
 }
 
 export interface VerificationFormData {
@@ -39,7 +42,7 @@ export const personalDataAtom = atom<PersonalFormData>({
 
 export const contactDataAtom = atom<ContactFormData>({
   key: "contactData",
-  default: { email: "", cellphone: "" }, // Added default value for cellphone
+  default: { email: "", phoneNumber: { countryCode: "", number: "" } },
 });
 
 export const verificationDataAtom = atom<VerificationFormData>({
