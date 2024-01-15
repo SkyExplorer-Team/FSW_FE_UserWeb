@@ -12,6 +12,8 @@ import {
   DatePicker,
   Radio,
   RadioChangeEvent,
+  Col,
+  Row,
 } from "antd";
 import { GoogleOutlined } from "@ant-design/icons";
 import { useRecoilState } from "recoil";
@@ -33,7 +35,15 @@ const { Option } = Select;
 const nationalityOptions = [
   { flag: "🇺🇸", name: "United States", value: "US" },
   { flag: "🇬🇧", name: "United Kingdom", value: "UK" },
-  // Add more nationality options here
+  { flag: "🇨🇦", name: "Canada", value: "CA" },
+  { flag: "🇦🇺", name: "Australia", value: "AU" },
+  { flag: "🇩🇪", name: "Germany", value: "DE" },
+  { flag: "🇫🇷", name: "France", value: "FR" },
+  { flag: "🇯🇵", name: "Japan", value: "JP" },
+  { flag: "🇮🇳", name: "India", value: "IN" },
+  { flag: "🇧🇷", name: "Brazil", value: "BR" },
+  { flag: "🇮🇩", name: "Indonesia", value: "ID" },
+  // Add more nationality options as needed
 ];
 
 const SignUpPage: React.FC = () => {
@@ -384,39 +394,46 @@ const SignUpPage: React.FC = () => {
 
                   {/* Nationality Modal */}
                   <Modal
-                    title="Select Nationality"
+                    title="Select your nationality"
                     open={isNationalityModalVisible}
                     footer={null}
                     onCancel={() => setNationalityModalVisible(false)}
                     centered
                   >
-                    <Radio.Group
-                      onChange={(e: RadioChangeEvent) => {
-                        const selectedValue = e.target.value;
-                        const selectedOption = nationalityOptions.find(
-                          (option) => option.value === selectedValue
-                        );
-                        setSelectedNationality(selectedOption || null);
-                        setNationalityModalVisible(false);
-                        form.setFieldsValue({ nationality: selectedValue });
-                      }}
-                      value={
-                        selectedNationality ? selectedNationality.value : ""
-                      }
-                    >
-                      {nationalityOptions.map((option) => (
-                        <Radio key={option.value} value={option.value}>
-                          <span
-                            role="img"
-                            aria-label="flag"
-                            style={{ marginRight: "8px" }}
-                          >
-                            {option.flag}
-                          </span>{" "}
-                          {option.name}
-                        </Radio>
-                      ))}
-                    </Radio.Group>
+                    <div>
+                      <Text>
+                        Please select your nationality from the options below
+                        for the personal information.
+                      </Text>
+                      <Radio.Group
+                        onChange={(e: RadioChangeEvent) => {
+                          const selectedValue = e.target.value;
+                          const selectedOption = nationalityOptions.find(
+                            (option) => option.value === selectedValue
+                          );
+                          setSelectedNationality(selectedOption || null);
+                          setNationalityModalVisible(false);
+                          form.setFieldsValue({ nationality: selectedValue });
+                        }}
+                        value={
+                          selectedNationality ? selectedNationality.value : ""
+                        }
+                        style={{ display: "flex", flexDirection: "column" }}
+                      >
+                        {nationalityOptions.map((option) => (
+                          <Radio key={option.value} value={option.value}>
+                            <span
+                              role="img"
+                              aria-label="flag"
+                              style={{ marginRight: "8px" }}
+                            >
+                              {option.flag}
+                            </span>{" "}
+                            {option.name}
+                          </Radio>
+                        ))}
+                      </Radio.Group>
+                    </div>
                   </Modal>
 
                   <Form.Item
