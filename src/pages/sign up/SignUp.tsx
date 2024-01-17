@@ -335,6 +335,11 @@ const SignUpPage: React.FC = () => {
                         required: !isNoFirstMiddleNameChecked,
                         message: "Please enter first & middle name",
                       },
+                      {
+                        pattern: /^[A-Za-z\s]+$/, // Only allow alphabets and spaces
+                        message:
+                          "Please enter a valid name with alphabets only",
+                      },
                     ]}
                   >
                     <Input disabled={isNoFirstMiddleNameChecked} />
@@ -373,6 +378,11 @@ const SignUpPage: React.FC = () => {
                     name="lastName"
                     rules={[
                       { required: true, message: "Please enter last name" },
+                      {
+                        pattern: /^[A-Za-z\s]+$/, // Only allow alphabets and spaces
+                        message:
+                          "Please enter a valid last name with alphabets only",
+                      },
                     ]}
                   >
                     <Input />
