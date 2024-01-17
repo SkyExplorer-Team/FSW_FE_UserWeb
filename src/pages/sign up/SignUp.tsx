@@ -493,13 +493,28 @@ const SignUpPage: React.FC = () => {
                         required: true,
                         message: "Please enter your phone number",
                       },
+                      {
+                        validator: (_, value) => {
+                          // Validate phone number length and format
+                          const isValidPhoneNumber =
+                            /^\d{8,}$/.test(value?.number) &&
+                            /^\d{1,}$/.test(value?.countryCode);
+
+                          if (!isValidPhoneNumber) {
+                            return Promise.reject(
+                              "Invalid phone number. Please enter a valid phone number with at least 8 digits."
+                            );
+                          }
+
+                          return Promise.resolve();
+                        },
+                      },
                     ]}
                   >
                     <Input.Group
                       compact
                       style={{ display: "flex", gap: "8px" }}
                     >
-                      {" "}
                       {/* Select for Country Code */}
                       <Form.Item
                         name={["phoneNumber", "countryCode"]}
@@ -511,7 +526,7 @@ const SignUpPage: React.FC = () => {
                           },
                         ]}
                       >
-                        <Select style={{ width: "25%" }}>
+                        <Select style={{ width: "25%" }} showArrow={false}>
                           {/* Add your country code options here */}
                           <Option value="+62">+62</Option>
                           {/* Add more country codes as needed */}
