@@ -12,8 +12,6 @@ import {
   DatePicker,
   Radio,
   RadioChangeEvent,
-  Col,
-  Row,
 } from "antd";
 import { GoogleOutlined } from "@ant-design/icons";
 import { useRecoilState } from "recoil";
@@ -63,6 +61,7 @@ const SignUpPage: React.FC = () => {
 
   const [personalData, setPersonalData] = useRecoilState(personalDataAtom);
   const [contactData, setContactData] = useRecoilState(contactDataAtom);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [verificationData, setVerificationData] =
     useRecoilState(verificationDataAtom);
 
@@ -71,7 +70,7 @@ const SignUpPage: React.FC = () => {
   const [isFieldsFilled, setIsFieldsFilled] = useState<boolean>(false);
   const [verificationState, setVerificationState] = useState<boolean>(false);
 
-  const handleNext = async () => {
+  const handleNext = useCallback(async () => {
     if (currentStep === 2) {
       setVerificationState(true);
     } else {
@@ -82,7 +81,7 @@ const SignUpPage: React.FC = () => {
         console.error("Validation error:", error);
       }
     }
-  };
+  }, [currentStep, form, setVerificationState, setCurrentStep]);
 
   const handleStepClick = (step: number) => {
     if (step < currentStep && isFieldsFilled) {
@@ -132,11 +131,11 @@ const SignUpPage: React.FC = () => {
     handleNext();
   };
 
-  const handleSelectedNationality = (
-    value: string | { flag: string; name: string; value: string } | null
-  ) => {
-    setSelectedNationality(value);
-  };
+  // const handleSelectedNationality = (
+  //   value: string | { flag: string; name: string; value: string } | null
+  // ) => {
+  //   setSelectedNationality(value);
+  // };
 
   const onContactFormFinish = (values: ContactFormData) => {
     console.log("Contact Form values:", values);
@@ -155,18 +154,18 @@ const SignUpPage: React.FC = () => {
     }
   };
 
-  const showNationalityModal = () => {
-    setNationalityModalVisible(true);
-  };
+  // const showNationalityModal = () => {
+  //   setNationalityModalVisible(true);
+  // };
 
-  const handleNationalityChange = (value: string) => {
-    const selectedOption = nationalityOptions.find(
-      (option) => option.value === value
-    );
-    setSelectedNationality(selectedOption || null);
-    setNationalityModalVisible(false);
-    form.setFieldsValue({ nationality: value });
-  };
+  // const handleNationalityChange = (value: string) => {
+  //   const selectedOption = nationalityOptions.find(
+  //     (option) => option.value === value
+  //   );
+  //   setSelectedNationality(selectedOption || null);
+  //   setNationalityModalVisible(false);
+  //   form.setFieldsValue({ nationality: value });
+  // };
 
   const startCounter = useCallback(() => {
     const intervalId = setInterval(() => {
@@ -350,22 +349,23 @@ const SignUpPage: React.FC = () => {
                       onChange={(e) => {
                         setIsNoFirstMiddleNameChecked(e.target.checked);
 
-                        // Update validation rules for First & Middle Name
-                        const rules = e.target.checked
-                          ? []
-                          : [
-                              {
-                                required: true,
-                                message: "Please enter first & middle name",
-                              },
-                            ];
+                        // Get the current form fields to update rules dynamically
+                        const fields = form.getFieldsValue();
 
-                        form.setFields([
-                          {
-                            name: "firstMiddleName",
-                            rules,
+                        // Update validation rules for First & Middle Name
+                        form.setFields({
+                          ...fields, // Preserve existing field values
+                          firstMiddleName: {
+                            rules: e.target.checked
+                              ? []
+                              : [
+                                  {
+                                    required: true,
+                                    message: "Please enter first & middle name",
+                                  },
+                                ],
                           },
-                        ]);
+                        });
                       }}
                     >
                       This passenger doesn’t have a first & middle name in the
@@ -418,16 +418,11 @@ const SignUpPage: React.FC = () => {
                       <Radio.Group
                         onChange={(e: RadioChangeEvent) => {
                           const selectedValue = e.target.value;
-                          const selectedOption = nationalityOptions.find(
-                            (option) => option.value === selectedValue
-                          );
-                          setSelectedNationality(selectedOption || null);
+                          setSelectedNationality(selectedValue); // Only set the value, not the object
                           setNationalityModalVisible(false);
-                          form.setFieldsValue({ nationality: selectedValue });
+                          form.setFieldsValue({ nationality: selectedValue }); // Update form field
                         }}
-                        value={
-                          selectedNationality ? selectedNationality.value : ""
-                        }
+                        value={selectedNationality} // Use the selected value directly
                         style={{ display: "flex", flexDirection: "column" }}
                       >
                         {nationalityOptions.map((option) => (
