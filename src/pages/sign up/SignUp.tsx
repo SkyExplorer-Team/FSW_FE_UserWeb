@@ -76,6 +76,7 @@ const SignUpPage: React.FC = () => {
     } else {
       try {
         await form.validateFields();
+        console.log("Validation successful. Moving to the next step.");
         setCurrentStep((prevStep) => prevStep + 1);
       } catch (error) {
         console.error("Validation error:", error);
@@ -501,9 +502,9 @@ const SignUpPage: React.FC = () => {
                       {
                         validator: (_, value) => {
                           // Validate phone number length and format
-                          const isValidPhoneNumber =
-                            /^\d{8,}$/.test(value?.number) &&
-                            /^\d{1,}$/.test(value?.countryCode);
+                          const isValidPhoneNumber = /^\d{8,}$/.test(
+                            value?.number
+                          );
 
                           if (!isValidPhoneNumber) {
                             return Promise.reject(
@@ -515,6 +516,7 @@ const SignUpPage: React.FC = () => {
                         },
                       },
                     ]}
+                    validateTrigger={["onBlur"]} // Added validation trigger
                   >
                     <Input.Group
                       compact
