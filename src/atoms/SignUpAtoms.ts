@@ -19,9 +19,9 @@ export interface ContactFormData {
   };
 }
 
-export interface VerificationFormData {
-  verificationCode: string;
-}
+// export interface VerificationFormData {
+//   verificationCode: string;
+// }
 
 export interface PasswordFormData {
   password: string;
@@ -45,10 +45,10 @@ export const contactDataAtom = atom<ContactFormData>({
   default: { email: "", phoneNumber: { countryCode: "", number: "" } },
 });
 
-export const verificationDataAtom = atom<VerificationFormData>({
-  key: "verificationData",
-  default: { verificationCode: "" },
-});
+// export const verificationDataAtom = atom<VerificationFormData>({
+//   key: "verificationData",
+//   default: { verificationCode: "" },
+// });
 
 export const passwordDataAtom = atom<PasswordFormData>({
   key: "passwordData",
