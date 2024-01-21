@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Logo from "../components/Logo";
-import { ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Menu, Radio, RadioChangeEvent, Select, Space } from "antd";
+import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Menu, Radio, RadioChangeEvent, Select, Space } from "antd";
 import { MenuProps } from "antd/lib";
-import { DownOutlined, TeamOutlined, DollarOutlined } from '@ant-design/icons';
+import { DownOutlined, TeamOutlined, DollarOutlined, SwapOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -91,11 +91,11 @@ const Index: React.FC = () => {
                 </Header>
                 <Content>
                     <div>
-
+                        {/* div infront */}
                         <div className="relative">
                             <img className="w-full" src="src/assets/Illustration.svg" ></img>
                             <div className="absolute bottom left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
-                                <div className=" p-6 bg-white rounded-[20px] shadow border border-gray-200 flex-col justify-center items-start gap-6 inline-flex">
+                                <div className=" p-6 w-[1080px] bg-white rounded-[20px] shadow border border-gray-200 flex-col justify-center items-start gap-6 inline-flex">
                                     <div className="self-stretch justify-start items-center gap-6 inline-flex">
                                         <div className="justify-start items-start gap-9 flex">
                                             <Radio.Group buttonStyle="outline" size="large" className="text-[#38A993]" defaultValue={trip} onChange={onChange}>
@@ -130,17 +130,10 @@ const Index: React.FC = () => {
                                                 </a>
                                             </Dropdown>
                                         </div>
-                                        <div className="justify-start items-center ">
-                                            <div className="w-6 h-6 relative"></div>
-                                            <div className="w-6 h-6 justify-center items-center flex">
-                                                <div className="w-6 h-6 relative">
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div className="self-stretch justify-start items-center gap-6 inline-flex">
-                                        <div className="grow shrink basis-0 h-[60px] justify-start items-center gap-6 flex">
-                                            <div className="h-[60px] justify-center items-center gap-6 flex">
+                                        <div className="grow shrink basis-0 justify-start items-center gap-6 flex">
+                                            <div className="justify-center items-center gap-6 flex">
                                                 <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
                                                     <div className="px-2 bg-white justify-start items-start gap-2.5 inline-flex">
                                                         <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">From</div>
@@ -182,12 +175,7 @@ const Index: React.FC = () => {
 
                                                     </div>
                                                 </div>
-                                                <div className="p-3 bg-emerald-400 rounded-full flex-col justify-center items-center gap-3 inline-flex">
-                                                    <div className="w-[19px] h-[19px] justify-center items-center inline-flex">
-                                                        <div className="w-[19px] h-[19px] relative">
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <Button type="primary" style={{ backgroundColor: "#38A993" }} shape="circle" icon={<SwapOutlined />} size="large" />
                                                 <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
                                                     <div className="px-2 bg-white justify-start items-start gap-2.5 inline-flex">
                                                         <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">To</div>
@@ -228,7 +216,7 @@ const Index: React.FC = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="grow shrink basis-0 h-[60px] justify-start items-center gap-6 flex">
+                                            <div className="grow shrink basis-0 justify-start items-center gap-6 flex">
                                                 <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
                                                     <div className="px-2 bg-white justify-start items-start gap-2.5 inline-flex">
                                                         <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Departure Date</div>
@@ -236,7 +224,8 @@ const Index: React.FC = () => {
 
                                                     <div className="self-stretch px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center gap-3 inline-flex">
 
-                                                        <DatePicker className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal" bordered={false} format={customFormat} />
+
+                                                        <DatePicker style={{ width: "100%" }} className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal" bordered={false} format={customFormat} />
 
                                                     </div>
                                                 </div>
@@ -250,41 +239,43 @@ const Index: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="h-20"></div>
-                    <div className="">
-                        <div className="snap-center self-center justify-center content-center text-center items-center">
-                            <div className="w-full h-[441px] px-48 py-16 border-b border-gray-100 justify-between items-center inline-flex">
-                                <div className="flex-col justify-start items-center gap-[25px] inline-flex">
-                                    <div className="w-[275px] h-[193px] relative bg-gradient-to-b from-emerald-100 to-white rounded-2xl border border-gray-100">
-                                        <div className="h-14 left-[27px] top-[93px] absolute rounded-xl"></div>
-                                        <div className="w-[236.49px] h-[145px] left-[19.50px] top-[24px] absolute">
-                                        </div>
-                                    </div>
-                                    <div className="flex-col justify-center items-center gap-4 flex">
-                                        <div className="text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Find Your Journey in a Flash</div>
-                                        <div className="w-[390px] text-center text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Discover flights that suit your plans. Start your adventure with a simple search.</div>
-                                    </div>
-                                </div>
-                                <div className="flex-col justify-start items-center gap-[27px] inline-flex">
-                                    <div className="w-[275px] h-[193px] pl-[22.61px] pr-[23px] pt-[7px] pb-1.5 bg-gradient-to-b from-emerald-100 to-white rounded-2xl border border-gray-100 justify-center items-center inline-flex">
-                                    </div>
-                                    <div className="flex-col justify-center items-center gap-4 flex">
-                                        <div className="text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Tailor Your Journey, Your Way</div>
-                                        <div className="w-[390px] text-center text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Make it uniquely yours. Add details, select seats, and choose your in-flight delights.</div>
-                                    </div>
-                                </div>
-                                <div className="flex-col justify-start items-center gap-7 inline-flex">
-                                    <div className="w-[275px] h-[193px] relative bg-gradient-to-b from-emerald-100 to-white rounded-2xl border border-gray-100">
+                    <div className="h-32"></div>
+                    <div className=" text-center ">
+                        <div className="border-b border-gray-100 justify-between items-center inline-flex">
+                            <div className="flex-col justify-start items-center gap-[25px] inline-flex">
+                                <div className="relative bg-gradient-to-b from-emerald-100 to-white rounded-2xl border border-gray-100">
+                                    <img className="p-4" src="src/assets/search_1.svg">
+                                    </img>
 
-                                    </div>
-                                    <div className="flex-col justify-center items-center gap-4 flex">
-                                        <div className="text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Smooth Boarding Awaits You</div>
-                                        <div className="w-[390px] text-center text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Ready for takeoff? Board with confidence using your digital boarding pass.</div>
-                                    </div>
+                                </div>
+                                <div className="flex-col justify-center items-center gap-4 flex">
+                                    <div className="text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Find Your Journey in a Flash</div>
+                                    <div className="w-[390px] text-center text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Discover flights that suit your plans. Start your adventure with a simple search.</div>
+                                </div>
+                            </div>
+                            <div className="flex-col justify-start items-center gap-[27px] inline-flex">
+                                <div className="relative bg-gradient-to-b from-emerald-100 to-white rounded-2xl border border-gray-100">
+                                    <img className="px-4" src="src/assets/take.svg">
+                                    </img>
+
+                                </div>
+                                <div className="flex-col justify-center items-center gap-4 flex">
+                                    <div className="text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Tailor Your Journey, Your Way</div>
+                                    <div className="w-[390px] text-center text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Make it uniquely yours. Add details, select seats, and choose your in-flight delights.</div>
+                                </div>
+                            </div>
+                            <div className="flex-col justify-start items-center gap-7 inline-flex">
+                                <div className="relative bg-gradient-to-b from-emerald-100 to-white rounded-2xl border border-gray-100">
+                                    <img className="" src="src/assets/smooth.svg">
+                                    </img>
+
+                                </div>
+                                <div className="flex-col justify-center items-center gap-4 flex">
+                                    <div className="text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Smooth Boarding Awaits You</div>
+                                    <div className="w-[390px] text-center text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Ready for takeoff? Board with confidence using your digital boarding pass.</div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </Content>
                 <Footer>
