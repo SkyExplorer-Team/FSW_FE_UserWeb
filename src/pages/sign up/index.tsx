@@ -24,6 +24,8 @@ import {
   PersonalFormData,
 } from "../../atoms/SignUpAtoms";
 import moment, { Moment } from "moment";
+import Title from "antd/es/typography/Title";
+// import "./index.css";
 
 const { Step } = Steps;
 const { Text } = Typography;
@@ -579,6 +581,11 @@ const SignUpPage: React.FC = () => {
               <div>
                 {/* ambil form dari step 0 dan 1 */}
                 {/* dummy form */}
+                <Title>Double Check</Title>
+                <Text>
+                  Almost there! Ensure all your details are accurate before
+                  hitting the submit button.
+                </Text>
                 <Text>First & Middle Name: {personalData.firstMiddleName}</Text>
                 <Text>Last Name: {personalData.lastName}</Text>
                 <Text>

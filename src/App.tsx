@@ -2,7 +2,7 @@
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "/vite.svg";
 import React from "react";
-import SignUpPage from "./pages/sign up/SignUp";
+import SignUpPage from "./pages/sign up/index";
 import "./App.css";
 
 function App() {
