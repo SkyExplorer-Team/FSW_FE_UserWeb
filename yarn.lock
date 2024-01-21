@@ -1065,6 +1065,11 @@
   dependencies:
     "toggle-selection" "^1.0.6"
 
+"country-flag-icons@^1.5.9":
+  "integrity" "sha512-9jrjv2w7kRbqNtdtMdK2j3gmDIZzd5l9L2pZiQjF9J0mUcB+NKIGDNADTDHBEp8EQtjOkCOcciJGGSOpERdXPQ=="
+  "resolved" "https://registry.npmjs.org/country-flag-icons/-/country-flag-icons-1.5.9.tgz"
+  "version" "1.5.9"
+
 "cross-spawn@^7.0.0", "cross-spawn@^7.0.2":
   "integrity" "sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w=="
   "resolved" "https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.3.tgz"

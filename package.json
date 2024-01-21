@@ -13,6 +13,7 @@
     "@react-oauth/google": "^0.12.1",
     "antd": "^5.12.7",
     "autoprefixer": "^10.4.16",
+    "country-flag-icons": "^1.5.9",
     "postcss": "^8.4.33",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
