@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Logo from "../components/Logo";
-import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Menu, Radio, RadioChangeEvent, Select, Space } from "antd";
+import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Radio, RadioChangeEvent, Select, Space } from "antd";
 import { MenuProps } from "antd/lib";
 import { DownOutlined, TeamOutlined, DollarOutlined, SwapOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
@@ -62,30 +62,42 @@ const Index: React.FC = () => {
             }}
         >
             <Layout>
-                <Header style={{ display: 'flex', alignItems: 'center', backgroundColor: "transparent" }}>
-                    <div className="justify-start items-center gap-8 flex">
-                        <Logo></Logo>
-                        <div className="justify-start items-start gap-6 flex">
-                            <Menu>
+                <Header style={{
+                    top: 0, zIndex: 1, marginTop: "4px", marginBottom: "12px", position: 'sticky', display: 'flex', alignItems: 'center', backgroundColor: "white",
+                }}>
+                    <div className="justify-around flex w-full">
 
-                            </Menu>
-                            <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Explore</div>
-                            <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Status</div>
-                            <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Cabin</div>
-                            <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Baggage</div>
-                        </div>
-                    </div>
-                    <div className="justify-start items-center gap-8 flex">
-                        <div className="justify-start items-center gap-4 flex">
-                            <div className="shadow flex-col justify-start items-start inline-flex">
-                                <div className="flex-col justify-start items-start flex">
-                                    <div className="w-6 h-[17.45px] relative bg-white rounded-sm"></div>
-                                </div>
+                        <div className="justify-start items-center gap-8 flex">
+                            <Logo></Logo>
+                            <div className="justify-start items-start gap-6 flex">
+                                <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Explore</div>
+                                <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Status</div>
+                                <Dropdown className="flex text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7" menu={{ items }}>
+                                    <a onClick={(e) => e.preventDefault()}>
+                                        <div className="pr-2">Cabin</div>
+                                        <DownOutlined />
+                                    </a>
+                                </Dropdown>
+                                <Dropdown className="flex text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7 " menu={{ items }}>
+                                    <a onClick={(e) => e.preventDefault()}>
+                                        <div className="pr-2">Baggage</div>
+                                        <DownOutlined />
+                                    </a>
+                                </Dropdown>
                             </div>
-                            <div className="text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">IDR</div>
                         </div>
-                        <div className="w-[183px] p-4 bg-emerald-400 rounded-xl flex-col justify-center items-center gap-3 inline-flex">
-                            <div className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal">Sign Up</div>
+                        <div className="gap-8 flex">
+                            <div className="justify-start items-center gap-4 flex">
+                                <div className="shadow flex-col justify-start items-start inline-flex">
+                                    <div className="flex-col justify-start items-start flex">
+                                        <div className="w-6 h-[17.45px] relative bg-white rounded-sm"></div>
+                                    </div>
+                                </div>
+                                <div className="text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">IDR</div>
+                            </div>
+                            <div className="w-[183px] p-4 bg-emerald-400 rounded-xl flex-col justify-center items-center gap-3 inline-flex">
+                                <div className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal">Sign Up</div>
+                            </div>
                         </div>
                     </div>
                 </Header>
@@ -277,13 +289,81 @@ const Index: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                </Content>
-                <Footer>
+                    <div className="h-20">
 
+                    </div>
+                </Content>
+                <Footer style={{
+                    padding: 0,
+                }} >
+                    <div className="w-full h-[321px] flex-col justify-center items-center inline-flex">
+                        <div className="w-full px-[51px] py-12 bg-white border-t border-gray-200 justify-between items-start inline-flex">
+                            <div className="h-[150px] flex-col justify-between items-start inline-flex">
+                                <div className="flex-col justify-center items-end gap-2 flex">
+                                    <Logo></Logo>
+                                    <div className="self-stretch text-center text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Navigate the Skies, Booking Made Easy </div>
+                                </div>
+                                <div className="self-stretch justify-start items-center gap-3 inline-flex">
+                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
+                                        <div className="w-5 h-5 relative"></div>
+                                    </div>
+                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
+                                        <div className="w-[18px] h-[18px] relative"></div>
+                                    </div>
+                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
+                                        <div className="w-5 h-5 relative"></div>
+                                    </div>
+                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
+                                        <div className="w-5 h-5 relative"></div>
+                                    </div>
+                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
+                                        <div className="w-5 h-5 relative">
+                                            <div className="w-[15.83px] h-[11.67px] left-[2.08px] top-[4.17px] absolute">
+                                                <div className="w-[15.83px] h-[11.67px] left-0 top-0 absolute">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="justify-start items-start gap-[90px] flex">
+                                <div className="flex-col justify-start items-start gap-3 inline-flex">
+                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Features</div>
+                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Sign Up / Sign In</div>
+                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Explore</div>
+                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Status</div>
+                                </div>
+                                <div className="flex-col justify-start items-start gap-3 inline-flex">
+                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Cabin</div>
+                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Economy</div>
+                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Business</div>
+                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">First</div>
+                                </div>
+                                <div className="flex-col justify-start items-start gap-3 inline-flex">
+                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Baggage</div>
+                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Checked Baggage</div>
+                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Cabin Baggage</div>
+                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Fare Types</div>
+                                </div>
+                                <div className="flex-col justify-start items-start gap-3 inline-flex">
+                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Resources</div>
+                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">About Us</div>
+                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">FAQs</div>
+                                </div>
+                                <div className="flex-col justify-start items-start gap-3 inline-flex">
+                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Company</div>
+                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Privacy Policy</div>
+                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Terms of Use</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="w-full h-[75px] pr-[51px] bg-emerald-400 justify-between items-center inline-flex">
+                            <div className="h-[94px] justify-end items-center gap-6 flex"></div>
+                            <div className="text-white text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">No Bull, Just Board!</div>
+                        </div>
+                    </div>
                 </Footer>
             </Layout>  </ConfigProvider>
-
-
     );
 };
 
