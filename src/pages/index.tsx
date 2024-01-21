@@ -187,7 +187,7 @@ const Index: React.FC = () => {
 
                                                     </div>
                                                 </div>
-                                                <Button type="primary" style={{ backgroundColor: "#38A993" }} shape="circle" icon={<SwapOutlined />} size="large" />
+                                                <Button className="" type="primary" style={{ backgroundColor: "#38A993" }} shape="circle" icon={<SwapOutlined />} size="large" />
                                                 <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
                                                     <div className="px-2 bg-white justify-start items-start gap-2.5 inline-flex">
                                                         <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">To</div>
@@ -289,8 +289,8 @@ const Index: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="h-20">
-
+                    <div className=" py-12 ">
+                        <img className="block mr-auto ml-auto" src="src/assets/download.svg" alt="" />
                     </div>
                 </Content>
                 <Footer style={{
