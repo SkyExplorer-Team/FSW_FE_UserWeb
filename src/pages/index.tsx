@@ -89,17 +89,17 @@ const Index: React.FC = () => {
                             </div>
                         </div>
                         <div className="gap-8 flex">
-                            <a className="snap-center self-center align-middle hover:text-[#38A993]">
-                            <div className="justify-start items-center gap-4 flex">
-                                <ReactCountryFlag
-                                countryCode="ID"
-                                svg
-                                />
-                                <div className="text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">IDR</div>
-                                <DownOutlined />
+                            <a className="snap-center self-center align-middle hover:text-[#38A993] text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                                <div className="justify-start items-center gap-4 flex">
+                                    <ReactCountryFlag
+                                    countryCode="ID"
+                                    svg
+                                    />
+                                    <div className="">IDR</div>
+                                    <DownOutlined />
 
-                            </div>
-                                </a>
+                                </div>
+                            </a>
                             <div className="w-[183px] p-4 bg-emerald-400 rounded-xl flex-col justify-center items-center gap-3 inline-flex">
                                 <div className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal">Sign Up</div>
                             </div>
@@ -129,7 +129,7 @@ const Index: React.FC = () => {
                                             </Radio.Group>
                                             <Divider type="vertical" className="h-6"></Divider>
                                             <Dropdown className="gap-4 flex" menu={{ items }}>
-                                                <a onClick={(e) => e.preventDefault()}>
+                                                <a className="hover:text-[#38A993]" onClick={(e) => e.preventDefault()}>
                                                     <Space>
                                                         <TeamOutlined style={{ fontSize: 24 }} />
                                                         <div className="text-base font-semibold font-['Plus Jakarta Sans'] leading-normal">1 Seats</div>
@@ -138,7 +138,7 @@ const Index: React.FC = () => {
                                                 </a>
                                             </Dropdown>
                                             <Dropdown className="gap-4 flex" menu={{ items }}>
-                                                <a onClick={(e) => e.preventDefault()}>
+                                                <a className="hover:text-[#38A993]" onClick={(e) => e.preventDefault()}>
                                                     <Space>
                                                         <DollarOutlined style={{ fontSize: 24 }} />
                                                         <div className="text-base font-semibold font-['Plus Jakarta Sans'] leading-normal">Economy</div>
