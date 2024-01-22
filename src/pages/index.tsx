@@ -5,6 +5,7 @@ import { MenuProps } from "antd/lib";
 import { DownOutlined, TeamOutlined, DollarOutlined, SwapOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import ReactCountryFlag from "react-country-flag"
 
 dayjs.extend(customParseFormat);
 
@@ -54,6 +55,7 @@ const Index: React.FC = () => {
                     // Seed Token
                     colorPrimary: "#38A993",
                     borderRadius: 2,
+                    colorPrimaryTextHover:"#38A993",
 
                     // Alias Token
                     colorBgContainer: '#f6ffed',
@@ -63,7 +65,7 @@ const Index: React.FC = () => {
         >
             <Layout>
                 <Header style={{
-                    top: 0, zIndex: 1, marginTop: "4px", marginBottom: "12px", position: 'sticky', display: 'flex', alignItems: 'center', backgroundColor: "white",
+                    top: 0, zIndex: 1, marginBottom: "12px",paddingTop:"4px",paddingBottom:"8px", position: 'sticky', display: 'flex', alignItems: 'center', backgroundColor: "white",
                 }}>
                     <div className="justify-around flex w-full">
 
@@ -72,13 +74,13 @@ const Index: React.FC = () => {
                             <div className="justify-start items-start gap-6 flex">
                                 <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Explore</div>
                                 <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Status</div>
-                                <Dropdown className="flex text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7" menu={{ items }}>
+                                <Dropdown className="flex hover:text-[#38A993] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7" menu={{ items }}>
                                     <a onClick={(e) => e.preventDefault()}>
                                         <div className="pr-2">Cabin</div>
                                         <DownOutlined />
                                     </a>
                                 </Dropdown>
-                                <Dropdown className="flex text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7 " menu={{ items }}>
+                                <Dropdown className="flex hover:text-[#38A993] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7 " menu={{ items }}>
                                     <a onClick={(e) => e.preventDefault()}>
                                         <div className="pr-2">Baggage</div>
                                         <DownOutlined />
@@ -87,14 +89,17 @@ const Index: React.FC = () => {
                             </div>
                         </div>
                         <div className="gap-8 flex">
+                            <a className="snap-center self-center align-middle hover:text-[#38A993]">
                             <div className="justify-start items-center gap-4 flex">
-                                <div className="shadow flex-col justify-start items-start inline-flex">
-                                    <div className="flex-col justify-start items-start flex">
-                                        <div className="w-6 h-[17.45px] relative bg-white rounded-sm"></div>
-                                    </div>
-                                </div>
+                                <ReactCountryFlag
+                                countryCode="ID"
+                                svg
+                                />
                                 <div className="text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">IDR</div>
+                                <DownOutlined />
+
                             </div>
+                                </a>
                             <div className="w-[183px] p-4 bg-emerald-400 rounded-xl flex-col justify-center items-center gap-3 inline-flex">
                                 <div className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal">Sign Up</div>
                             </div>
