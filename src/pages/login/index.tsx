@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { Button, Input, Modal, Typography } from "antd";
 import { GoogleOutlined } from "@ant-design/icons";
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { useNavigate } from "react-router-dom";
 
 const { Text } = Typography;
-
-
-// interface LoginFormData {
-//     email: string;
-//     password: string;
-// }
+const endpoint = "/api/user/";
+const target = "/login/"
+const api_base_url = "be-java-production.up.railway.app/https://be-java-production.up.railway.app"
 
 const SignIn: React.FC = () => {
+    const navigate = useNavigate();
+
     const [isOnboarding, setIsOnboarding] = useState<boolean>(true);
     const [termsVisible, setTermsVisible] = useState<boolean>(false);
     const [privacyVisible, setPrivacyVisible] = useState<boolean>(false);
@@ -27,13 +27,13 @@ const SignIn: React.FC = () => {
         console.log("password:", password);
 
     };
+    const handleSignUp = () => {
+        navigate("/signup")
+    };
+
     const handleTermsClick = () => {
         setTermsVisible(true);
     };
-
-    // const onContactFormFinish = (values: LoginFormData) => {
-    // };
-
 
     const handlePrivacyClick = () => {
         setPrivacyVisible(true);
@@ -44,9 +44,37 @@ const SignIn: React.FC = () => {
     };
 
 
-    const handleSignIn = () => {
+    const handleSignIn = async ()  =>  {
         console.log("Sign In clicked");
-        // Implement Sign In logic here
+
+        const payload= {
+            "email": email,
+            "password": password
+        }
+
+        const response = await fetch(
+            api_base_url + endpoint+target,
+            {
+              method: 'post',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+            }
+          );
+          const responseJson = await response.json();
+
+          if (response.status !== 200) {
+            alert('error: ' + responseJson.message);
+          }
+
+
+          localStorage.setItem(
+            'access_token',
+            responseJson.data.access_token
+          );
+
+          // If login succeed, redirect ke home
+          navigate('/dashboard');
+        console.log(response)
     };
 
     return (
@@ -95,7 +123,7 @@ const SignIn: React.FC = () => {
                                 Don't Have an Account?{" "}
                                 <a
                                     type="text"
-                                    onClick={handleSignIn}
+                                    onClick={handleSignUp}
                                     className="cursor-pointer font-medium text-primary mb-4 hover:text-primary-dark"
                                 >
                                     Sign Up
@@ -188,7 +216,7 @@ const SignIn: React.FC = () => {
                             </form>
                             <div className="h-8"></div>
                             <button
-                                onClick={handleContinueWithEmail}
+                                onClick={handleSignIn}
                                 type="submit"
                                 disabled={
                                     (email == "" || password == "")
