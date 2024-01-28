@@ -9,12 +9,13 @@ import {
   Select,
   DatePicker,
   Radio,
+  RadioChangeEvent,
   Checkbox,
   Card,
   Space,
   Alert,
 } from "antd";
-import { DownOutlined, EditOutlined } from "@ant-design/icons";
+import { GoogleOutlined, DownOutlined, EditOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import SubmitButton from "../../components/SubmitButton";
 import { Option } from "antd/es/mentions";
@@ -85,54 +86,6 @@ const SignUpPage: React.FC = () => {
     null
   );
   const [isOtpResend, setIsOtpResend] = useState<boolean>(false);
-
-  // const handleRegister = async () => {
-  //   const url = "https://be-java-production.up.railway.app/auth/register/";
-
-  //   const headers = {
-  //     "Content-Type": "application/json",
-  //   };
-
-  //   const data = {
-  //     firstName: personalData.firstName,
-  //     lastName: personalData.lastName,
-  //     password: passwordData.password,
-  //     salutation: personalData.salutation,
-  //     email: contactData.email,
-  //     national: personalData.nationality,
-  //     dob: moment(personalData.dob, "DD MMMM YYYY").format("YYYY-MM-DD"),
-  //     phone: contactData.phoneNumber,
-  //     subscribe: true,
-  //     otpCode: "", // need to generate or handle OTP separately
-  //     otpExpireTime: "", // need to set the correct value based on your requirements
-  //     resetPasswordToken: "", // need to handle this separately
-  //     authProvider: "local",
-  //     providerId: "", // need to handle this separately
-  //     registrationComplete: true,
-  //     otpverified: true,
-  //   };
-
-  //   try {
-  //     const response = await fetch(url, {
-  //       method: "POST",
-  //       headers: headers,
-  //       body: JSON.stringify(data),
-  //     });
-
-  //     if (response.ok) {
-  //       console.log("Registration successful!");
-  //       // Redirect or perform other actions upon successful registration
-  //     } else {
-  //       console.error(
-  //         `Registration failed with status code: ${response.status}`
-  //       );
-  //       const errorText = await response.text();
-  //       console.error(errorText);
-  //     }
-  //   } catch (error) {
-  //     console.error("An error occurred during registration:", error);
-  //   }
-  // };
 
   const handleNext = () => {
     console.log(currentStep);
@@ -276,7 +229,7 @@ const SignUpPage: React.FC = () => {
   // useEffect(() => {
   //   const intervalId = startCounter();
 
-  //   Cleanup interval when the component unmounts
+  //   // Cleanup interval when the component unmounts
   //   return () => clearInterval(intervalId);
   // }, [startCounter]);
   const validateNumber = (
@@ -689,6 +642,17 @@ const SignUpPage: React.FC = () => {
                     name="firstMiddleName"
                     className="font-medium mb-0"
                     rules={[validateFirstName]}
+                    // rules={[
+                    //   {
+                    //     required: !isNoFirstMiddleNameChecked,
+                    //     message: "Please enter first & middle name",
+                    //   },
+                    //   {
+                    //     pattern: /^[A-Za-z\s]+$/, // Only allow alphabets and spaces
+                    //     message:
+                    //       "Please enter a valid name with alphabets only",
+                    //   },
+                    // ]}
                   >
                     <Input
                       disabled={isNoFirstMiddleNameChecked}
