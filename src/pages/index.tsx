@@ -6,6 +6,7 @@ import { DownOutlined, TeamOutlined, DollarOutlined, SwapOutlined } from '@ant-d
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ReactCountryFlag from "react-country-flag"
+import { useNavigate } from "react-router-dom";
 
 dayjs.extend(customParseFormat);
 
@@ -13,6 +14,7 @@ const { Header, Content, Footer } = Layout;
 
 
 const Index: React.FC = () => {
+    const navigate = useNavigate();
 
     const dateFormat = 'dddd, DD MMM YYYY';
 
@@ -29,6 +31,14 @@ const Index: React.FC = () => {
             ),
         },
     ];
+    const handleSignUp = () => {
+        navigate("/signup")
+    };
+
+    const handleSearch = () => {
+        console.log("Searching...");
+    };
+
 
     const [trip, setTrip] = useState<string>('one-way');
 
@@ -55,7 +65,7 @@ const Index: React.FC = () => {
                     // Seed Token
                     colorPrimary: "#38A993",
                     borderRadius: 2,
-                    colorPrimaryTextHover:"#38A993",
+                    colorPrimaryTextHover: "#38A993",
 
                     // Alias Token
                     colorBgContainer: '#f6ffed',
@@ -65,7 +75,7 @@ const Index: React.FC = () => {
         >
             <Layout>
                 <Header style={{
-                    top: 0, zIndex: 1, marginBottom: "12px",paddingTop:"4px",paddingBottom:"8px", position: 'sticky', display: 'flex', alignItems: 'center', backgroundColor: "white",
+                    top: 0, zIndex: 1, marginBottom: "12px", paddingTop: "4px", paddingBottom: "8px", position: 'sticky', display: 'flex', alignItems: 'center', backgroundColor: "white",
                 }}>
                     <div className="justify-around flex w-full">
 
@@ -92,17 +102,23 @@ const Index: React.FC = () => {
                             <a className="snap-center self-center align-middle hover:text-[#38A993] text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
                                 <div className="justify-start items-center gap-4 flex">
                                     <ReactCountryFlag
-                                    countryCode="ID"
-                                    svg
+                                        countryCode="ID"
+                                        svg
                                     />
                                     <div className="">IDR</div>
                                     <DownOutlined />
 
                                 </div>
                             </a>
-                            <div className="w-[183px] p-4 bg-emerald-400 rounded-xl flex-col justify-center items-center gap-3 inline-flex">
-                                <div className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal">Sign Up</div>
-                            </div>
+                            <button
+                                onClick={handleSignUp}
+                                type="submit"
+                                className="my-4 justify-center rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm">
+                                <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
+                                    Sign Up
+                                </p>
+                            </button>,
+
                         </div>
                     </div>
                 </Header>
@@ -248,9 +264,14 @@ const Index: React.FC = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="p-4 bg-emerald-400 rounded-xl flex-col justify-center items-center gap-3 inline-flex">
-                                            <div className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal">Search Flights</div>
-                                        </div>
+                                        <button
+                                            onClick={handleSearch}
+                                            type="submit"
+                                            className="my-4 justify-center rounded-xl flex-col bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm">
+                                            <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
+                                                Search Flights
+                                            </p>
+                                        </button>,
                                     </div>
                                 </div>
                             </div>
