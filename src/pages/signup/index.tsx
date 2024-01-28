@@ -281,8 +281,8 @@ const SignUpPage: React.FC = () => {
   }, [verificationCodeCounter]);
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 p-4">
-      <div className="md:w-1/2">
+    <div className="flex flex-col md:flex-row gap-4">
+      <div className="md:w-1/2 h-screen">
         <img
 
           src="src/assets/sign-up.png"

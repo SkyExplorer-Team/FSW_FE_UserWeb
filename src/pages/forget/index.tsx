@@ -3,13 +3,13 @@ import { Form, Input, Typography } from "antd";
 
 type ValidateStatus = Parameters<typeof Form.Item>[0]['validateStatus'];
 
-const validateEmail = (email:string) : {validateStatus : ValidateStatus, errorMsg: string |null} => {
+const validateEmail = (email: string): { validateStatus: ValidateStatus, errorMsg: string | null } => {
     const res = String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-    if (res == null){
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    if (res == null) {
         return {
             validateStatus: "error",
             errorMsg: "Please enter a valid email address"
@@ -19,28 +19,28 @@ const validateEmail = (email:string) : {validateStatus : ValidateStatus, errorMs
         validateStatus: "success",
         errorMsg: null
     }
-    
-  };
+
+};
 
 const Index: React.FC = () => {
     const [isOnboarding, setIsOnboarding] = useState<boolean>(true);
-    
+
     const [disabledSave, setDisabledSave] = useState(true);
 
-    
+
     const [email, setEmail] = useState<{
         value: string;
         validateStatus?: ValidateStatus;
         errorMsg?: string | null;
-      }>({ value: "" });
-    
+    }>({ value: "" });
+
     const onEmailChange = (value: string) => {
 
         const { validateStatus, errorMsg } = validateEmail(value);
 
-        if(validateStatus === "success") {
+        if (validateStatus === "success") {
             setDisabledSave(false)
-        }else{
+        } else {
             setDisabledSave(true)
         }
         setEmail({
@@ -49,9 +49,9 @@ const Index: React.FC = () => {
             errorMsg,
         });
 
-        
-      };
-    
+
+    };
+
     const handleContinueWithEmail = () => {
         setIsOnboarding(false);
         console.log("email:", email);
@@ -87,7 +87,7 @@ const Index: React.FC = () => {
                         <Form>
                             <Form.Item
                                 validateStatus={email.validateStatus}
-                                help = {email.errorMsg}
+                                help={email.errorMsg}
                             >
                                 <Typography.Title style={{ paddingBottom: 0, marginBottom: 0 }} level={5}>Email</Typography.Title>
                                 <Input style={{ marginTop: "0.5rem" }}
@@ -95,24 +95,24 @@ const Index: React.FC = () => {
                                         onEmailChange(e.target.value);
                                     }}
                                     placeholder="Enter Your Email"
-                                    
+
                                 />
                             </Form.Item>
-                        <div className="h-10">
-                        </div>
-                        <Form.Item shouldUpdate>
-                            <div className="flex flex-col items-center">
-                                <button
-                                    onClick={handleContinueWithEmail}
-                                    type="submit"
-                                    disabled={disabledSave}
-                                    className="flex w-full  mb-4 justify-center rounded-md active:bg-primary disabled:bg-gray-300 bg-primary hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm">
-                                    <p className="p-2">
-                                        Send Instruction
-                                    </p>
-                                </button>
+                            <div className="h-10">
                             </div>
-                        </Form.Item>
+                            <Form.Item shouldUpdate>
+                                <div className="flex flex-col items-center">
+                                    <button
+                                        onClick={handleContinueWithEmail}
+                                        type="submit"
+                                        disabled={disabledSave}
+                                        className="flex w-full  mb-4 justify-center rounded-md active:bg-primary disabled:bg-gray-300 bg-primary hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm">
+                                        <p className="p-2">
+                                            Send Instruction
+                                        </p>
+                                    </button>
+                                </div>
+                            </Form.Item>
                         </Form>
 
                     </div>
@@ -127,17 +127,7 @@ const Index: React.FC = () => {
                             </p>
 
                             <div className="h-8"></div>
-                            {/* <button
-                                onClick={handleContinueWithEmail}
-                                type="submit"
-                                disabled={
-                                    (email == "" || password == "")
-                                }
-                                className="flex w-full mb-4 justify-center rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm">
-                                <p className="p-2">
-                                    Sign In
-                                </p>
-                            </button> */}
+
                         </div>
 
                     </div>}
