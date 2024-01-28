@@ -284,9 +284,10 @@ const SignUpPage: React.FC = () => {
     <div className="flex flex-col md:flex-row gap-4 p-4">
       <div className="md:w-1/2">
         <img
+
           src="src/assets/sign-up.png"
           alt="Sign Up Image"
-          className="w-screen md:w-full"
+          className="h-screen rounded p-10 object-contain fixed"
         />
       </div>
       <div className="md:w-1/2 flex items-center p-4 md:py-10 md:px-16">
@@ -472,11 +473,10 @@ const SignUpPage: React.FC = () => {
                     <div className="flex flex-row">
                       <Text className="text-neutral">Didn’t receive code?</Text>
                       <Text
-                        className={`${
-                          verificationCodeCounter === 0
-                            ? "text-primary"
-                            : "text-neutral"
-                        } ml-1 font-semibold cursor-pointer`}
+                        className={`${verificationCodeCounter === 0
+                          ? "text-primary"
+                          : "text-neutral"
+                          } ml-1 font-semibold cursor-pointer`}
                         onClick={handleOtpResend}
                       >
                         Resend
@@ -642,17 +642,17 @@ const SignUpPage: React.FC = () => {
                     name="firstMiddleName"
                     className="font-medium mb-0"
                     rules={[validateFirstName]}
-                    // rules={[
-                    //   {
-                    //     required: !isNoFirstMiddleNameChecked,
-                    //     message: "Please enter first & middle name",
-                    //   },
-                    //   {
-                    //     pattern: /^[A-Za-z\s]+$/, // Only allow alphabets and spaces
-                    //     message:
-                    //       "Please enter a valid name with alphabets only",
-                    //   },
-                    // ]}
+                  // rules={[
+                  //   {
+                  //     required: !isNoFirstMiddleNameChecked,
+                  //     message: "Please enter first & middle name",
+                  //   },
+                  //   {
+                  //     pattern: /^[A-Za-z\s]+$/, // Only allow alphabets and spaces
+                  //     message:
+                  //       "Please enter a valid name with alphabets only",
+                  //   },
+                  // ]}
                   >
                     <Input
                       disabled={isNoFirstMiddleNameChecked}
