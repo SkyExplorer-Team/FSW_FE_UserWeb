@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import Logo from "../components/Logo";
 import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Radio, RadioChangeEvent, Select, Space } from "antd";
 import { MenuProps } from "antd/lib";
-import { DownOutlined, TeamOutlined, DollarOutlined, SwapOutlined } from '@ant-design/icons';
+import { DownOutlined, TeamOutlined, DollarOutlined, SwapOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ReactCountryFlag from "react-country-flag"
 import { useNavigate } from "react-router-dom";
+import PassengerField from '../components/passenger_field';
 
 dayjs.extend(customParseFormat);
 
@@ -144,7 +145,13 @@ const Index: React.FC = () => {
                                                 </Radio>
                                             </Radio.Group>
                                             <Divider type="vertical" className="h-6"></Divider>
-                                            <Dropdown className="gap-4 flex" menu={{ items }}>
+                                            <Dropdown trigger={["click"]} className="gap-4 flex" menu={{ items }}
+                                                dropdownRender={() => (
+                                                    <PassengerField>
+
+                                                    </PassengerField>
+                                                )}
+                                            >
                                                 <a className="hover:text-[#38A993]" onClick={(e) => e.preventDefault()}>
                                                     <Space>
                                                         <TeamOutlined style={{ fontSize: 24 }} />
@@ -389,7 +396,7 @@ const Index: React.FC = () => {
                         </div>
                     </div>
                 </Footer>
-            </Layout>  </ConfigProvider>
+            </Layout >  </ConfigProvider >
     );
 };
 

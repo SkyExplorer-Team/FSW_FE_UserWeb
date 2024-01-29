@@ -126,6 +126,7 @@ const Index: React.FC = () => {
                                 Continue your journey with us.
                             </p>
 
+
                             <div className="h-8"></div>
 
                         </div>
