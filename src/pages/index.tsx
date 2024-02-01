@@ -185,7 +185,7 @@ const Index: React.FC = () => {
                                                 </Radio>
                                             </Radio.Group>
                                             <Divider type="vertical" className="h-6"></Divider>
-                                            <Dropdown className="gap-4 flex" menu={{  }}
+                                            <Dropdown trigger={["click"]} className="gap-4 flex" menu={{  }}
                                                 dropdownRender={() => (
                                                     <PassengerField 
                                                     seats={seat}
@@ -206,7 +206,7 @@ const Index: React.FC = () => {
                                                     </Space>
                                                 </a>
                                             </Dropdown>
-                                            <Dropdown  className="gap-4 flex"
+                                            <Dropdown trigger={["click"]} className="gap-4 flex"
                                                 dropdownRender={() => (
                                                     <CabinField chosen={
                                                         cabin

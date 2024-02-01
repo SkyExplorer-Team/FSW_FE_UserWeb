@@ -122,8 +122,8 @@ const PassengerField: React.FC<SeatsProps> = (
             </div>
             <button
                 type="submit"
-                className="my-4 justify-center rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm">
-                <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
+                className="my-4 justify-center w-full rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm">
+                <p className="self-stretch w-full text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
                     Save
                 </p>
             </button>

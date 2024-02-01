@@ -35,7 +35,7 @@ const CabinField: React.FC<CabinProps> = (
                 }            
             }} >
         <div className="w-[430px] h-[368px] p-6 bg-white rounded-2xl shadow border border-gray-100 flex-col justify-center items-start gap-4 inline-flex">
-    <div className="self-stretch text-emerald-400 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">Cabin Class</div>
+    <div className="self-stretch text-primary text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">Cabin Class</div>
     <div className="h-[188px] flex-col justify-center items-start gap-6 flex">
         <div className="self-stretch h-[188px] flex-col justify-center items-center gap-2 flex">
             <a className="w-[367px] py-3 justify-center items-center gap-4 inline-flex"
@@ -76,8 +76,18 @@ const CabinField: React.FC<CabinProps> = (
             </a>
         </div>
     </div>
+    <button
+        type="submit"
+        className="my-4 justify-center w-full rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm">
+        <p className="self-stretch w-full text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
+            Save
+        </p>
+    </button>
+
     </div>
+        
         </Radio.Group>
+        
     );
 };
 
