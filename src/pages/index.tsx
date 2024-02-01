@@ -2,19 +2,43 @@ import React, { useState } from "react";
 import Logo from "../components/Logo";
 import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Radio, RadioChangeEvent, Select, Space } from "antd";
 import { MenuProps } from "antd/lib";
-import { DownOutlined, TeamOutlined, DollarOutlined, SwapOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { DownOutlined, TeamOutlined, DollarOutlined, SwapOutlined} from '@ant-design/icons';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ReactCountryFlag from "react-country-flag"
 import { useNavigate } from "react-router-dom";
 import PassengerField from '../components/passenger_field';
+import CabinField from "../components/cabin_field";
 
 dayjs.extend(customParseFormat);
 
 const { Header, Content, Footer } = Layout;
 
+// type SeatMap = {
+//     [key: string]: number;
+//   };
+  
 
 const Index: React.FC = () => {
+
+
+    // const [seat, setSeat] = useState<SeatMap>({
+    //     adults: 0,
+    //     children: 0,
+    //     infant: 0,
+    
+    // });
+
+    const [cabin, setCabin] = useState<number>(1);
+
+    // const changeSeats = ( targetMap : SeatMap )=>{
+    //     setSeat(targetMap);
+    // }
+
+    const changeCabin = ( target : number )=>{
+        setCabin(target);
+    }
+    
     const navigate = useNavigate();
 
     const dateFormat = 'dddd, DD MMM YYYY';
@@ -22,16 +46,18 @@ const Index: React.FC = () => {
     const customFormat: DatePickerProps['format'] = (value) =>
         value.format(dateFormat);
 
+
     const items: MenuProps['items'] = [
-        {
-            key: '1',
-            label: (
-                <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                    1st menu item
-                </a>
-            ),
-        },
-    ];
+            {
+                key: '1',
+                label: (
+                    <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
+                        1st menu item
+                    </a>
+                ),
+            },
+        ];
+
     const handleSignUp = () => {
         navigate("/signup")
     };
@@ -39,6 +65,7 @@ const Index: React.FC = () => {
     const handleSearch = () => {
         console.log("Searching...");
     };
+
 
 
     const [trip, setTrip] = useState<string>('one-way');
@@ -145,7 +172,7 @@ const Index: React.FC = () => {
                                                 </Radio>
                                             </Radio.Group>
                                             <Divider type="vertical" className="h-6"></Divider>
-                                            <Dropdown trigger={["click"]} className="gap-4 flex" menu={{ items }}
+                                            <Dropdown className="gap-4 flex" menu={{  }}
                                                 dropdownRender={() => (
                                                     <PassengerField>
 
@@ -160,7 +187,17 @@ const Index: React.FC = () => {
                                                     </Space>
                                                 </a>
                                             </Dropdown>
-                                            <Dropdown className="gap-4 flex" menu={{ items }}>
+                                            <Dropdown  className="gap-4 flex"
+                                                dropdownRender={() => (
+                                                    <CabinField chosen={
+                                                        cabin
+                                                    }
+                                                    onChange={(target)=>{changeCabin(target)}}
+                                                    >
+
+                                                    </CabinField>
+                                                )}
+                                            >
                                                 <a className="hover:text-[#38A993]" onClick={(e) => e.preventDefault()}>
                                                     <Space>
                                                         <DollarOutlined style={{ fontSize: 24 }} />
