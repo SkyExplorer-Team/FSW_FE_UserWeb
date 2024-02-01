@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Form, Input, Typography } from "antd";
+import { Alert, Form, Input, Typography } from "antd";
+import SubmitButton from "../../components/SubmitButton";
 
 type ValidateStatus = Parameters<typeof Form.Item>[0]['validateStatus'];
 
@@ -117,21 +118,131 @@ const Index: React.FC = () => {
 
                     </div>
                     :
-                    <div className="self-center">
-                        <div className="self-center ">
-                            <h1 className="text-left text-4xl mb-2 font-semibold">
-                                Sign in to Your Account
-                            </h1>
-                            <p className="text-left mb-8 text-lg font-normal">
-                                Continue your journey with us.
-                            </p>
+                    
+                    <div className="flex flex-col gap-5">
+                {isOtpResend && (
+                  <Alert
+                    message={
+                      <Text
+                        className="font-semibold"
+                        style={{ color: "#247535" }}
+                      >
+                        OTP Resent Successfully
+                      </Text>
+                    }
+                    description={
+                      <Text style={{ color: "#247535" }}>
+                        We've resent the OTP code. Please check your inbox or
+                        messages.
+                      </Text>
+                    }
+                    style={{ color: "#247535" }}
+                    type="success"
+                    showIcon
+                  />
+                )}
 
-
-                            <div className="h-8"></div>
-
-                        </div>
-
-                    </div>}
+                <Text className="text-4xl font-semibold">Verify Code</Text>
+                <div className="flex flex-col">
+                  <Text className="text-lg text-neutral">
+                    Enter the verification code we send you on
+                  </Text>
+                  <Text className="text-lg mb-8">{contactData.email}</Text>
+                </div>
+                <Form
+                  form={verificationCodeForm}
+                  onFinish={onVerificationFormFinish}
+                >
+                  <div className="flex flex-col items-center">
+                    <div className="w-4/5">
+                      <Space direction="horizontal" size="middle">
+                        <Form.Item
+                          name="code1"
+                          rules={[
+                            { required: true, message: "", max: 1, min: 1 },
+                          ]}
+                        >
+                          <Input
+                            style={{ height: "72px", textAlign: "center" }}
+                            size="large"
+                            maxLength={1}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          name="code2"
+                          rules={[
+                            { required: true, message: "", max: 1, min: 1 },
+                          ]}
+                        >
+                          <Input
+                            style={{ height: "72px", textAlign: "center" }}
+                            size="large"
+                            maxLength={1}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          name="code3"
+                          rules={[
+                            { required: true, message: "", max: 1, min: 1 },
+                          ]}
+                        >
+                          <Input
+                            style={{ height: "72px", textAlign: "center" }}
+                            size="large"
+                            maxLength={1}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          name="code4"
+                          rules={[
+                            { required: true, message: "", max: 1, min: 1 },
+                          ]}
+                        >
+                          <Input
+                            style={{ height: "72px", textAlign: "center" }}
+                            size="large"
+                            maxLength={1}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          name="code5"
+                          rules={[
+                            { required: true, message: "", max: 1, min: 1 },
+                          ]}
+                        >
+                          <Input
+                            style={{ height: "72px", textAlign: "center" }}
+                            size="large"
+                            maxLength={1}
+                          />
+                        </Form.Item>
+                      </Space>
+                    </div>
+                  </div>
+                  <div className="mt-5 mb-10 flex flex-col gap-4 items-center">
+                    <div className="flex flex-row">
+                      <Text className="text-neutral">Didn’t receive code?</Text>
+                      <Text
+                        className={`${verificationCodeCounter === 0
+                          ? "text-primary"
+                          : "text-neutral"
+                          } ml-1 font-semibold cursor-pointer`}
+                        onClick={handleOtpResend}
+                      >
+                        Resend
+                      </Text>
+                    </div>
+                    <Text className="text-primary">
+                      {String(minutes).padStart(2, "0")}:
+                      {String(seconds).padStart(2, "0")}
+                    </Text>
+                  </div>
+                  <Form.Item>
+                    <SubmitButton form={verificationCodeForm} />
+                  </Form.Item>
+                </Form>
+              </div>
+              }
             </div>
         </div>
     );
