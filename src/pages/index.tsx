@@ -14,26 +14,24 @@ dayjs.extend(customParseFormat);
 
 const { Header, Content, Footer } = Layout;
 
-// type SeatMap = {
-//     [key: string]: number;
-//   };
-  
+
 
 const Index: React.FC = () => {
 
 
-    // const [seat, setSeat] = useState<SeatMap>({
-    //     adults: 0,
-    //     children: 0,
-    //     infant: 0,
-    
-    // });
+    const [seat, setSeat] = useState(new Map<string,number>(
+        [
+            ["adults", 0],
+            ["children", 0],
+            ["infant", 0] 
+        ]
+    ));
 
     const [cabin, setCabin] = useState<number>(1);
 
-    // const changeSeats = ( targetMap : SeatMap )=>{
-    //     setSeat(targetMap);
-    // }
+    const   changeSeats = ( targetMap : Map<string,number> )=>{
+        setSeat(targetMap);
+    }
 
     const changeCabin = ( target : number )=>{
         setCabin(target);
@@ -174,7 +172,13 @@ const Index: React.FC = () => {
                                             <Divider type="vertical" className="h-6"></Divider>
                                             <Dropdown className="gap-4 flex" menu={{  }}
                                                 dropdownRender={() => (
-                                                    <PassengerField>
+                                                    <PassengerField 
+                                                    seats={seat}
+                                                    
+                                                    onChange={(target)=>{
+                                                        changeSeats(target)
+                                                    }}
+                                                    >
 
                                                     </PassengerField>
                                                 )}

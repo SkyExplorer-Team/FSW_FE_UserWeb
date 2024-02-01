@@ -1,7 +1,34 @@
 import { Button } from "antd";
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { useState } from "react";
 
-const PassengerField: React.FC = () => {
+
+interface SeatsProps{
+    seats : Map<string,number>
+    onChange: (e: Map<string,number>) => void
+
+}
+
+
+const PassengerField: React.FC<SeatsProps> = (
+    {
+        seats,
+        onChange
+    }  
+) => {
+
+    const value= new  Map(seats)
+
+
+    const [adult,setAdult] = useState(seats.get("adults")??0)
+    const [children,setChildren] = useState(seats.get("children")??0)
+    const [infant,setInfant] = useState(seats.get("infant")??0)
+
+    const updateMap = (k:string,v:number) => {
+        value.set(k,v)
+        onChange(value)
+      }
+        
 
     return (
         <div className="w-[430px] h-[416px] p-6 bg-white rounded-2xl shadow border border-gray-100 flex-col justify-center items-start gap-4 inline-flex">
@@ -14,13 +41,25 @@ const PassengerField: React.FC = () => {
                             <div className="text-center text-neutral-900 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">12 years old and above</div>
                         </div>
                         <div className="justify-center items-center gap-1 flex">
-                            <Button className="p-2 rounded-[100px] border border-gray-300 justify-center items-center gap-2 flex">
+                            <Button className="p-2 rounded-[100px] border border-gray-300 justify-center items-center gap-2 flex"
+                            onClick={()=>{
+                                setAdult(adult-1)
+                                updateMap("adults",adult)
+                            } }
+                            >
                                 <MinusOutlined />
 
                             </Button>
 
-                            <div className="w-10 text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">1</div>
-                            <Button className="p-2 rounded-[100px] border border-gray-300 justify-center items-center gap-2 flex">
+                            <div className="w-10 text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">{adult}</div>
+                            <Button className="p-2 rounded-[100px] border border-gray-300 justify-center items-center gap-2 flex"
+                            onClick={()=>
+                                {
+                                    setAdult(adult+1)
+                                    updateMap("adults",adult)
+                                }
+                            }
+                            >
                                 <PlusOutlined />
                             </Button>
                         </div>
@@ -31,12 +70,23 @@ const PassengerField: React.FC = () => {
                             <div className="text-center text-neutral-900 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">2-11 years old</div>
                         </div>
                         <div className="justify-center items-center gap-1 flex">
-                            <Button className="p-2 rounded-[100px] border border-gray-300 justify-center items-center gap-2 flex">
+                            <Button className="p-2 rounded-[100px] border border-gray-300 justify-center items-center gap-2 flex"
+                            onClick={()=>
+                                {
+                                    setChildren(children-1)
+                                    updateMap("children",children)
+                                } }
+                            >
                                 <MinusOutlined />
 
                             </Button>
-                            <div className="w-10 text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">0</div>
-                            <Button className="p-2 rounded-[100px] border border-gray-300 justify-center items-center gap-2 flex">
+                            <div className="w-10 text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">{children}</div>
+                            <Button className="p-2 rounded-[100px] border border-gray-300 justify-center items-center gap-2 flex"
+                            onClick={()=>{
+                                setChildren(children+1)
+                                updateMap("children",children)
+                            } }
+                            >
                                 <PlusOutlined />
                             </Button>
                         </div>
@@ -47,12 +97,23 @@ const PassengerField: React.FC = () => {
                             <div className="text-center text-neutral-900 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Below 2 years old</div>
                         </div>
                         <div className="justify-center items-center gap-1 flex">
-                            <Button className="p-2 rounded-[100px] border border-gray-300 justify-center items-center gap-2 flex">
+                            <Button className="p-2 rounded-[100px] border border-gray-300 justify-center items-center gap-2 flex"
+                            onClick={()=>
+                                {
+                                    setInfant(infant-1)
+                                    updateMap("infant",infant)
+                                }}
+                            >
                                 <MinusOutlined />
 
                             </Button>
-                            <div className="w-10 text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">0</div>
-                            <Button className="p-2 rounded-[100px] border border-gray-300 justify-center items-center gap-2 flex">
+                            <div className="w-10 text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">{infant}</div>
+                            <Button className="p-2 rounded-[100px] border border-gray-300 justify-center items-center gap-2 flex"
+                            onClick={()=>{
+                                setInfant(infant+1)
+                                updateMap("infant",infant  )                            
+                            } }
+                            >
                                 <PlusOutlined />
                             </Button>
                         </div>
