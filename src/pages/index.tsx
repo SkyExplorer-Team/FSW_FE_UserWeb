@@ -154,6 +154,8 @@ const Index: React.FC = () => {
 
     const handleSearch = () => {
         console.log("Searching...");
+        //case found:
+
     };
 
 
