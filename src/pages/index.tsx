@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../components/Logo";
 import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Radio, RadioChangeEvent, Select, Space } from "antd";
 import { MenuProps } from "antd/lib";
@@ -18,12 +18,61 @@ dayjs.extend(customParseFormat);
 const { Header, Content, Footer } = Layout;
 
 
+const api_base_url = "https://be-java-production.up.railway.app"
+
+
+interface Airport {
+    nationalId: string;
+    name: string;
+    abv: string;
+    lat: number | null;
+    long: number | null;
+}
 
 const Index: React.FC = () => {
     const token = localStorage.getItem(
         'access_token',
     );
 
+    let airports: Airport[] = [];
+    let fromAirportDetails: { "label": string, "value": string }[] = [];
+    let toAirportDetails: { "label": string, "value": string }[] = [];
+    let fromAirport!: Airport;
+    let toAirport!: Airport;
+
+    async function fetchInitialAirport() {
+        const payload = {}
+
+        const response = await fetch(
+            api_base_url + "/api/airport",
+            {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            }
+        );
+        console.log(response)
+        const responseJson = await response.json();
+        if (response.status !== 200) {
+            alert('error: ' + responseJson.message);
+            return;
+        }
+        // make Sure this ok ==============
+        airports = responseJson['Airport']
+    }
+
+    useEffect(() => {
+
+        fetchInitialAirport()
+
+        airports.map((val) => {
+            fromAirportDetails.push({ label: val.name, value: val.nationalId })
+            toAirportDetails.push({ label: val.name, value: val.nationalId })
+        })
+
+
+
+    })
 
     const [seat, setSeat] = useState(new Map<string, number>(
         [
@@ -43,6 +92,10 @@ const Index: React.FC = () => {
         setCabin(target);
     }
 
+    const onDatePick: DatePickerProps['onChange'] = (date, dateString) => {
+        console.log(date, dateString);
+    };
+
     const navigate = useNavigate();
 
     const dateFormat = 'dddd, DD MMM YYYY';
@@ -50,6 +103,39 @@ const Index: React.FC = () => {
     const customFormat: DatePickerProps['format'] = (value) =>
         value.format(dateFormat);
 
+    const fromChange = (value: string) => {
+        fromAirport = airports.find((obj) => {
+            return obj.name = value;
+        })!
+
+        console.log(`selected ${fromAirport.name} ${fromAirport.abv}`);
+    };
+    const toChange = (value: string) => {
+        toAirport = airports.find((obj) => {
+            return obj.name = value;
+        })!
+
+        console.log(`selected ${toAirport.name} ${toAirport.abv}`);
+    };
+
+    const fromSearch = (value: string) => {
+        fromAirportDetails = fromAirportDetails.filter((obj) => {
+            return obj.label.includes(value)
+        })
+        console.log('search:', value);
+    };
+
+    const toSearch = (value: string) => {
+        toAirportDetails = toAirportDetails.filter((obj) => {
+            return obj.label.includes(value)
+        })
+
+        console.log('search:', value);
+    };
+
+    // Filter `option.label` match the user type `input`
+    const filterOption = (input: string, option?: { label: string; value: string }) =>
+        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
     const items: MenuProps['items'] = [
         {
@@ -77,17 +163,7 @@ const Index: React.FC = () => {
     const onChange = (e: RadioChangeEvent) => {
         setTrip(e.target.value);
     };
-    const fromChange = (value: string) => {
-        console.log(`selected ${value}`);
-    };
 
-    const fromSearch = (value: string) => {
-        console.log('search:', value);
-    };
-
-    // Filter `option.label` match the user type `input`
-    const filterOption = (input: string, option?: { label: string; value: string }) =>
-        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
 
     return (
@@ -139,7 +215,6 @@ const Index: React.FC = () => {
                                     />
                                     <div className="">IDR</div>
                                     <DownOutlined />
-
                                 </div>
                             </a>
 
@@ -235,11 +310,10 @@ const Index: React.FC = () => {
                                                         <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">From</div>
                                                     </div>
                                                     <div className="px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center inline-flex">
-
                                                         <Select
                                                             showSearch
                                                             bordered={false}
-                                                            title="From"
+                                                            title="Where From"
                                                             dropdownStyle={{ backgroundColor: 'white' }}
                                                             style={{
                                                                 color: 'white',
@@ -248,27 +322,21 @@ const Index: React.FC = () => {
                                                                 backgroundColor: 'transparent',
                                                             }}
 
-                                                            placeholder="Select a person"
+                                                            placeholder="Where From ?"
+                                                            value={fromAirport == undefined ? null : fromAirport.name}
                                                             optionFilterProp="children"
                                                             onChange={fromChange}
                                                             onSearch={fromSearch}
                                                             filterOption={filterOption}
-                                                            options={[
-                                                                {
-                                                                    value: 'jack',
-                                                                    label: 'Jack',
-                                                                },
-                                                                {
-                                                                    value: 'lucy',
-                                                                    label: 'Lucy',
-                                                                },
-                                                                {
-                                                                    value: 'tom',
-                                                                    label: 'Tom',
-                                                                },
-                                                            ]}
+                                                            optionRender={(option) => {
+                                                                return <div>
+                                                                    {
+                                                                        option.value
+                                                                    }
+                                                                </div>
+                                                            }}
+                                                            options={fromAirportDetails}
                                                         />
-
                                                     </div>
                                                 </div>
                                                 <Button className="" type="primary" style={{ backgroundColor: "#38A993" }} shape="circle" icon={<SwapOutlined />} size="large" />
@@ -282,6 +350,8 @@ const Index: React.FC = () => {
                                                             bordered={false}
                                                             title="To"
                                                             dropdownStyle={{ backgroundColor: 'white' }}
+                                                            value={toAirport == undefined ? null : toAirport.name}
+
                                                             style={{
                                                                 color: 'white',
                                                                 borderColor: 'transparent',
@@ -291,23 +361,17 @@ const Index: React.FC = () => {
                                                             showSearch
                                                             placeholder="Select a person"
                                                             optionFilterProp="children"
-                                                            onChange={fromChange}
-                                                            onSearch={fromSearch}
+                                                            onChange={toChange}
+                                                            onSearch={toSearch}
                                                             filterOption={filterOption}
-                                                            options={[
-                                                                {
-                                                                    value: 'jack',
-                                                                    label: 'Jack',
-                                                                },
-                                                                {
-                                                                    value: 'lucy',
-                                                                    label: 'Lucy',
-                                                                },
-                                                                {
-                                                                    value: 'tom',
-                                                                    label: 'Tom',
-                                                                },
-                                                            ]}
+                                                            optionRender={(option) => {
+                                                                return <div>
+                                                                    {
+                                                                        option.value
+                                                                    }
+                                                                </div>
+                                                            }}
+                                                            options={toAirportDetails}
                                                         />
                                                     </div>
                                                 </div>
@@ -321,7 +385,7 @@ const Index: React.FC = () => {
                                                     <div className="self-stretch px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center gap-3 inline-flex">
 
 
-                                                        <DatePicker style={{ width: "100%" }} className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal" bordered={false} format={customFormat} />
+                                                        <DatePicker onChange={onDatePick} style={{ width: "100%" }} className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal" bordered={false} format={customFormat} />
 
                                                     </div>
                                                 </div>
