@@ -8,19 +8,48 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ReactCountryFlag from "react-country-flag"
 import { useNavigate } from "react-router-dom";
 import PassengerField from '../components/passenger_field';
+import CabinField from "../components/cabin_field";
+import SkeletonAvatar from "antd/lib/skeleton/Avatar";
+import HomeInfo1 from "../components/home_info1";
+import HomeFooter from "../components/home_footer";
 
 dayjs.extend(customParseFormat);
 
 const { Header, Content, Footer } = Layout;
 
 
+
 const Index: React.FC = () => {
+    const token = localStorage.getItem(
+        'access_token',
+    );
+
+
+    const [seat, setSeat] = useState(new Map<string, number>(
+        [
+            ["adults", 0],
+            ["children", 0],
+            ["infant", 0]
+        ]
+    ));
+
+    const [cabin, setCabin] = useState<number>(1);
+
+    const changeSeats = (targetMap: Map<string, number>) => {
+        setSeat(targetMap);
+    }
+
+    const changeCabin = (target: number) => {
+        setCabin(target);
+    }
+
     const navigate = useNavigate();
 
     const dateFormat = 'dddd, DD MMM YYYY';
 
     const customFormat: DatePickerProps['format'] = (value) =>
         value.format(dateFormat);
+
 
     const items: MenuProps['items'] = [
         {
@@ -32,6 +61,7 @@ const Index: React.FC = () => {
             ),
         },
     ];
+
     const handleSignUp = () => {
         navigate("/signup")
     };
@@ -39,6 +69,7 @@ const Index: React.FC = () => {
     const handleSearch = () => {
         console.log("Searching...");
     };
+
 
 
     const [trip, setTrip] = useState<string>('one-way');
@@ -111,14 +142,23 @@ const Index: React.FC = () => {
 
                                 </div>
                             </a>
-                            <button
-                                onClick={handleSignUp}
-                                type="submit"
-                                className="my-4 justify-center rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm">
-                                <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
-                                    Sign Up
-                                </p>
-                            </button>,
+
+                            {
+                                token ?
+                                    <div className="snap-center self-center align-middle hover:text-[#38A993] text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                                        <SkeletonAvatar className="mr-4" />
+                                        AAAAA
+                                        <DownOutlined />
+                                    </div> :
+                                    <button
+                                        onClick={handleSignUp}
+                                        type="submit"
+                                        className="my-4 justify-center rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm">
+                                        <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
+                                            Sign Up
+                                        </p>
+                                    </button>
+                            }
 
                         </div>
                     </div>
@@ -145,9 +185,15 @@ const Index: React.FC = () => {
                                                 </Radio>
                                             </Radio.Group>
                                             <Divider type="vertical" className="h-6"></Divider>
-                                            <Dropdown trigger={["click"]} className="gap-4 flex" menu={{ items }}
+                                            <Dropdown trigger={["click"]} className="gap-4 flex" menu={{}}
                                                 dropdownRender={() => (
-                                                    <PassengerField>
+                                                    <PassengerField
+                                                        seats={seat}
+
+                                                        onChange={(target) => {
+                                                            changeSeats(target)
+                                                        }}
+                                                    >
 
                                                     </PassengerField>
                                                 )}
@@ -160,7 +206,17 @@ const Index: React.FC = () => {
                                                     </Space>
                                                 </a>
                                             </Dropdown>
-                                            <Dropdown className="gap-4 flex" menu={{ items }}>
+                                            <Dropdown trigger={["click"]} className="gap-4 flex"
+                                                dropdownRender={() => (
+                                                    <CabinField chosen={
+                                                        cabin
+                                                    }
+                                                        onChange={(target) => { changeCabin(target) }}
+                                                    >
+
+                                                    </CabinField>
+                                                )}
+                                            >
                                                 <a className="hover:text-[#38A993]" onClick={(e) => e.preventDefault()}>
                                                     <Space>
                                                         <DollarOutlined style={{ fontSize: 24 }} />
@@ -285,116 +341,13 @@ const Index: React.FC = () => {
                         </div>
                     </div>
                     <div className="h-32"></div>
-                    <div className=" text-center ">
-                        <div className="border-b border-gray-100 justify-between items-center inline-flex">
-                            <div className="flex-col justify-start items-center gap-[25px] inline-flex">
-                                <div className="relative bg-gradient-to-b from-emerald-100 to-white rounded-2xl border border-gray-100">
-                                    <img className="p-4" src="src/assets/search_1.svg">
-                                    </img>
+                    <HomeInfo1 />
 
-                                </div>
-                                <div className="flex-col justify-center items-center gap-4 flex">
-                                    <div className="text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Find Your Journey in a Flash</div>
-                                    <div className="w-[390px] text-center text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Discover flights that suit your plans. Start your adventure with a simple search.</div>
-                                </div>
-                            </div>
-                            <div className="flex-col justify-start items-center gap-[27px] inline-flex">
-                                <div className="relative bg-gradient-to-b from-emerald-100 to-white rounded-2xl border border-gray-100">
-                                    <img className="px-4" src="src/assets/take.svg">
-                                    </img>
-
-                                </div>
-                                <div className="flex-col justify-center items-center gap-4 flex">
-                                    <div className="text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Tailor Your Journey, Your Way</div>
-                                    <div className="w-[390px] text-center text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Make it uniquely yours. Add details, select seats, and choose your in-flight delights.</div>
-                                </div>
-                            </div>
-                            <div className="flex-col justify-start items-center gap-7 inline-flex">
-                                <div className="relative bg-gradient-to-b from-emerald-100 to-white rounded-2xl border border-gray-100">
-                                    <img className="" src="src/assets/smooth.svg">
-                                    </img>
-
-                                </div>
-                                <div className="flex-col justify-center items-center gap-4 flex">
-                                    <div className="text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Smooth Boarding Awaits You</div>
-                                    <div className="w-[390px] text-center text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Ready for takeoff? Board with confidence using your digital boarding pass.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className=" py-12 ">
-                        <img className="block mr-auto ml-auto" src="src/assets/download.svg" alt="" />
-                    </div>
                 </Content>
                 <Footer style={{
                     padding: 0,
                 }} >
-                    <div className="w-full h-[321px] flex-col justify-center items-center inline-flex">
-                        <div className="w-full px-[51px] py-12 bg-white border-t border-gray-200 justify-between items-start inline-flex">
-                            <div className="h-[150px] flex-col justify-between items-start inline-flex">
-                                <div className="flex-col justify-center items-end gap-2 flex">
-                                    <Logo></Logo>
-                                    <div className="self-stretch text-center text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Navigate the Skies, Booking Made Easy </div>
-                                </div>
-                                <div className="self-stretch justify-start items-center gap-3 inline-flex">
-                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
-                                        <div className="w-5 h-5 relative"></div>
-                                    </div>
-                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
-                                        <div className="w-[18px] h-[18px] relative"></div>
-                                    </div>
-                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
-                                        <div className="w-5 h-5 relative"></div>
-                                    </div>
-                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
-                                        <div className="w-5 h-5 relative"></div>
-                                    </div>
-                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
-                                        <div className="w-5 h-5 relative">
-                                            <div className="w-[15.83px] h-[11.67px] left-[2.08px] top-[4.17px] absolute">
-                                                <div className="w-[15.83px] h-[11.67px] left-0 top-0 absolute">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="justify-start items-start gap-[90px] flex">
-                                <div className="flex-col justify-start items-start gap-3 inline-flex">
-                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Features</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Sign Up / Sign In</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Explore</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Status</div>
-                                </div>
-                                <div className="flex-col justify-start items-start gap-3 inline-flex">
-                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Cabin</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Economy</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Business</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">First</div>
-                                </div>
-                                <div className="flex-col justify-start items-start gap-3 inline-flex">
-                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Baggage</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Checked Baggage</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Cabin Baggage</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Fare Types</div>
-                                </div>
-                                <div className="flex-col justify-start items-start gap-3 inline-flex">
-                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Resources</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">About Us</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">FAQs</div>
-                                </div>
-                                <div className="flex-col justify-start items-start gap-3 inline-flex">
-                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Company</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Privacy Policy</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Terms of Use</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-full h-[75px] pr-[51px] bg-emerald-400 justify-between items-center inline-flex">
-                            <div className="h-[94px] justify-end items-center gap-6 flex"></div>
-                            <div className="text-white text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">No Bull, Just Board!</div>
-                        </div>
-                    </div>
+                    <HomeFooter />
                 </Footer>
             </Layout >  </ConfigProvider >
     );
