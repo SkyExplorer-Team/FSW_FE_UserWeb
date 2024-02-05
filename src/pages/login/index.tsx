@@ -19,7 +19,6 @@ const SignIn: React.FC = () => {
     const [password, setPassword] = useState<string>("");
     const handleContinueWithGoogle = () => {
         console.log("Continue with Google clicked");
-        // Implement Google authentication logic here
     };
     const handleContinueWithEmail = () => {
         setIsOnboarding(false);
