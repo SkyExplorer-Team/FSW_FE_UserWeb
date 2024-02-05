@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Logo from "../components/Logo";
-import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Radio, RadioChangeEvent, Select, Space } from "antd";
+import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Pagination, PaginationProps, Radio, RadioChangeEvent, Select, Space } from "antd";
 import { MenuProps } from "antd/lib";
 import { DownOutlined, TeamOutlined, DollarOutlined, SwapOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
@@ -29,6 +29,14 @@ interface Airport {
     long: number | null;
 }
 
+interface Schedule {
+    name: string;
+    departureDate : dayjs.Dayjs;
+    plane : string;
+    arrivalDate : dayjs.Dayjs;
+    duration : number; 
+}
+
 const Index: React.FC = () => {
     const token = localStorage.getItem(
         'access_token',
@@ -39,7 +47,8 @@ const Index: React.FC = () => {
     let toAirportDetails: { "label": string, "value": string }[] = [];
     let fromAirport!: Airport;
     let toAirport!: Airport;
-
+    let departureDate : dayjs.Dayjs;
+    let schedules : Schedule[] = [];
     async function fetchInitialAirport() {
         const payload = {}
 
@@ -92,8 +101,9 @@ const Index: React.FC = () => {
         setCabin(target);
     }
 
-    const onDatePick: DatePickerProps['onChange'] = (date, dateString) => {
-        console.log(date, dateString);
+    const onDatePick: DatePickerProps['onChange'] = (date) => {
+        departureDate = date!;
+        console.log(departureDate.toISOString());
     };
 
     const navigate = useNavigate();
@@ -152,12 +162,49 @@ const Index: React.FC = () => {
         navigate("/signup")
     };
 
-    const handleSearch = () => {
+    const handleSearch = async () => {
         console.log("Searching...");
         //case found:
+        const payload = {}
+            
+            const url = new URL(api_base_url + "/schedule-detail/getSchedules")
+            url.searchParams.append("cabinClassId","1")
+            url.searchParams.append("ticketTypeId","1")
+            url.searchParams.append("date",departureDate.toISOString())
+            url.searchParams.append("fromAirportId",fromAirport.nationalId)
+            url.searchParams.append("toAirportId",toAirport.nationalId)
+
+
+        const response = await fetch(
+            url.toString(),
+            {
+
+                method: 'get',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            }
+        );
+        console.log(response)
+        const responseJson = await response.json();
+        if (response.status !== 200) {
+            alert('error: ' + responseJson.message);
+            return;
+        }
+        // implement get schedules ==============
+        schedules =responseJson['schedules'];
+        setPage(1)
+        setScheduleToRender(schedules.slice((page - 1) * 4, (page * 4)-1))
 
     };
 
+    const [page,setPage]=useState<number>(1);
+    const [scheduleToRender,setScheduleToRender]=useState<Schedule[]>(schedules.slice(0, 3));
+    const onChangePage: PaginationProps['onShowSizeChange'] = (current) => {
+        console.log(page);
+        setPage(current)
+        setScheduleToRender(schedules.slice((page - 1) * 4, (page * 4)-1))
+      };
+    
 
 
     const [trip, setTrip] = useState<string>('one-way');
@@ -341,7 +388,12 @@ const Index: React.FC = () => {
                                                         />
                                                     </div>
                                                 </div>
-                                                <Button className="" type="primary" style={{ backgroundColor: "#38A993" }} shape="circle" icon={<SwapOutlined />} size="large" />
+                                                <Button onClick={()=>{
+                                                    const temp = fromAirport;
+                                                    fromAirport = toAirport
+                                                    toAirport = temp
+                                                }} 
+                                                className="" type="primary" style={{ backgroundColor: "#38A993" }} shape="circle" icon={<SwapOutlined />} size="large" />
                                                 <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
                                                     <div className="px-2 bg-white justify-start items-start gap-2.5 inline-flex">
                                                         <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">To</div>
@@ -407,6 +459,133 @@ const Index: React.FC = () => {
                         </div>
                     </div>
                     <div className="h-32"></div>
+                    {
+                        schedules.length != 0 ? <div></div> :
+                        <div className="flex w-full">
+                        <div className="w-full flex-col justify-center items-center gap-5 inline-flex py-8">
+                        {
+                            // Make Sure schedule to render is implemented
+                            scheduleToRender.map(()=>{
+                            return <div className="w-[646px] shadow justify-center items-center inline-flex">
+                                <div className="grow shrink basis-0 px-6 py-5 bg-white rounded-xl flex-col justify-center items-center gap-2.5 inline-flex">
+                                    <div className="self-stretch justify-start items-end gap-[5.01px] inline-flex">
+                                        <div className="w-[65px] flex-col justify-start items-start gap-1 inline-flex">
+                                            <div className="text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">10:25</div>
+                                            <div className="text-emerald-400 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">CGK</div>
+                                            <div className="self-stretch text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">16 Jan</div>
+                                        </div>
+                                        <div className="grow shrink basis-0 self-stretch pt-3 flex-col justify-between items-center inline-flex">
+                                            <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Inter']">1h 45m</div>
+                                            <div className="w-[225px] py-3 justify-center items-center gap-1 inline-flex">
+                                                <div className="w-[16.39px] h-[15.58px] relative">
+                                                    <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-emerald-400 rounded-full" />
+                                                    <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-emerald-400 rounded-full" />
+                                                </div>
+                                                <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
+                                                <div className="w-5 h-5 origin-top-left rotate-90 justify-center items-center flex">
+                                                    <div className="w-5 h-5 relative">
+                                                    </div>
+                                                </div>
+                                                <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
+                                                <div className="w-[16.39px] h-[15.58px] relative">
+                                                    <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-emerald-400 rounded-full" />
+                                                    <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-emerald-400 rounded-full" />
+                                                </div>
+                                            </div>
+                                            <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Inter']">Direct</div>
+                                        </div>
+                                        <div className="w-[61px] flex-col justify-start items-end gap-1 inline-flex">
+                                            <div className="text-right text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">13:10</div>
+                                            <div className="text-right text-emerald-400 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">SIN</div>
+                                            <div className="self-stretch text-right text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">16 Jan</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="self-stretch px-6 py-5 bg-white rounded-xl flex-col justify-center items-start gap-3 inline-flex">
+                                    <div className="self-stretch justify-start items-center gap-2 inline-flex">
+                                        <div className="w-8 h-8 justify-center items-center gap-[6.62px] flex">
+                                            <div className="w-[31.60px] h-[31.60px] relative">
+                                                <div className="w-[29.79px] h-[29.79px] left-[1.10px] top-[1.10px] absolute bg-emerald-400 rounded-full" />
+                                                <div className="w-[22.34px] h-[22.34px] left-[15.95px] top-0 absolute origin-top-left rotate-[45.56deg]">
+                                                    <div className="w-[22.34px] h-[22.34px] left-0 top-[-0px] absolute">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex-col justify-center items-start inline-flex">
+                                            <div className="text-center text-neutral-900 text-xs font-semibold font-['Plus Jakarta Sans'] leading-none">SE 955</div>
+                                            <div className="text-center text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">Boeing 777-300ER</div>
+                                        </div>
+                                    </div>
+                                    <div className="self-stretch justify-start items-center gap-1 inline-flex">
+                                        <div className="text-emerald-400 text-xl font-bold font-['Plus Jakarta Sans'] leading-7">IDR 1,950K</div>
+                                        <div className="text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">/pax</div>
+                                    </div>
+                                </div>
+                            </div>
+                            })
+                        }                            
+                        <div className="w-[646px] shadow justify-center items-center inline-flex">
+                                <div className="grow shrink basis-0 px-6 py-5 bg-white rounded-xl flex-col justify-center items-center gap-2.5 inline-flex">
+                                    <div className="self-stretch justify-start items-end gap-[5.01px] inline-flex">
+                                        <div className="w-[65px] flex-col justify-start items-start gap-1 inline-flex">
+                                            <div className="text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">10:25</div>
+                                            <div className="text-emerald-400 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">CGK</div>
+                                            <div className="self-stretch text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">16 Jan</div>
+                                        </div>
+                                        <div className="grow shrink basis-0 self-stretch pt-3 flex-col justify-between items-center inline-flex">
+                                            <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Inter']">1h 45m</div>
+                                            <div className="w-[225px] py-3 justify-center items-center gap-1 inline-flex">
+                                                <div className="w-[16.39px] h-[15.58px] relative">
+                                                    <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-emerald-400 rounded-full" />
+                                                    <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-emerald-400 rounded-full" />
+                                                </div>
+                                                <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
+                                                <div className="w-5 h-5 origin-top-left rotate-90 justify-center items-center flex">
+                                                    <div className="w-5 h-5 relative">
+                                                    </div>
+                                                </div>
+                                                <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
+                                                <div className="w-[16.39px] h-[15.58px] relative">
+                                                    <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-emerald-400 rounded-full" />
+                                                    <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-emerald-400 rounded-full" />
+                                                </div>
+                                            </div>
+                                            <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Inter']">Direct</div>
+                                        </div>
+                                        <div className="w-[61px] flex-col justify-start items-end gap-1 inline-flex">
+                                            <div className="text-right text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">13:10</div>
+                                            <div className="text-right text-emerald-400 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">SIN</div>
+                                            <div className="self-stretch text-right text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">16 Jan</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="self-stretch px-6 py-5 bg-white rounded-xl flex-col justify-center items-start gap-3 inline-flex">
+                                    <div className="self-stretch justify-start items-center gap-2 inline-flex">
+                                        <div className="w-8 h-8 justify-center items-center gap-[6.62px] flex">
+                                            <div className="w-[31.60px] h-[31.60px] relative">
+                                                <div className="w-[29.79px] h-[29.79px] left-[1.10px] top-[1.10px] absolute bg-emerald-400 rounded-full" />
+                                                <div className="w-[22.34px] h-[22.34px] left-[15.95px] top-0 absolute origin-top-left rotate-[45.56deg]">
+                                                    <div className="w-[22.34px] h-[22.34px] left-0 top-[-0px] absolute">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex-col justify-center items-start inline-flex">
+                                            <div className="text-center text-neutral-900 text-xs font-semibold font-['Plus Jakarta Sans'] leading-none">SE 955</div>
+                                            <div className="text-center text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">Boeing 777-300ER</div>
+                                        </div>
+                                    </div>
+                                    <div className="self-stretch justify-start items-center gap-1 inline-flex">
+                                        <div className="text-emerald-400 text-xl font-bold font-['Plus Jakarta Sans'] leading-7">IDR 1,950K</div>
+                                        <div className="text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">/pax</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <Pagination onChange={onChangePage} defaultCurrent={1} total={schedules.length} pageSize={4}/>
+                            </div>
+                        </div>
+                    }
                     <HomeInfo1 />
 
                 </Content>
