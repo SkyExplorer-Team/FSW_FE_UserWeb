@@ -525,66 +525,9 @@ const Index: React.FC = () => {
                             </div>
                             })
                         }                            
-                        <div className="w-[646px] shadow justify-center items-center inline-flex">
-                                <div className="grow shrink basis-0 px-6 py-5 bg-white rounded-xl flex-col justify-center items-center gap-2.5 inline-flex">
-                                    <div className="self-stretch justify-start items-end gap-[5.01px] inline-flex">
-                                        <div className="w-[65px] flex-col justify-start items-start gap-1 inline-flex">
-                                            <div className="text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">10:25</div>
-                                            <div className="text-emerald-400 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">CGK</div>
-                                            <div className="self-stretch text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">16 Jan</div>
-                                        </div>
-                                        <div className="grow shrink basis-0 self-stretch pt-3 flex-col justify-between items-center inline-flex">
-                                            <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Inter']">1h 45m</div>
-                                            <div className="w-[225px] py-3 justify-center items-center gap-1 inline-flex">
-                                                <div className="w-[16.39px] h-[15.58px] relative">
-                                                    <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-emerald-400 rounded-full" />
-                                                    <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-emerald-400 rounded-full" />
-                                                </div>
-                                                <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
-                                                <div className="w-5 h-5 origin-top-left rotate-90 justify-center items-center flex">
-                                                    <div className="w-5 h-5 relative">
-                                                    </div>
-                                                </div>
-                                                <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
-                                                <div className="w-[16.39px] h-[15.58px] relative">
-                                                    <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-emerald-400 rounded-full" />
-                                                    <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-emerald-400 rounded-full" />
-                                                </div>
-                                            </div>
-                                            <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Inter']">Direct</div>
-                                        </div>
-                                        <div className="w-[61px] flex-col justify-start items-end gap-1 inline-flex">
-                                            <div className="text-right text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">13:10</div>
-                                            <div className="text-right text-emerald-400 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">SIN</div>
-                                            <div className="self-stretch text-right text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">16 Jan</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="self-stretch px-6 py-5 bg-white rounded-xl flex-col justify-center items-start gap-3 inline-flex">
-                                    <div className="self-stretch justify-start items-center gap-2 inline-flex">
-                                        <div className="w-8 h-8 justify-center items-center gap-[6.62px] flex">
-                                            <div className="w-[31.60px] h-[31.60px] relative">
-                                                <div className="w-[29.79px] h-[29.79px] left-[1.10px] top-[1.10px] absolute bg-emerald-400 rounded-full" />
-                                                <div className="w-[22.34px] h-[22.34px] left-[15.95px] top-0 absolute origin-top-left rotate-[45.56deg]">
-                                                    <div className="w-[22.34px] h-[22.34px] left-0 top-[-0px] absolute">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="flex-col justify-center items-start inline-flex">
-                                            <div className="text-center text-neutral-900 text-xs font-semibold font-['Plus Jakarta Sans'] leading-none">SE 955</div>
-                                            <div className="text-center text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">Boeing 777-300ER</div>
-                                        </div>
-                                    </div>
-                                    <div className="self-stretch justify-start items-center gap-1 inline-flex">
-                                        <div className="text-emerald-400 text-xl font-bold font-['Plus Jakarta Sans'] leading-7">IDR 1,950K</div>
-                                        <div className="text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">/pax</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <Pagination onChange={onChangePage} defaultCurrent={1} total={schedules.length} pageSize={4}/>
-                            </div>
+                        <Pagination onChange={onChangePage} defaultCurrent={1} total={schedules.length} pageSize={4}/>
                         </div>
+                    </div>
                     }
                     <HomeInfo1 />
 
