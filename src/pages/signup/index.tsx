@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Steps,
   Button,
@@ -87,6 +88,9 @@ const SignUpPage: React.FC = () => {
     null
   );
   const [isOtpResend, setIsOtpResend] = useState<boolean>(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleNext = () => {
     console.log(currentStep);
@@ -152,7 +156,11 @@ const SignUpPage: React.FC = () => {
   };
 
   const handleSignIn = () => {
-    // navigate("/login");
+    navigate("/login");
+  };
+
+  const handleSignUpSuccess = () {
+    // navigate("/index")
   };
 
   const handleTermsClick = () => {
@@ -175,6 +183,7 @@ const SignUpPage: React.FC = () => {
 
   const onContactFormFinish = (values: ContactFormData) => {
     console.log("Contact Form values:", values);
+    handleVerifyOTP(values.email); // Menambahkan pemanggilan handleVerifyOTP setelah mengisi formulir kontak
     handleNext();
   };
 
@@ -253,7 +262,6 @@ const SignUpPage: React.FC = () => {
         national: selectedNationality || "",
         dob: personalData.dob,
         phone: contactData.phoneNumber,
-        subscribe: isNoFirstMiddleNameChecked,
       };
 
       const apiUrl = process.env.REACT_APP_API_BASE_URL;
@@ -271,6 +279,7 @@ const SignUpPage: React.FC = () => {
         // Registrasi berhasil
         const responseData = await response.json();
         console.log("Registration successful:", responseData);
+        setRegistrationSuccess(true);
         // navigate to dashboard
       } else {
         const errorData = await response.json();
@@ -399,11 +408,10 @@ const SignUpPage: React.FC = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // 'Authorization': 'Bearer token'
         },
         body: JSON.stringify({
           email: email,
-          password: passwordData.password, // Gunakan kata sandi yang sudah tersimpan
+          password: passwordData.password,
           // Tambahkan parameter lain yang diperlukan untuk menetapkan kata sandi
         }),
       });
@@ -411,6 +419,9 @@ const SignUpPage: React.FC = () => {
       if (response.ok) {
         const responseData = await response.json();
         console.log("Password set successfully:", responseData);
+
+        // Lanjutkan ke langkah berikutnya setelah menetapkan kata sandi
+        handleNext();
       } else {
         const errorData = await response.json();
         console.error("Failed to set password:", errorData);
@@ -735,6 +746,7 @@ const SignUpPage: React.FC = () => {
                   className="bg-primary mb-2 mt-5"
                   size="large"
                   block={true}
+                  onClick={() => navigate("/src/pages/index.tsx")}
                 >
                   Sign In
                 </Button>
@@ -756,7 +768,7 @@ const SignUpPage: React.FC = () => {
                   Join us on the journey! Register now and unlock a world of
                   seamless possibilities and exclusive benefits.
                 </Text>
-                {/* dummy form replaced */}
+                {/* dummy form */}
                 <Form
                   form={personalInfoForm}
                   onFinish={onPersonalFormFinish}
