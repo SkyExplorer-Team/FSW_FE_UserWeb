@@ -159,7 +159,7 @@ const SignUpPage: React.FC = () => {
     navigate("/login");
   };
 
-  const handleSignUpSuccess = () {
+  const handleSignUpSuccess = () => {
     // navigate("/index")
   };
 
