@@ -6,9 +6,7 @@ import { ValidateStatus } from "antd/lib/form/FormItem";
 
 import GoogleSvg from "../../assets/google.svg";
 const { Text } = Typography;
-const endpoint = "/api/auth/";
-const target = "login"
-const api_base_url = "https://be-java-production.up.railway.app"
+// const api_base_url = "https://be-java-production.up.railway.app"
 
 const SignIn: React.FC = () => {
     const navigate = useNavigate();
@@ -22,9 +20,6 @@ const SignIn: React.FC = () => {
     };
     const handleContinueWithEmail = () => {
         setIsOnboarding(false);
-        console.log("email:", email);
-        console.log("password:", password);
-
     };
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -64,20 +59,21 @@ const SignIn: React.FC = () => {
     }>({ value: "" });
 
 
-    const onEmailChange = (value: string) => {
+    const onEmailChange = async (value: string) => {
 
         const { validateStatus, errorMsg } = validateEmail(value);
-
+        await setEmail({
+            value,
+            validateStatus,
+            errorMsg,
+        });
         if (validateStatus === "success") {
             setDisabledLogin(false)
         } else {
             setDisabledLogin(true)
         }
-        setEmail({
-            value,
-            validateStatus,
-            errorMsg,
-        });
+        console.log(email.value)
+
 
 
     };
@@ -109,14 +105,15 @@ const SignIn: React.FC = () => {
                 "password": password
             }
             const response = await fetch(
-                api_base_url + endpoint + target,
+                "https://be-java-production.up.railway.app/api/auth/login",
                 {
                     method: 'post',
-                    headers: { 'Content-Type': 'application/json' },
+                    mode: "cors",
+                    headers: { "accept": "*/*", 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload),
                 }
             );
-            console.log(response)
+            console.log(response.body)
             const responseJson = await response.json();
 
             if (response.status !== 200) {
@@ -130,10 +127,8 @@ const SignIn: React.FC = () => {
                 responseJson.data.token
             );
 
-
             // If login succeed, redirect ke home
-            navigate('/dashboard');
-            console.log(response)
+            navigate('/');
         }
         catch (err) {
             showModal()
@@ -143,14 +138,14 @@ const SignIn: React.FC = () => {
 
     return (
         <div className="flex flex-col md:flex-row gap-4">
-            <div className="h-screen w-1/2">
+            <div className=" md:w-screen-lg:w-1/2 sm:h-fit md:h-screen">
                 <img
                     src="src/assets/sign-in.png"
                     alt="Sign In Image"
                     className="h-full rounded p-10 object-contain "
                 />
             </div>
-            <div className="md:w-1/2 flex items-center p-4 md:py-10 md:px-16">
+            <div className=" flex items-center flex-grow p-4 md:py-10 md:px-16">
                 {isOnboarding ?
                     <div className="self-center w-full">
                         <h1 className="text-left text-4xl mb-8 font-semibold">
@@ -317,6 +312,7 @@ const SignIn: React.FC = () => {
                         <Modal
                             open={isModalOpen}
                             title="Account Not Found"
+                            closable={true}
                             footer={[
                                 <button
                                     onClick={handleOk}
