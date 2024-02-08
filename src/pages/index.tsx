@@ -1,20 +1,128 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Logo from "../components/Logo";
-import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Radio, RadioChangeEvent, Select, Space } from "antd";
+import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Pagination, PaginationProps, Radio, RadioChangeEvent, Select, Space } from "antd";
 import { MenuProps } from "antd/lib";
-import { DownOutlined, TeamOutlined, DollarOutlined, SwapOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { DownOutlined, TeamOutlined, DollarOutlined, SwapOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import ReactCountryFlag from "react-country-flag"
 import { useNavigate } from "react-router-dom";
 import PassengerField from '../components/passenger_field';
+import CabinField from "../components/cabin_field";
+import SkeletonAvatar from "antd/lib/skeleton/Avatar";
+import HomeInfo1 from "../components/home_info1";
+import HomeFooter from "../components/home_footer";
 
 dayjs.extend(customParseFormat);
 
 const { Header, Content, Footer } = Layout;
 
 
+const api_base_url = "https://be-java-production.up.railway.app"
+
+
+interface Airport {
+    nationalId: string;
+    name: string;
+    abv: string;
+    lat: number | null;
+    long: number | null;
+}
+
+interface Schedule {
+    name: string;
+    departureDate: dayjs.Dayjs;
+    plane: string;
+    arrivalDate: dayjs.Dayjs;
+    duration: number;
+}
+
 const Index: React.FC = () => {
+    const token = localStorage.getItem(
+        'access_token',
+    );
+
+    let airports: Airport[] = [];
+    let fromAirportDetails: { "label": string, "value": string }[] = [];
+    let toAirportDetails: { "label": string, "value": string }[] = [];
+    let fromAirport!: Airport;
+    let toAirport!: Airport;
+    let departureDate: dayjs.Dayjs;
+    let returnDate: dayjs.Dayjs;
+    let schedules: Schedule[] = [];
+    async function fetchInitialAirport() {
+        const payload = {}
+
+        const response = await fetch(
+            api_base_url + "/api/airport",
+            {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            }
+        );
+        console.log(response)
+        const responseJson = await response.json();
+        if (response.status !== 200) {
+            alert('error: ' + responseJson.message);
+            return;
+        }
+        // make Sure this ok ==============
+        console.log(responseJson);
+        console.log("responseJson");
+
+        airports = responseJson['Airport']
+    }
+    let accessToken: string | null;
+    useRef(() => {
+        accessToken = localStorage.getItem(
+            'access_token',
+        );
+    })
+    useEffect(() => {
+
+        console.log(accessToken)
+        // if (accessToken === null) {
+        //     navigate('/login')
+        // }
+        fetchInitialAirport()
+
+        airports.map((val) => {
+            fromAirportDetails.push({ label: val.name, value: val.nationalId })
+            toAirportDetails.push({ label: val.name, value: val.nationalId })
+        })
+
+
+
+    })
+
+    const [seat, setSeat] = useState(new Map<string, number>(
+        [
+            ["adults", 0],
+            ["children", 0],
+            ["infant", 0]
+        ]
+    ));
+
+    const [cabin, setCabin] = useState<number>(1);
+
+    const changeSeats = (targetMap: Map<string, number>) => {
+        setSeat(targetMap);
+    }
+
+    const changeCabin = (target: number) => {
+        setCabin(target);
+    }
+
+    const onDepartureDatePick: DatePickerProps['onChange'] = (date) => {
+        departureDate = date!;
+        console.log(departureDate.toISOString());
+    };
+    const onReturnDatePick: DatePickerProps['onChange'] = (date) => {
+        returnDate = date!;
+        console.log(returnDate.toISOString());
+    };
+
     const navigate = useNavigate();
 
     const dateFormat = 'dddd, DD MMM YYYY';
@@ -22,23 +130,98 @@ const Index: React.FC = () => {
     const customFormat: DatePickerProps['format'] = (value) =>
         value.format(dateFormat);
 
+    const fromChange = (value: string) => {
+        fromAirport = airports.find((obj) => {
+            return obj.name = value;
+        })!
+
+        console.log(`selected ${fromAirport.name} ${fromAirport.abv}`);
+    };
+    const toChange = (value: string) => {
+        toAirport = airports.find((obj) => {
+            return obj.name = value;
+        })!
+
+        console.log(`selected ${toAirport.name} ${toAirport.abv}`);
+    };
+
+    const fromSearch = (value: string) => {
+        fromAirportDetails = fromAirportDetails.filter((obj) => {
+            return obj.label.includes(value)
+        })
+        console.log('search:', value);
+    };
+
+    const toSearch = (value: string) => {
+        toAirportDetails = toAirportDetails.filter((obj) => {
+            return obj.label.includes(value)
+        })
+
+        console.log('search:', value);
+    };
+
+
+    const filterOption = (input: string, option?: { label: string; value: string }) =>
+        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
+
     const items: MenuProps['items'] = [
         {
             key: '1',
             label: (
-                <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-                    1st menu item
+                <a target="_blank" rel="noopener noreferrer" href="/">
+                    Items
                 </a>
             ),
         },
     ];
+
     const handleSignUp = () => {
         navigate("/signup")
     };
 
-    const handleSearch = () => {
+    const handleSearch = async () => {
         console.log("Searching...");
+        //case found:
+        const payload = {}
+
+        const url = new URL(api_base_url + "/schedule-detail/getSchedules")
+        url.searchParams.append("cabinClassId", "1")
+        url.searchParams.append("ticketTypeId", "1")
+        url.searchParams.append("date", departureDate.toISOString())
+        url.searchParams.append("fromAirportId", fromAirport.nationalId)
+        url.searchParams.append("toAirportId", toAirport.nationalId)
+
+
+        const response = await fetch(
+            url.toString(),
+            {
+
+                method: 'get',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            }
+        );
+        console.log(response)
+        const responseJson = await response.json();
+        if (response.status !== 200) {
+            alert('error: ' + responseJson.message);
+            return;
+        }
+        // implement get schedules ==============
+        schedules = responseJson['schedules'];
+        setPage(1)
+        setScheduleToRender(schedules.slice((page - 1) * 4, (page * 4) - 1))
+
     };
+
+    const [page, setPage] = useState<number>(1);
+    const [scheduleToRender, setScheduleToRender] = useState<Schedule[]>(schedules.slice(0, 3));
+    const onChangePage: PaginationProps['onShowSizeChange'] = (current) => {
+        console.log(page);
+        setPage(current)
+        setScheduleToRender(schedules.slice((page - 1) * 4, (page * 4) - 1))
+    };
+
 
 
     const [trip, setTrip] = useState<string>('one-way');
@@ -46,17 +229,7 @@ const Index: React.FC = () => {
     const onChange = (e: RadioChangeEvent) => {
         setTrip(e.target.value);
     };
-    const fromChange = (value: string) => {
-        console.log(`selected ${value}`);
-    };
 
-    const fromSearch = (value: string) => {
-        console.log('search:', value);
-    };
-
-    // Filter `option.label` match the user type `input`
-    const filterOption = (input: string, option?: { label: string; value: string }) =>
-        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
 
     return (
@@ -108,17 +281,25 @@ const Index: React.FC = () => {
                                     />
                                     <div className="">IDR</div>
                                     <DownOutlined />
-
                                 </div>
                             </a>
-                            <button
-                                onClick={handleSignUp}
-                                type="submit"
-                                className="my-4 justify-center rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm">
-                                <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
-                                    Sign Up
-                                </p>
-                            </button>,
+
+                            {
+                                token ?
+                                    <div className="snap-center self-center align-middle hover:text-[#38A993] text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                                        <SkeletonAvatar className="mr-4" />
+                                        AAAAA
+                                        <DownOutlined />
+                                    </div> :
+                                    <button
+                                        onClick={handleSignUp}
+                                        type="submit"
+                                        className="my-4 justify-center rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm">
+                                        <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
+                                            Sign Up
+                                        </p>
+                                    </button>
+                            }
 
                         </div>
                     </div>
@@ -128,8 +309,8 @@ const Index: React.FC = () => {
                         {/* div infront */}
                         <div className="relative">
                             <img className="w-full" src="src/assets/Illustration.svg" ></img>
-                            <div className="absolute bottom left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
-                                <div className=" p-6 w-[1080px] bg-white rounded-[20px] shadow border border-gray-200 flex-col justify-center items-start gap-6 inline-flex">
+                            <div className="absolute w-full m-auto -bottom-[10%] snap-center self-center text-center ">
+                                <div className=" p-6  bg-white rounded-[20px] shadow border border-gray-200 flex-col justify-center items-start gap-6 inline-flex">
                                     <div className="self-stretch justify-start items-center gap-6 inline-flex">
                                         <div className="justify-start items-start gap-9 flex">
                                             <Radio.Group buttonStyle="outline" size="large" className="text-[#38A993]" defaultValue={trip} onChange={onChange}>
@@ -145,9 +326,15 @@ const Index: React.FC = () => {
                                                 </Radio>
                                             </Radio.Group>
                                             <Divider type="vertical" className="h-6"></Divider>
-                                            <Dropdown trigger={["click"]} className="gap-4 flex" menu={{ items }}
+                                            <Dropdown trigger={["click"]} className="gap-4 flex" menu={{}}
                                                 dropdownRender={() => (
-                                                    <PassengerField>
+                                                    <PassengerField
+                                                        seats={seat}
+
+                                                        onChange={(target) => {
+                                                            changeSeats(target)
+                                                        }}
+                                                    >
 
                                                     </PassengerField>
                                                 )}
@@ -160,7 +347,17 @@ const Index: React.FC = () => {
                                                     </Space>
                                                 </a>
                                             </Dropdown>
-                                            <Dropdown className="gap-4 flex" menu={{ items }}>
+                                            <Dropdown trigger={["click"]} className="gap-4 flex"
+                                                dropdownRender={() => (
+                                                    <CabinField chosen={
+                                                        cabin
+                                                    }
+                                                        onChange={(target) => { changeCabin(target) }}
+                                                    >
+
+                                                    </CabinField>
+                                                )}
+                                            >
                                                 <a className="hover:text-[#38A993]" onClick={(e) => e.preventDefault()}>
                                                     <Space>
                                                         <DollarOutlined style={{ fontSize: 24 }} />
@@ -172,52 +369,53 @@ const Index: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="self-stretch justify-start items-center gap-6 inline-flex">
-                                        <div className="grow shrink basis-0 justify-start items-center gap-6 flex">
-                                            <div className="justify-center items-center gap-6 flex">
+                                        <div className="grow shrink basis-0 justify-start items-center gap-3 flex">
+                                            <div className=" justify-center items-center gap-2 flex">
                                                 <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
-                                                    <div className="px-2 bg-white justify-start items-start gap-2.5 inline-flex">
+                                                    <div className="bg-white justify-start items-start gap-2.5 inline-flex">
                                                         <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">From</div>
                                                     </div>
                                                     <div className="px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center inline-flex">
-
                                                         <Select
                                                             showSearch
                                                             bordered={false}
-                                                            title="From"
-                                                            dropdownStyle={{ backgroundColor: 'white' }}
+                                                            title="Where From"
+                                                            placeholder="Where From ?"
+                                                            dropdownStyle={{ backgroundColor: 'white', width: 'fit-content', padding: '24px' }}
                                                             style={{
                                                                 color: 'white',
                                                                 borderColor: 'transparent',
                                                                 border: '0px solid',
                                                                 backgroundColor: 'transparent',
                                                             }}
-
-                                                            placeholder="Select a person"
+                                                            value={fromAirport == undefined ? null : fromAirport.name}
                                                             optionFilterProp="children"
                                                             onChange={fromChange}
                                                             onSearch={fromSearch}
                                                             filterOption={filterOption}
-                                                            options={[
-                                                                {
-                                                                    value: 'jack',
-                                                                    label: 'Jack',
-                                                                },
-                                                                {
-                                                                    value: 'lucy',
-                                                                    label: 'Lucy',
-                                                                },
-                                                                {
-                                                                    value: 'tom',
-                                                                    label: 'Tom',
-                                                                },
-                                                            ]}
+                                                            options={fromAirportDetails}
+                                                            notFoundContent={<>
+                                                                <img className="p-8 w-[430px]" src="src/assets/not-found.svg">
+                                                                </img>
+                                                            </>}
+                                                            optionRender={(option) => {
+                                                                return <div>
+                                                                    {
+                                                                        option.value
+                                                                    }
+                                                                </div>
+                                                            }}
                                                         />
-
                                                     </div>
                                                 </div>
-                                                <Button className="" type="primary" style={{ backgroundColor: "#38A993" }} shape="circle" icon={<SwapOutlined />} size="large" />
+                                                <Button onClick={() => {
+                                                    const temp = fromAirport;
+                                                    fromAirport = toAirport
+                                                    toAirport = temp
+                                                }}
+                                                    className="" type="primary" style={{ backgroundColor: "#38A993" }} shape="circle" icon={<SwapOutlined />} size="large" />
                                                 <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
-                                                    <div className="px-2 bg-white justify-start items-start gap-2.5 inline-flex">
+                                                    <div className="bg-white justify-start items-start gap-2.5 inline-flex">
                                                         <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">To</div>
                                                     </div>
                                                     <div className="px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center inline-flex">
@@ -225,51 +423,83 @@ const Index: React.FC = () => {
                                                         <Select
                                                             bordered={false}
                                                             title="To"
-                                                            dropdownStyle={{ backgroundColor: 'white' }}
+                                                            dropdownStyle={{ backgroundColor: 'white', padding: '24px', width: 'fit-content' }}
+                                                            value={toAirport == undefined ? null : toAirport.name}
+                                                            showSearch
+                                                            placeholder="Select a person"
+                                                            optionFilterProp="children"
+                                                            onChange={toChange}
+                                                            onSearch={toSearch}
                                                             style={{
                                                                 color: 'white',
                                                                 borderColor: 'transparent',
                                                                 border: '0px solid',
                                                                 backgroundColor: 'transparent',
                                                             }}
-                                                            showSearch
-                                                            placeholder="Select a person"
-                                                            optionFilterProp="children"
-                                                            onChange={fromChange}
-                                                            onSearch={fromSearch}
+                                                            notFoundContent={<>
+                                                                <img className="p-4 w-[430px]" src="src/assets/not-found.svg">
+                                                                </img>
+                                                            </>}
                                                             filterOption={filterOption}
-                                                            options={[
-                                                                {
-                                                                    value: 'jack',
-                                                                    label: 'Jack',
-                                                                },
-                                                                {
-                                                                    value: 'lucy',
-                                                                    label: 'Lucy',
-                                                                },
-                                                                {
-                                                                    value: 'tom',
-                                                                    label: 'Tom',
-                                                                },
-                                                            ]}
+                                                            optionRender={(option) => {
+                                                                console.log(option.value)
+                                                                return <div className="w-[382px] h-[68px] py-2 justify-center items-center gap-4 inline-flex">
+                                                                    <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
+                                                                        <div className="text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Jakarta, Indonesia</div>
+                                                                        <div className="text-center text-neutral-900 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Soekarno Hatta International</div>
+                                                                    </div>
+                                                                    <div className="p-2 bg-emerald-100 rounded flex-col justify-center items-center gap-1 inline-flex">
+                                                                        <div className="text-center text-teal-700 text-xl font-bold font-['Plus Jakarta Sans'] leading-7">CGK</div>
+                                                                    </div>
+                                                                </div>
+                                                            }}
+                                                            options={toAirportDetails}
                                                         />
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="grow shrink basis-0 justify-start items-center gap-6 flex">
-                                                <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
-                                                    <div className="px-2 bg-white justify-start items-start gap-2.5 inline-flex">
-                                                        <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Departure Date</div>
+                                            {trip == "one-way" ?
+                                                <div className="grow shrink basis-0 justify-start items-center gap-3 flex">
+                                                    <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
+                                                        <div className="px-2 bg-white justify-start items-start gap-2.5 inline-flex">
+                                                            <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Departure Date</div>
+                                                        </div>
+
+                                                        <div className="self-stretch px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center gap-3 inline-flex">
+
+
+                                                            <DatePicker onChange={onDepartureDatePick} style={{ width: "100%" }} className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal" bordered={false} format={customFormat} />
+
+                                                        </div>
                                                     </div>
+                                                </div> :
+                                                <div className="flex-row ">
+                                                    <div className="grow shrink basis-0 flex-col  justify-start items-start mr-3 gap-2 inline-flex">
+                                                        <div className="bg-white justify-start items-start inline-flex">
+                                                            <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Departure Date</div>
+                                                        </div>
 
-                                                    <div className="self-stretch px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center gap-3 inline-flex">
+                                                        <div className="py-[8px] rounded-xl border border-gray-100 justify-start items-center">
 
 
-                                                        <DatePicker style={{ width: "100%" }} className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal" bordered={false} format={customFormat} />
+                                                            <DatePicker onChange={onDepartureDatePick} style={{ width: "100%" }} className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal" bordered={false} format={customFormat} />
 
+                                                        </div>
+                                                    </div>
+                                                    <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
+                                                        <div className="bg-white justify-start items-start inline-flex">
+                                                            <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Return Date</div>
+                                                        </div>
+
+                                                        <div className="py-[8px] rounded-xl border border-gray-100 justify-start items-center">
+
+
+                                                            <DatePicker onChange={onReturnDatePick} style={{ width: "100%" }} className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal" bordered={false} format={customFormat} />
+
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            }
                                         </div>
                                         <button
                                             onClick={handleSearch}
@@ -285,116 +515,83 @@ const Index: React.FC = () => {
                         </div>
                     </div>
                     <div className="h-32"></div>
-                    <div className=" text-center ">
-                        <div className="border-b border-gray-100 justify-between items-center inline-flex">
-                            <div className="flex-col justify-start items-center gap-[25px] inline-flex">
-                                <div className="relative bg-gradient-to-b from-emerald-100 to-white rounded-2xl border border-gray-100">
-                                    <img className="p-4" src="src/assets/search_1.svg">
-                                    </img>
-
-                                </div>
-                                <div className="flex-col justify-center items-center gap-4 flex">
-                                    <div className="text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Find Your Journey in a Flash</div>
-                                    <div className="w-[390px] text-center text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Discover flights that suit your plans. Start your adventure with a simple search.</div>
+                    {
+                        schedules.length != 0 ? <div></div> :
+                            <div className="flex w-full">
+                                <div className="w-full flex-col justify-center items-center gap-5 inline-flex py-8">
+                                    {
+                                        // Make Sure schedule to render is implemented
+                                        scheduleToRender.map(() => {
+                                            return <div className="w-[646px] shadow justify-center items-center inline-flex">
+                                                <div className="grow shrink basis-0 px-6 py-5 bg-white rounded-xl flex-col justify-center items-center gap-2.5 inline-flex">
+                                                    <div className="self-stretch justify-start items-end gap-[5.01px] inline-flex">
+                                                        <div className="w-[65px] flex-col justify-start items-start gap-1 inline-flex">
+                                                            <div className="text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">10:25</div>
+                                                            <div className="text-emerald-400 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">CGK</div>
+                                                            <div className="self-stretch text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">16 Jan</div>
+                                                        </div>
+                                                        <div className="grow shrink basis-0 self-stretch pt-3 flex-col justify-between items-center inline-flex">
+                                                            <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Inter']">1h 45m</div>
+                                                            <div className="w-[225px] py-3 justify-center items-center gap-1 inline-flex">
+                                                                <div className="w-[16.39px] h-[15.58px] relative">
+                                                                    <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-emerald-400 rounded-full" />
+                                                                    <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-emerald-400 rounded-full" />
+                                                                </div>
+                                                                <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
+                                                                <div className="w-5 h-5 origin-top-left rotate-90 justify-center items-center flex">
+                                                                    <div className="w-5 h-5 relative">
+                                                                    </div>
+                                                                </div>
+                                                                <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
+                                                                <div className="w-[16.39px] h-[15.58px] relative">
+                                                                    <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-emerald-400 rounded-full" />
+                                                                    <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-emerald-400 rounded-full" />
+                                                                </div>
+                                                            </div>
+                                                            <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Inter']">Direct</div>
+                                                        </div>
+                                                        <div className="w-[61px] flex-col justify-start items-end gap-1 inline-flex">
+                                                            <div className="text-right text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">13:10</div>
+                                                            <div className="text-right text-emerald-400 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">SIN</div>
+                                                            <div className="self-stretch text-right text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">16 Jan</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="self-stretch px-6 py-5 bg-white rounded-xl flex-col justify-center items-start gap-3 inline-flex">
+                                                    <div className="self-stretch justify-start items-center gap-2 inline-flex">
+                                                        <div className="w-8 h-8 justify-center items-center gap-[6.62px] flex">
+                                                            <div className="w-[31.60px] h-[31.60px] relative">
+                                                                <div className="w-[29.79px] h-[29.79px] left-[1.10px] top-[1.10px] absolute bg-emerald-400 rounded-full" />
+                                                                <div className="w-[22.34px] h-[22.34px] left-[15.95px] top-0 absolute origin-top-left rotate-[45.56deg]">
+                                                                    <div className="w-[22.34px] h-[22.34px] left-0 top-[-0px] absolute">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex-col justify-center items-start inline-flex">
+                                                            <div className="text-center text-neutral-900 text-xs font-semibold font-['Plus Jakarta Sans'] leading-none">SE 955</div>
+                                                            <div className="text-center text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">Boeing 777-300ER</div>
+                                                        </div>
+                                                    </div>
+                                                    <div className="self-stretch justify-start items-center gap-1 inline-flex">
+                                                        <div className="text-emerald-400 text-xl font-bold font-['Plus Jakarta Sans'] leading-7">IDR 1,950K</div>
+                                                        <div className="text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">/pax</div>
+                                                    </div>
+                                                </div>
+                                                <Pagination onChange={onChangePage} defaultCurrent={1} total={schedules.length} pageSize={4} />
+                                            </div>
+                                        })
+                                    }
                                 </div>
                             </div>
-                            <div className="flex-col justify-start items-center gap-[27px] inline-flex">
-                                <div className="relative bg-gradient-to-b from-emerald-100 to-white rounded-2xl border border-gray-100">
-                                    <img className="px-4" src="src/assets/take.svg">
-                                    </img>
+                    }
+                    <HomeInfo1 />
 
-                                </div>
-                                <div className="flex-col justify-center items-center gap-4 flex">
-                                    <div className="text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Tailor Your Journey, Your Way</div>
-                                    <div className="w-[390px] text-center text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Make it uniquely yours. Add details, select seats, and choose your in-flight delights.</div>
-                                </div>
-                            </div>
-                            <div className="flex-col justify-start items-center gap-7 inline-flex">
-                                <div className="relative bg-gradient-to-b from-emerald-100 to-white rounded-2xl border border-gray-100">
-                                    <img className="" src="src/assets/smooth.svg">
-                                    </img>
-
-                                </div>
-                                <div className="flex-col justify-center items-center gap-4 flex">
-                                    <div className="text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Smooth Boarding Awaits You</div>
-                                    <div className="w-[390px] text-center text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Ready for takeoff? Board with confidence using your digital boarding pass.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className=" py-12 ">
-                        <img className="block mr-auto ml-auto" src="src/assets/download.svg" alt="" />
-                    </div>
                 </Content>
                 <Footer style={{
                     padding: 0,
                 }} >
-                    <div className="w-full h-[321px] flex-col justify-center items-center inline-flex">
-                        <div className="w-full px-[51px] py-12 bg-white border-t border-gray-200 justify-between items-start inline-flex">
-                            <div className="h-[150px] flex-col justify-between items-start inline-flex">
-                                <div className="flex-col justify-center items-end gap-2 flex">
-                                    <Logo></Logo>
-                                    <div className="self-stretch text-center text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Navigate the Skies, Booking Made Easy </div>
-                                </div>
-                                <div className="self-stretch justify-start items-center gap-3 inline-flex">
-                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
-                                        <div className="w-5 h-5 relative"></div>
-                                    </div>
-                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
-                                        <div className="w-[18px] h-[18px] relative"></div>
-                                    </div>
-                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
-                                        <div className="w-5 h-5 relative"></div>
-                                    </div>
-                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
-                                        <div className="w-5 h-5 relative"></div>
-                                    </div>
-                                    <div className="p-2 rounded-full justify-start items-center gap-2.5 flex">
-                                        <div className="w-5 h-5 relative">
-                                            <div className="w-[15.83px] h-[11.67px] left-[2.08px] top-[4.17px] absolute">
-                                                <div className="w-[15.83px] h-[11.67px] left-0 top-0 absolute">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="justify-start items-start gap-[90px] flex">
-                                <div className="flex-col justify-start items-start gap-3 inline-flex">
-                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Features</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Sign Up / Sign In</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Explore</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Status</div>
-                                </div>
-                                <div className="flex-col justify-start items-start gap-3 inline-flex">
-                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Cabin</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Economy</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Business</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">First</div>
-                                </div>
-                                <div className="flex-col justify-start items-start gap-3 inline-flex">
-                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Baggage</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Checked Baggage</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Cabin Baggage</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Fare Types</div>
-                                </div>
-                                <div className="flex-col justify-start items-start gap-3 inline-flex">
-                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Resources</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">About Us</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">FAQs</div>
-                                </div>
-                                <div className="flex-col justify-start items-start gap-3 inline-flex">
-                                    <div className="self-stretch text-black text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Company</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Privacy Policy</div>
-                                    <div className="self-stretch text-slate-700 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">Terms of Use</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="w-full h-[75px] pr-[51px] bg-emerald-400 justify-between items-center inline-flex">
-                            <div className="h-[94px] justify-end items-center gap-6 flex"></div>
-                            <div className="text-white text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">No Bull, Just Board!</div>
-                        </div>
-                    </div>
+                    <HomeFooter />
                 </Footer>
             </Layout >  </ConfigProvider >
     );
