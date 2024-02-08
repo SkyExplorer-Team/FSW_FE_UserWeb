@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Logo from "../components/Logo";
 import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Pagination, PaginationProps, Radio, RadioChangeEvent, Select, Space } from "antd";
 import { MenuProps } from "antd/lib";
@@ -48,6 +48,7 @@ const Index: React.FC = () => {
     let fromAirport!: Airport;
     let toAirport!: Airport;
     let departureDate: dayjs.Dayjs;
+    let returnDate: dayjs.Dayjs;
     let schedules: Schedule[] = [];
     async function fetchInitialAirport() {
         const payload = {}
@@ -73,11 +74,13 @@ const Index: React.FC = () => {
         airports = responseJson['Airport']
     }
     let accessToken: string | null;
-    useEffect(() => {
-
+    useRef(() => {
         accessToken = localStorage.getItem(
             'access_token',
         );
+    })
+    useEffect(() => {
+
         console.log(accessToken)
         // if (accessToken === null) {
         //     navigate('/login')
@@ -111,9 +114,13 @@ const Index: React.FC = () => {
         setCabin(target);
     }
 
-    const onDatePick: DatePickerProps['onChange'] = (date) => {
+    const onDepartureDatePick: DatePickerProps['onChange'] = (date) => {
         departureDate = date!;
         console.log(departureDate.toISOString());
+    };
+    const onReturnDatePick: DatePickerProps['onChange'] = (date) => {
+        returnDate = date!;
+        console.log(returnDate.toISOString());
     };
 
     const navigate = useNavigate();
@@ -302,8 +309,8 @@ const Index: React.FC = () => {
                         {/* div infront */}
                         <div className="relative">
                             <img className="w-full" src="src/assets/Illustration.svg" ></img>
-                            <div className="absolute bottom left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
-                                <div className=" p-6 w-[1080px] bg-white rounded-[20px] shadow border border-gray-200 flex-col justify-center items-start gap-6 inline-flex">
+                            <div className="absolute w-full m-auto -bottom-[10%] snap-center self-center text-center ">
+                                <div className=" p-6  bg-white rounded-[20px] shadow border border-gray-200 flex-col justify-center items-start gap-6 inline-flex">
                                     <div className="self-stretch justify-start items-center gap-6 inline-flex">
                                         <div className="justify-start items-start gap-9 flex">
                                             <Radio.Group buttonStyle="outline" size="large" className="text-[#38A993]" defaultValue={trip} onChange={onChange}>
@@ -362,10 +369,10 @@ const Index: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="self-stretch justify-start items-center gap-6 inline-flex">
-                                        <div className="grow shrink basis-0 justify-start items-center gap-6 flex">
-                                            <div className="justify-center items-center gap-6 flex">
+                                        <div className="grow shrink basis-0 justify-start items-center gap-3 flex">
+                                            <div className=" justify-center items-center gap-2 flex">
                                                 <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
-                                                    <div className="px-2 bg-white justify-start items-start gap-2.5 inline-flex">
+                                                    <div className="bg-white justify-start items-start gap-2.5 inline-flex">
                                                         <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">From</div>
                                                     </div>
                                                     <div className="px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center inline-flex">
@@ -408,7 +415,7 @@ const Index: React.FC = () => {
                                                 }}
                                                     className="" type="primary" style={{ backgroundColor: "#38A993" }} shape="circle" icon={<SwapOutlined />} size="large" />
                                                 <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
-                                                    <div className="px-2 bg-white justify-start items-start gap-2.5 inline-flex">
+                                                    <div className="bg-white justify-start items-start gap-2.5 inline-flex">
                                                         <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">To</div>
                                                     </div>
                                                     <div className="px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center inline-flex">
@@ -451,20 +458,48 @@ const Index: React.FC = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="grow shrink basis-0 justify-start items-center gap-6 flex">
-                                                <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
-                                                    <div className="px-2 bg-white justify-start items-start gap-2.5 inline-flex">
-                                                        <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Departure Date</div>
+                                            {trip == "one-way" ?
+                                                <div className="grow shrink basis-0 justify-start items-center gap-3 flex">
+                                                    <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
+                                                        <div className="px-2 bg-white justify-start items-start gap-2.5 inline-flex">
+                                                            <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Departure Date</div>
+                                                        </div>
+
+                                                        <div className="self-stretch px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center gap-3 inline-flex">
+
+
+                                                            <DatePicker onChange={onDepartureDatePick} style={{ width: "100%" }} className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal" bordered={false} format={customFormat} />
+
+                                                        </div>
                                                     </div>
+                                                </div> :
+                                                <div className="flex-row ">
+                                                    <div className="grow shrink basis-0 flex-col  justify-start items-start mr-3 gap-2 inline-flex">
+                                                        <div className="bg-white justify-start items-start inline-flex">
+                                                            <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Departure Date</div>
+                                                        </div>
 
-                                                    <div className="self-stretch px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center gap-3 inline-flex">
+                                                        <div className="py-[8px] rounded-xl border border-gray-100 justify-start items-center">
 
 
-                                                        <DatePicker onChange={onDatePick} style={{ width: "100%" }} className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal" bordered={false} format={customFormat} />
+                                                            <DatePicker onChange={onDepartureDatePick} style={{ width: "100%" }} className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal" bordered={false} format={customFormat} />
 
+                                                        </div>
+                                                    </div>
+                                                    <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
+                                                        <div className="bg-white justify-start items-start inline-flex">
+                                                            <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Return Date</div>
+                                                        </div>
+
+                                                        <div className="py-[8px] rounded-xl border border-gray-100 justify-start items-center">
+
+
+                                                            <DatePicker onChange={onReturnDatePick} style={{ width: "100%" }} className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal" bordered={false} format={customFormat} />
+
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            }
                                         </div>
                                         <button
                                             onClick={handleSearch}
