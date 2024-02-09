@@ -41,6 +41,14 @@ function App() {
   return (
     <ConfigProvider
       theme={{
+        components: {
+          Table: {
+            headerBg: "#38A993",
+            headerColor: "white",
+            borderColor: "white",
+            cellPaddingBlock: 4
+          },
+        },
         token: {
           colorPrimary: "#38A993",
         },
