@@ -16,12 +16,11 @@ import {
   Space,
   Alert,
 } from "antd";
-import { GoogleOutlined, DownOutlined, EditOutlined } from "@ant-design/icons";
+import { DownOutlined, EditOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import SubmitButton from "../../components/SubmitButton";
 import { Option } from "antd/es/mentions";
 import moment, { Moment } from "moment";
-import { FlagIcon, FlagIconCode } from "react-flag-kit";
 import { Rule } from "antd/es/form";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -57,46 +56,32 @@ interface VerificationFormData {
 
 // Dummy data for nationality options (replace with actual data)
 const nationalityOptions: {
-  flag: string;
   name: string;
   id: string;
-  value: string;
 }[] = [
   {
-    flag: "🇺🇸",
-    name: "UNITED STATES",
     id: "ae6e9985-8683-494d-9c91-93a7f36d6003",
-    value: "US",
+    name: "UNITED STATES",
   },
   {
-    flag: "🇨🇳",
-    name: "CHINA",
     id: "45930fd0-5990-469c-80cd-9d7648250139",
-    value: "CN",
+    name: "CHINA",
   },
   {
-    flag: "🇬🇧",
-    name: "UNITED KINGDOM",
     id: "4f42934e-35b6-4fa8-832c-7cdf88c464dc",
-    value: "GB",
+    name: "UNITED KINGDOM",
   },
   {
-    flag: "🇦🇪",
-    name: "UNITED ARAB EMIRATES",
     id: "6fb3e59a-ab7b-45d2-be0f-ce700633d459",
-    value: "AE",
+    name: "UNITED ARAB EMIRATES",
   },
   {
-    flag: "🇮🇩",
-    name: "INDONESIA",
     id: "7e9ac63c-d3f0-46d6-bd58-1cc46b88f2c8",
-    value: "ID",
+    name: "INDONESIA",
   },
   {
-    flag: "🇯🇵",
-    name: "JAPAN",
     id: "2a9160ff-e1ad-410f-827f-05946127fe04",
-    value: "JP",
+    name: "JAPAN",
   },
 ];
 
@@ -344,6 +329,13 @@ const SignUpPage: React.FC = () => {
     } catch (error) {
       console.error("Error during OTP verification:", error);
     }
+  };
+
+  const getSelectedNationalityName = () => {
+    const selectedOption = nationalityOptions.find(
+      (option) => option.id === selectedNationality
+    );
+    return selectedOption ? selectedOption.name : "";
   };
 
   const postNationality = async () => {
@@ -868,18 +860,9 @@ const SignUpPage: React.FC = () => {
                     <Input
                       readOnly
                       onClick={() => setNationalityModalVisible(true)}
-                      value={selectedNationality || ""}
+                      value={getSelectedNationalityName() || ""}
                       className="font-normal"
                       placeholder="Your Nationality"
-                      prefix={
-                        selectedNationality && (
-                          <FlagIcon
-                            code={option.flag as FlagIconCode}
-                            size={32}
-                            className="mr-4 rounded"
-                          />
-                        )
-                      }
                       suffix={<DownOutlined style={{ color: "#d9d9d9" }} />}
                     />
                   </Form.Item>
@@ -888,9 +871,9 @@ const SignUpPage: React.FC = () => {
                   <Modal
                     title="Select your nationality"
                     open={isNationalityModalVisible}
-                    footer={null}
                     onCancel={() => setNationalityModalVisible(false)}
                     centered
+                    footer={null}
                   >
                     <div className="flex flex-col gap-5 w-100">
                       <Text>
@@ -898,27 +881,20 @@ const SignUpPage: React.FC = () => {
                         for the personal information.
                       </Text>
                       {nationalityOptions.map((option) => (
-                        <Card className="w-100" key={option.value}>
+                        <Card className="w-100" key={option.id}>
                           <div className="flex flex-row justify-between">
-                            <div className="flex flex-row">
-                              <FlagIcon
-                                code={option.flag as FlagIconCode}
-                                size={32}
-                                className="mr-4 rounded"
-                              />
-                              {option.name}
-                            </div>
+                            <div className="flex flex-row">{option.name}</div>
                             <Radio
-                              checked={option.value === selectedNationality}
+                              checked={option.id === selectedNationality}
                               onClick={() => {
-                                setSelectedNationality(option.value);
+                                setSelectedNationality(option.id);
                                 setNationalityModalVisible(false);
                                 personalInfoForm.setFieldsValue({
-                                  nationality: option.value,
+                                  nationality: option.name,
                                 });
                                 setPersonalData({
                                   ...personalData,
-                                  nationality: option.value,
+                                  nationality: option.name,
                                 });
                               }}
                             />
