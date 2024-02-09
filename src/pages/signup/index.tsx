@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -58,17 +57,42 @@ interface VerificationFormData {
 
 // Dummy data for nationality options (replace with actual data)
 const nationalityOptions = [
-  { flag: "🇺🇸", name: "United States", value: "US" },
-  { flag: "🇬🇧", name: "United Kingdom", value: "GB" },
-  { flag: "🇨🇦", name: "Canada", value: "CA" },
-  { flag: "🇦🇺", name: "Australia", value: "AU" },
-  { flag: "🇩🇪", name: "Germany", value: "DE" },
-  { flag: "🇫🇷", name: "France", value: "FR" },
-  { flag: "🇯🇵", name: "Japan", value: "JP" },
-  { flag: "🇮🇳", name: "India", value: "IN" },
-  { flag: "🇧🇷", name: "Brazil", value: "BR" },
-  { flag: "🇮🇩", name: "Indonesia", value: "ID" },
-  // Add more nationality options as needed
+  {
+    flag: "🇺🇸",
+    name: "UNITED STATES",
+    id: "ae6e9985-8683-494d-9c91-93a7f36d6003",
+    value: "US",
+  },
+  {
+    flag: "🇨🇳",
+    name: "CHINA",
+    id: "45930fd0-5990-469c-80cd-9d7648250139",
+    value: "CN",
+  },
+  {
+    flag: "🇬🇧",
+    name: "UNITED KINGDOM",
+    id: "4f42934e-35b6-4fa8-832c-7cdf88c464dc",
+    value: "GB",
+  },
+  {
+    flag: "🇦🇪",
+    name: "UNITED ARAB EMIRATES",
+    id: "6fb3e59a-ab7b-45d2-be0f-ce700633d459",
+    value: "AE",
+  },
+  {
+    flag: "🇮🇩",
+    name: "INDONESIA",
+    id: "7e9ac63c-d3f0-46d6-bd58-1cc46b88f2c8",
+    value: "ID",
+  },
+  {
+    flag: "🇯🇵",
+    name: "JAPAN",
+    id: "2a9160ff-e1ad-410f-827f-05946127fe04",
+    value: "JP",
+  },
 ];
 
 const SignUpPage: React.FC = () => {
@@ -82,8 +106,10 @@ const SignUpPage: React.FC = () => {
     useState<number>(5);
   const [isNoFirstMiddleNameChecked, setIsNoFirstMiddleNameChecked] =
     useState<boolean>(false);
+  // const [nationalityOptions, setNationalityOptions] = useState([]);
   const [isNationalityModalVisible, setNationalityModalVisible] =
     useState<boolean>(false);
+
   const [selectedNationality, setSelectedNationality] = useState<string | null>(
     null
   );
@@ -312,31 +338,6 @@ const SignUpPage: React.FC = () => {
       }
     } catch (error) {
       console.error("Error during OTP verification:", error);
-    }
-  };
-
-  const fetchNationalities = async () => {
-    try {
-      const apiUrl = process.env.REACT_APP_API_BASE_URL;
-
-      // Kirim permintaan ke API
-      const response = await fetch(`${apiUrl}/api/national`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          // 'Authorization': 'Bearer token'
-        },
-      });
-
-      if (response.ok) {
-        const nationalities = await response.json();
-        console.log("Nationalities:", nationalities);
-      } else {
-        const errorData = await response.json();
-        console.error("Failed to fetch nationalities:", errorData);
-      }
-    } catch (error) {
-      console.error("Error during fetching nationalities:", error);
     }
   };
 
@@ -905,17 +906,17 @@ const SignUpPage: React.FC = () => {
                             <Radio
                               checked={option.value === selectedNationality}
                               onClick={() => {
-                                setSelectedNationality(option.value); // Only set the value, not the object
+                                setSelectedNationality(option.value);
                                 setNationalityModalVisible(false);
                                 personalInfoForm.setFieldsValue({
                                   nationality: option.value,
-                                }); // Update form field
+                                });
                                 setPersonalData({
                                   ...personalData,
                                   nationality: option.value,
                                 });
                               }}
-                            ></Radio>
+                            />
                           </div>
                         </Card>
                       ))}
