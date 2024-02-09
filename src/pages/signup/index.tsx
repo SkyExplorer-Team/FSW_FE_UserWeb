@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Steps,
   Button,
@@ -20,7 +21,7 @@ import { Link } from "react-router-dom";
 import SubmitButton from "../../components/SubmitButton";
 import { Option } from "antd/es/mentions";
 import moment, { Moment } from "moment";
-import { FlagIcon } from "react-flag-kit";
+import { FlagIcon, FlagIconCode } from "react-flag-kit";
 import { Rule } from "antd/es/form";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -55,18 +56,48 @@ interface VerificationFormData {
 }
 
 // Dummy data for nationality options (replace with actual data)
-const nationalityOptions = [
-  { flag: "🇺🇸", name: "United States", value: "US" },
-  { flag: "🇬🇧", name: "United Kingdom", value: "GB" },
-  { flag: "🇨🇦", name: "Canada", value: "CA" },
-  { flag: "🇦🇺", name: "Australia", value: "AU" },
-  { flag: "🇩🇪", name: "Germany", value: "DE" },
-  { flag: "🇫🇷", name: "France", value: "FR" },
-  { flag: "🇯🇵", name: "Japan", value: "JP" },
-  { flag: "🇮🇳", name: "India", value: "IN" },
-  { flag: "🇧🇷", name: "Brazil", value: "BR" },
-  { flag: "🇮🇩", name: "Indonesia", value: "ID" },
-  // Add more nationality options as needed
+const nationalityOptions: {
+  flag: string;
+  name: string;
+  id: string;
+  value: string;
+}[] = [
+  {
+    flag: "🇺🇸",
+    name: "UNITED STATES",
+    id: "ae6e9985-8683-494d-9c91-93a7f36d6003",
+    value: "US",
+  },
+  {
+    flag: "🇨🇳",
+    name: "CHINA",
+    id: "45930fd0-5990-469c-80cd-9d7648250139",
+    value: "CN",
+  },
+  {
+    flag: "🇬🇧",
+    name: "UNITED KINGDOM",
+    id: "4f42934e-35b6-4fa8-832c-7cdf88c464dc",
+    value: "GB",
+  },
+  {
+    flag: "🇦🇪",
+    name: "UNITED ARAB EMIRATES",
+    id: "6fb3e59a-ab7b-45d2-be0f-ce700633d459",
+    value: "AE",
+  },
+  {
+    flag: "🇮🇩",
+    name: "INDONESIA",
+    id: "7e9ac63c-d3f0-46d6-bd58-1cc46b88f2c8",
+    value: "ID",
+  },
+  {
+    flag: "🇯🇵",
+    name: "JAPAN",
+    id: "2a9160ff-e1ad-410f-827f-05946127fe04",
+    value: "JP",
+  },
 ];
 
 const SignUpPage: React.FC = () => {
@@ -80,23 +111,23 @@ const SignUpPage: React.FC = () => {
     useState<number>(5);
   const [isNoFirstMiddleNameChecked, setIsNoFirstMiddleNameChecked] =
     useState<boolean>(false);
+  // const [nationalityOptions, setNationalityOptions] = useState([]);
   const [isNationalityModalVisible, setNationalityModalVisible] =
     useState<boolean>(false);
+
   const [selectedNationality, setSelectedNationality] = useState<string | null>(
     null
   );
   const [isOtpResend, setIsOtpResend] = useState<boolean>(false);
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleNext = () => {
     console.log(currentStep);
     if (currentStep === 2) {
       startVerificationCodeCounter();
       setCurrentStep(currentStep + 1);
-      // }
-      // if (currentStep === 4) {
-      //   const generatedCode = Math.floor(1000 + Math.random() * 9000).toString();
-      //   setVerificationCode(generatedCode);
-      //   startCounter();
     } else {
       setCurrentStep(currentStep + 1);
     }
@@ -140,14 +171,13 @@ const SignUpPage: React.FC = () => {
     };
   const handlePasswordFormChange =
     (fieldName: keyof PasswordFormData) => (value: string) => {
-      setContactData({
-        ...contactData,
+      setPasswordData({
+        ...passwordData,
         [fieldName]: value,
       });
     };
 
   const handleContinueWithGoogle = () => {
-    console.log("Continue with Google clicked");
     // Implement Google authentication logic here
   };
 
@@ -157,8 +187,11 @@ const SignUpPage: React.FC = () => {
   };
 
   const handleSignIn = () => {
-    console.log("Sign In clicked");
-    // Implement Sign In logic here
+    navigate("/login");
+  };
+
+  const handleSignUpSuccess = () => {
+    // navigate("/index")
   };
 
   const handleTermsClick = () => {
@@ -181,6 +214,7 @@ const SignUpPage: React.FC = () => {
 
   const onContactFormFinish = (values: ContactFormData) => {
     console.log("Contact Form values:", values);
+    handleVerifyOTP(values.email); // Menambahkan pemanggilan handleVerifyOTP setelah mengisi formulir kontak
     handleNext();
   };
 
@@ -195,6 +229,10 @@ const SignUpPage: React.FC = () => {
   };
   const onPasswordFormFinish = (values: PasswordFormData) => {
     console.log("Password Form values:", values);
+    setPasswordData({
+      password: values.password,
+      confirmPassword: values.confirmPassword,
+    });
     handleNext();
   };
 
@@ -211,27 +249,6 @@ const SignUpPage: React.FC = () => {
   const minutes = Math.floor(verificationCodeCounter / 60);
   const seconds = verificationCodeCounter % 60;
 
-  // const startCounter = useCallback(() => {
-  //   const intervalId = setInterval(() => {
-  //     setCounter((prevCounter) => prevCounter - 1);
-
-  //     if (counter === 0) {
-  //       clearInterval(intervalId);
-  //       setVerificationCode(null);
-  //       setCounter(60);
-  //       handleNext();
-  //     }
-  //   }, 1000);
-
-  //   return intervalId;
-  // }, [counter, handleNext]);
-
-  // useEffect(() => {
-  //   const intervalId = startCounter();
-
-  //   // Cleanup interval when the component unmounts
-  //   return () => clearInterval(intervalId);
-  // }, [startCounter]);
   const validateNumber = (
     _: any,
     value: string,
@@ -265,12 +282,158 @@ const SignUpPage: React.FC = () => {
     },
   });
 
-  const handleOtpResend = () => {
-    console.log("OTP Resend clicked");
-    if (!isOtpResend) {
-      setVerificationCodeCounter(5);
-      setIsOtpResend(true);
-      // startVerificationCodeCounter();
+  const handleRegister = async () => {
+    try {
+      const registerData = {
+        firstName: personalData.firstName,
+        lastName: personalData.lastName,
+        password: passwordData.password,
+        salutation: personalData.salutation,
+        email: contactData.email,
+        national: selectedNationality || "",
+        dob: personalData.dob,
+        phone: contactData.phoneNumber,
+      };
+
+      const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
+      // Kirim permintaan ke API
+      const response = await fetch(`${apiUrl}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(registerData),
+      });
+
+      if (response.ok) {
+        // Registrasi berhasil
+        const responseData = await response.json();
+        console.log("Registration successful:", responseData);
+        setRegistrationSuccess(true);
+        // navigate to dashboard
+      } else {
+        const errorData = await response.json();
+        console.error("Registration failed:", errorData);
+      }
+    } catch (error) {
+      console.error("Error during registration:", error);
+    }
+  };
+
+  const handleVerifyOTP = async (email: string) => {
+    try {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
+      // Kirim permintaan ke API untuk verifikasi OTP
+      const response = await fetch(`${apiUrl}/auth/verifyOTP?email=${email}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // 'Authorization': 'Bearer token'
+        },
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("OTP verification successful:", responseData);
+      } else {
+        const errorData = await response.json();
+        console.error("OTP verification failed:", errorData);
+      }
+    } catch (error) {
+      console.error("Error during OTP verification:", error);
+    }
+  };
+
+  const postNationality = async () => {
+    try {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
+      // Kirim permintaan ke API untuk menambahkan nationality pilihan user
+      const response = await fetch(`${apiUrl}/api/national`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // 'Authorization': 'Bearer token'
+        },
+        body: JSON.stringify({
+          // Data nasional yang akan ditambahkan
+        }),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Nationality added successfully:", responseData);
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to add nationality:", errorData);
+      }
+    } catch (error) {
+      console.error("Error during adding nationality:", error);
+    }
+  };
+
+  const handleOtpResend = async (email: string) => {
+    try {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
+      // Kirim permintaan ke API untuk resend OTP
+      const response = await fetch(`${apiUrl}/auth/resend`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // 'Authorization': 'Bearer token'
+        },
+        body: JSON.stringify({
+          email: email,
+        }),
+      });
+
+      if (response.ok) {
+        // Resend OTP berhasil
+        console.log("OTP Resend successful");
+        setVerificationCodeCounter(60); // Set the counter back to 60 seconds
+        setIsOtpResend(true); // Set isOtpResend to true
+        startVerificationCodeCounter(); // Restart the counter
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to resend OTP:", errorData);
+      }
+    } catch (error) {
+      console.error("Error during OTP resend:", error);
+    }
+  };
+
+  const handleSetPassword = async (email: string) => {
+    try {
+      const apiUrl = process.env.REACT_APP_API_BASE_URL;
+
+      // Kirim permintaan ke API untuk menetapkan kata sandi
+      const response = await fetch(`${apiUrl}/auth/setPassword`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: passwordData.password,
+          // Tambahkan parameter lain yang diperlukan untuk menetapkan kata sandi
+        }),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Password set successfully:", responseData);
+
+        // Lanjutkan ke langkah berikutnya setelah menetapkan kata sandi
+        handleNext();
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to set password:", errorData);
+      }
+    } catch (error) {
+      console.error("Error during setting password:", error);
     }
   };
 
@@ -284,7 +447,6 @@ const SignUpPage: React.FC = () => {
     <div className="flex flex-col md:flex-row gap-4">
       <div className="md:w-1/2 h-screen">
         <img
-
           src="src/assets/sign-up.png"
           alt="Sign Up Image"
           className="h-screen rounded p-10 object-contain fixed"
@@ -473,11 +635,12 @@ const SignUpPage: React.FC = () => {
                     <div className="flex flex-row">
                       <Text className="text-neutral">Didn’t receive code?</Text>
                       <Text
-                        className={`${verificationCodeCounter === 0
-                          ? "text-primary"
-                          : "text-neutral"
-                          } ml-1 font-semibold cursor-pointer`}
-                        onClick={handleOtpResend}
+                        className={`${
+                          verificationCodeCounter === 0
+                            ? "text-primary"
+                            : "text-neutral"
+                        } ml-1 font-semibold cursor-pointer`}
+                        onClick={() => handleOtpResend(contactData.email)}
                       >
                         Resend
                       </Text>
@@ -589,6 +752,7 @@ const SignUpPage: React.FC = () => {
                   className="bg-primary mb-2 mt-5"
                   size="large"
                   block={true}
+                  onClick={() => navigate("/src/pages/index.tsx")}
                 >
                   Sign In
                 </Button>
@@ -642,17 +806,6 @@ const SignUpPage: React.FC = () => {
                     name="firstMiddleName"
                     className="font-medium mb-0"
                     rules={[validateFirstName]}
-                  // rules={[
-                  //   {
-                  //     required: !isNoFirstMiddleNameChecked,
-                  //     message: "Please enter first & middle name",
-                  //   },
-                  //   {
-                  //     pattern: /^[A-Za-z\s]+$/, // Only allow alphabets and spaces
-                  //     message:
-                  //       "Please enter a valid name with alphabets only",
-                  //   },
-                  // ]}
                   >
                     <Input
                       disabled={isNoFirstMiddleNameChecked}
@@ -721,7 +874,7 @@ const SignUpPage: React.FC = () => {
                       prefix={
                         selectedNationality && (
                           <FlagIcon
-                            code={selectedNationality}
+                            code={option.flag as FlagIconCode}
                             size={32}
                             className="mr-4 rounded"
                           />
@@ -749,7 +902,7 @@ const SignUpPage: React.FC = () => {
                           <div className="flex flex-row justify-between">
                             <div className="flex flex-row">
                               <FlagIcon
-                                code={option.value}
+                                code={option.flag as FlagIconCode}
                                 size={32}
                                 className="mr-4 rounded"
                               />
@@ -758,17 +911,17 @@ const SignUpPage: React.FC = () => {
                             <Radio
                               checked={option.value === selectedNationality}
                               onClick={() => {
-                                setSelectedNationality(option.value); // Only set the value, not the object
+                                setSelectedNationality(option.value);
                                 setNationalityModalVisible(false);
                                 personalInfoForm.setFieldsValue({
                                   nationality: option.value,
-                                }); // Update form field
+                                });
                                 setPersonalData({
                                   ...personalData,
                                   nationality: option.value,
                                 });
                               }}
-                            ></Radio>
+                            />
                           </div>
                         </Card>
                       ))}
