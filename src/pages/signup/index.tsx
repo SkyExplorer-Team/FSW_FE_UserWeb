@@ -21,7 +21,7 @@ import { Link } from "react-router-dom";
 import SubmitButton from "../../components/SubmitButton";
 import { Option } from "antd/es/mentions";
 import moment, { Moment } from "moment";
-import { FlagIcon } from "react-flag-kit";
+import { FlagIcon, FlagIconCode } from "react-flag-kit";
 import { Rule } from "antd/es/form";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -56,7 +56,12 @@ interface VerificationFormData {
 }
 
 // Dummy data for nationality options (replace with actual data)
-const nationalityOptions = [
+const nationalityOptions: {
+  flag: string;
+  name: string;
+  id: string;
+  value: string;
+}[] = [
   {
     flag: "🇺🇸",
     name: "UNITED STATES",
@@ -869,7 +874,7 @@ const SignUpPage: React.FC = () => {
                       prefix={
                         selectedNationality && (
                           <FlagIcon
-                            code={selectedNationality}
+                            code={option.flag as FlagIconCode}
                             size={32}
                             className="mr-4 rounded"
                           />
@@ -897,7 +902,7 @@ const SignUpPage: React.FC = () => {
                           <div className="flex flex-row justify-between">
                             <div className="flex flex-row">
                               <FlagIcon
-                                code={option.value}
+                                code={option.flag as FlagIconCode}
                                 size={32}
                                 className="mr-4 rounded"
                               />
