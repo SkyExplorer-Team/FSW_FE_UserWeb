@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Select, Form, Input, Typography, Checkbox, DatePicker } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import type { DatePickerProps } from "antd";
-import { FlagIcon } from "react-flag-kit";
+import { FlagIcon, FlagIconCode } from "react-flag-kit";
 
 interface ContactFormData {
   email: string;
@@ -141,7 +141,7 @@ const PersonalInfo: React.FC = () => {
               <Option key={option.value} value={option.value}>
                 <div style={{ display: "flex", fontWeight: "bold" }}>
                   <FlagIcon
-                    code={option.value}
+                    code={option.value as FlagIconCode}
                     size={32}
                     className="mr-4 rounded"
                   ></FlagIcon>
