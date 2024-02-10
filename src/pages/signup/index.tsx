@@ -27,6 +27,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import GoogleSvg from "../../assets/google.svg";
 import TermsOfUseModal from "../../components/TermsOfUseModal";
 import PrivacyPolicyModal from "../../components/PrivacyPolicyModal";
+import { FlagIcon } from "react-flag-kit";
 
 dayjs.extend(customParseFormat);
 
@@ -139,6 +140,8 @@ const SignUpPage: React.FC = () => {
     confirmPassword: "",
   });
 
+  const { Option } = Select;
+
   const handlePersonalFormChange =
     (fieldName: keyof PersonalFormData) => (value: string) => {
       setPersonalData({
@@ -193,6 +196,7 @@ const SignUpPage: React.FC = () => {
   };
 
   const onPersonalFormFinish = (values: PersonalFormData) => {
+    console.log("onPersonalFormFinish called");
     console.log("Personal Form values:", values);
     handleNext();
   };
@@ -772,6 +776,16 @@ const SignUpPage: React.FC = () => {
                   onFinish={onPersonalFormFinish}
                   layout="vertical"
                   size="large"
+                  initialValues={{
+                    salutation: personalData.salutation,
+                    firstMiddleName: isNoFirstMiddleNameChecked
+                      ? ""
+                      : personalData.firstName,
+                    noFirstMiddleName: isNoFirstMiddleNameChecked,
+                    lastName: personalData.lastName,
+                    nationality: getSelectedNationalityName() || "",
+                    dob: personalData.dob,
+                  }}
                 >
                   <Form.Item
                     label="Salutation"
@@ -917,7 +931,16 @@ const SignUpPage: React.FC = () => {
                       {
                         validator: (_, value: Moment) => {
                           const selectedDate = value;
+
+                          // Check if selectedDate is defined before accessing properties
+                          if (!selectedDate) {
+                            return Promise.reject(
+                              "Please select a valid date of birth"
+                            );
+                          }
+
                           const today = moment().startOf("day");
+
                           if (
                             selectedDate.isAfter(today) ||
                             selectedDate.isSame(today)
@@ -926,6 +949,7 @@ const SignUpPage: React.FC = () => {
                               "Please select a valid date of birth"
                             );
                           }
+
                           return Promise.resolve();
                         },
                       },
