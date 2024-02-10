@@ -334,6 +334,11 @@ const SignUpPage: React.FC = () => {
         national: selectedNationality || "",
         dob: personalData.dob,
         phone: contactData.phoneNumber,
+        subscribe: true,
+        authProvider: "local",
+        providerId: "string",
+        registrationComplete: false, // Set to false by default
+        otpverified: false, // Set to false by default
       };
 
       const apiUrl = process.env.REACT_APP_API_BASE_URL;
@@ -455,6 +460,8 @@ const SignUpPage: React.FC = () => {
       }
     } catch (error) {
       console.error("Error during OTP resend:", error);
+    } finally {
+      setIsOtpResend(false); // Set isOtpResend back to false regardless of the result
     }
   };
 
