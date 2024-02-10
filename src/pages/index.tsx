@@ -70,8 +70,8 @@ const Index: React.FC = () => {
             'access_token',
         );
     })
-    useEffect(() => {
 
+    useEffect(() => {
         console.log(accessToken)
         // if (accessToken === null) {
         //     navigate('/login')
@@ -82,9 +82,6 @@ const Index: React.FC = () => {
             fromAirportDetails.push({ label: val.name, value: val.id })
             toAirportDetails.push({ label: val.name, value: val.id })
         })
-
-
-
     })
 
     const [seat, setSeat] = useState(new Map<string, number>(
@@ -289,7 +286,7 @@ const Index: React.FC = () => {
                                                 <a className="hover:text-[#38A993]" onClick={(e) => e.preventDefault()}>
                                                     <Space>
                                                         <TeamOutlined style={{ fontSize: 24 }} />
-                                                        <div className="text-base font-semibold font-['Plus Jakarta Sans'] leading-normal">1 Seats</div>
+                                                        <div className="text-base font-semibold font-['Plus Jakarta Sans'] leading-normal">Seats</div>
                                                         <DownOutlined />
                                                     </Space>
                                                 </a>
@@ -308,7 +305,14 @@ const Index: React.FC = () => {
                                                 <a className="hover:text-[#38A993]" onClick={(e) => e.preventDefault()}>
                                                     <Space>
                                                         <DollarOutlined style={{ fontSize: 24 }} />
-                                                        <div className="text-base font-semibold font-['Plus Jakarta Sans'] leading-normal">Economy</div>
+                                                        <div className="text-base font-semibold font-['Plus Jakarta Sans'] leading-normal">{cabin == 1 ? <>
+                                                            Economy
+                                                        </> : cabin == 2 ? <>
+                                                            Business
+                                                        </> : <>
+                                                            First
+                                                        </>}
+                                                        </div>
                                                         <DownOutlined />
                                                     </Space>
                                                 </a>
