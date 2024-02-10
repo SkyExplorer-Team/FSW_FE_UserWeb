@@ -16,18 +16,18 @@ import {
   Space,
   Alert,
 } from "antd";
-import { GoogleOutlined, DownOutlined, EditOutlined } from "@ant-design/icons";
+import { DownOutlined, EditOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import SubmitButton from "../../components/SubmitButton";
 import { Option } from "antd/es/mentions";
 import moment, { Moment } from "moment";
-import { FlagIcon, FlagIconCode } from "react-flag-kit";
 import { Rule } from "antd/es/form";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import GoogleSvg from "../../assets/google.svg";
 import TermsOfUseModal from "../../components/TermsOfUseModal";
 import PrivacyPolicyModal from "../../components/PrivacyPolicyModal";
+import { FlagIcon } from "react-flag-kit";
 
 dayjs.extend(customParseFormat);
 
@@ -57,46 +57,32 @@ interface VerificationFormData {
 
 // Dummy data for nationality options (replace with actual data)
 const nationalityOptions: {
-  flag: string;
   name: string;
   id: string;
-  value: string;
 }[] = [
   {
-    flag: "🇺🇸",
-    name: "UNITED STATES",
     id: "ae6e9985-8683-494d-9c91-93a7f36d6003",
-    value: "US",
+    name: "UNITED STATES",
   },
   {
-    flag: "🇨🇳",
-    name: "CHINA",
     id: "45930fd0-5990-469c-80cd-9d7648250139",
-    value: "CN",
+    name: "CHINA",
   },
   {
-    flag: "🇬🇧",
-    name: "UNITED KINGDOM",
     id: "4f42934e-35b6-4fa8-832c-7cdf88c464dc",
-    value: "GB",
+    name: "UNITED KINGDOM",
   },
   {
-    flag: "🇦🇪",
-    name: "UNITED ARAB EMIRATES",
     id: "6fb3e59a-ab7b-45d2-be0f-ce700633d459",
-    value: "AE",
+    name: "UNITED ARAB EMIRATES",
   },
   {
-    flag: "🇮🇩",
-    name: "INDONESIA",
     id: "7e9ac63c-d3f0-46d6-bd58-1cc46b88f2c8",
-    value: "ID",
+    name: "INDONESIA",
   },
   {
-    flag: "🇯🇵",
-    name: "JAPAN",
     id: "2a9160ff-e1ad-410f-827f-05946127fe04",
-    value: "JP",
+    name: "JAPAN",
   },
 ];
 
@@ -118,6 +104,7 @@ const SignUpPage: React.FC = () => {
   const [selectedNationality, setSelectedNationality] = useState<string | null>(
     null
   );
+  const [locale, setLocale] = useState<string>("");
   const [isOtpResend, setIsOtpResend] = useState<boolean>(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
@@ -154,8 +141,19 @@ const SignUpPage: React.FC = () => {
     confirmPassword: "",
   });
 
+  const { Option } = Select;
+
   const handlePersonalFormChange =
     (fieldName: keyof PersonalFormData) => (value: string) => {
+      if (fieldName === "nationality") {
+        const selectedOption = nationalityOptions.find(
+          (option) => option.name === value
+        );
+        if (selectedOption) {
+          setLocale(selectedOption.id);
+        }
+      }
+
       setPersonalData({
         ...personalData,
         [fieldName]: value,
@@ -164,11 +162,21 @@ const SignUpPage: React.FC = () => {
 
   const handleContactFormChange =
     (fieldName: keyof ContactFormData) => (value: string) => {
-      setContactData({
-        ...contactData,
-        [fieldName]: value,
-      });
+      if (fieldName === "phoneNumber") {
+        const fullPhoneNumber = `${locale}${value}`;
+        console.log("Full Phone Number:", fullPhoneNumber);
+        setContactData({
+          ...contactData,
+          [fieldName]: fullPhoneNumber,
+        });
+      } else {
+        setContactData({
+          ...contactData,
+          [fieldName]: value,
+        });
+      }
     };
+
   const handlePasswordFormChange =
     (fieldName: keyof PasswordFormData) => (value: string) => {
       setPasswordData({
@@ -208,14 +216,47 @@ const SignUpPage: React.FC = () => {
   };
 
   const onPersonalFormFinish = (values: PersonalFormData) => {
+    console.log("onPersonalFormFinish called");
     console.log("Personal Form values:", values);
     handleNext();
   };
 
-  const onContactFormFinish = (values: ContactFormData) => {
+  const onContactFormFinish = async (values: ContactFormData) => {
     console.log("Contact Form values:", values);
-    handleVerifyOTP(values.email); // Menambahkan pemanggilan handleVerifyOTP setelah mengisi formulir kontak
-    handleNext();
+
+    try {
+      await handleVerifyOTP(values.email); // Asynchronously verify OTP
+
+      // Verification successful, start the counter
+      startVerificationCodeCounter();
+
+      // Move to the next step
+      handleNext();
+    } catch (error) {
+      // Handle generic error scenarios during OTP verification
+      console.error("Error during OTP verification:", error);
+
+      if (error instanceof Error && error.message.includes("network")) {
+        // Handle network-related errors
+        console.error(
+          "Network error occurred. Please check your internet connection."
+        );
+      } else if (error instanceof Error && error.message.includes("timeout")) {
+        // Handle timeout errors
+        console.error("OTP verification timed out. Please try again.");
+      } else if (
+        error instanceof Error &&
+        error.message.includes("validation")
+      ) {
+        // Handle validation errors
+        console.error(
+          "Validation error during OTP verification. Please double-check your input."
+        );
+      } else {
+        // Handle other unexpected errors
+        console.error("An unexpected error occurred during OTP verification.");
+      }
+    }
   };
 
   const onVerificationFormFinish = (values: VerificationFormData) => {
@@ -293,6 +334,11 @@ const SignUpPage: React.FC = () => {
         national: selectedNationality || "",
         dob: personalData.dob,
         phone: contactData.phoneNumber,
+        subscribe: true,
+        authProvider: "local",
+        providerId: "string",
+        registrationComplete: false, // Set to false by default
+        otpverified: false, // Set to false by default
       };
 
       const apiUrl = process.env.REACT_APP_API_BASE_URL;
@@ -325,12 +371,16 @@ const SignUpPage: React.FC = () => {
     try {
       const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
-      // Kirim permintaan ke API untuk verifikasi OTP
+      // Check if apiUrl is defined before making the request
+      if (!apiUrl) {
+        throw new Error("REACT_APP_API_BASE_URL is not defined.");
+      }
+
+      // Continue with the OTP verification logic
       const response = await fetch(`${apiUrl}/auth/verifyOTP?email=${email}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          // 'Authorization': 'Bearer token'
         },
       });
 
@@ -343,7 +393,15 @@ const SignUpPage: React.FC = () => {
       }
     } catch (error) {
       console.error("Error during OTP verification:", error);
+      // Handle the error appropriately, e.g., display an error message to the user
     }
+  };
+
+  const getSelectedNationalityName = () => {
+    const selectedOption = nationalityOptions.find(
+      (option) => option.id === selectedNationality
+    );
+    return selectedOption ? selectedOption.name : "";
   };
 
   const postNationality = async () => {
@@ -402,6 +460,8 @@ const SignUpPage: React.FC = () => {
       }
     } catch (error) {
       console.error("Error during OTP resend:", error);
+    } finally {
+      setIsOtpResend(false); // Set isOtpResend back to false regardless of the result
     }
   };
 
@@ -780,6 +840,16 @@ const SignUpPage: React.FC = () => {
                   onFinish={onPersonalFormFinish}
                   layout="vertical"
                   size="large"
+                  initialValues={{
+                    salutation: personalData.salutation,
+                    firstMiddleName: isNoFirstMiddleNameChecked
+                      ? ""
+                      : personalData.firstName,
+                    noFirstMiddleName: isNoFirstMiddleNameChecked,
+                    lastName: personalData.lastName,
+                    nationality: getSelectedNationalityName() || "",
+                    dob: personalData.dob,
+                  }}
                 >
                   <Form.Item
                     label="Salutation"
@@ -868,18 +938,9 @@ const SignUpPage: React.FC = () => {
                     <Input
                       readOnly
                       onClick={() => setNationalityModalVisible(true)}
-                      value={selectedNationality || ""}
+                      value={getSelectedNationalityName() || ""}
                       className="font-normal"
                       placeholder="Your Nationality"
-                      prefix={
-                        selectedNationality && (
-                          <FlagIcon
-                            code={option.flag as FlagIconCode}
-                            size={32}
-                            className="mr-4 rounded"
-                          />
-                        )
-                      }
                       suffix={<DownOutlined style={{ color: "#d9d9d9" }} />}
                     />
                   </Form.Item>
@@ -888,9 +949,9 @@ const SignUpPage: React.FC = () => {
                   <Modal
                     title="Select your nationality"
                     open={isNationalityModalVisible}
-                    footer={null}
                     onCancel={() => setNationalityModalVisible(false)}
                     centered
+                    footer={null}
                   >
                     <div className="flex flex-col gap-5 w-100">
                       <Text>
@@ -898,27 +959,20 @@ const SignUpPage: React.FC = () => {
                         for the personal information.
                       </Text>
                       {nationalityOptions.map((option) => (
-                        <Card className="w-100" key={option.value}>
+                        <Card className="w-100" key={option.id}>
                           <div className="flex flex-row justify-between">
-                            <div className="flex flex-row">
-                              <FlagIcon
-                                code={option.flag as FlagIconCode}
-                                size={32}
-                                className="mr-4 rounded"
-                              />
-                              {option.name}
-                            </div>
+                            <div className="flex flex-row">{option.name}</div>
                             <Radio
-                              checked={option.value === selectedNationality}
+                              checked={option.id === selectedNationality}
                               onClick={() => {
-                                setSelectedNationality(option.value);
+                                setSelectedNationality(option.id);
                                 setNationalityModalVisible(false);
                                 personalInfoForm.setFieldsValue({
-                                  nationality: option.value,
+                                  nationality: option.name,
                                 });
                                 setPersonalData({
                                   ...personalData,
-                                  nationality: option.value,
+                                  nationality: option.name,
                                 });
                               }}
                             />
@@ -941,7 +995,16 @@ const SignUpPage: React.FC = () => {
                       {
                         validator: (_, value: Moment) => {
                           const selectedDate = value;
+
+                          // Check if selectedDate is defined before accessing properties
+                          if (!selectedDate) {
+                            return Promise.reject(
+                              "Please select a valid date of birth"
+                            );
+                          }
+
                           const today = moment().startOf("day");
+
                           if (
                             selectedDate.isAfter(today) ||
                             selectedDate.isSame(today)
@@ -950,6 +1013,7 @@ const SignUpPage: React.FC = () => {
                               "Please select a valid date of birth"
                             );
                           }
+
                           return Promise.resolve();
                         },
                       },
@@ -996,17 +1060,14 @@ const SignUpPage: React.FC = () => {
                       rules={[{ required: false }]}
                       style={{
                         display: "inline-block",
-                        width: "18%",
+                        width: "12%",
                         marginRight: "2%",
                       }}
                     >
                       <Input
-                        defaultValue="+62"
-                        readOnly={true}
+                        value={locale ? `+${locale}` : ""}
+                        readOnly
                         size="large"
-                        suffix={
-                          <FlagIcon code={"ID"} size={28} className="rounded" />
-                        }
                       />
                     </Form.Item>
                     <Form.Item
@@ -1025,7 +1086,7 @@ const SignUpPage: React.FC = () => {
                       ]}
                       style={{
                         display: "inline-block",
-                        width: "80%",
+                        width: "86%",
                       }}
                       className=" mb-5"
                     >
@@ -1033,13 +1094,12 @@ const SignUpPage: React.FC = () => {
                         size="large"
                         placeholder="Phone Number"
                         onChange={(e) =>
-                          handleContactFormChange("phoneNumber")(
-                            "+62" + e.target.value
-                          )
+                          handleContactFormChange("phoneNumber")(e.target.value)
                         }
                       />
                     </Form.Item>
                   </Form.Item>
+
                   <Form.Item
                     label="Email"
                     name="email"

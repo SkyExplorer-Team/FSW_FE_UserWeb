@@ -297,8 +297,6 @@ const Index: React.FC = () => {
     handleNavigationClick(e.key); // Call handleNavigationClick to update activeNavigation
   };
 
-  
-
   return (
     <>
     <div className="grid grid-cols-12 w-full">
@@ -680,7 +678,7 @@ const Index: React.FC = () => {
                 selectedKeys={[current]}
                 mode="horizontal"
                 items={items}
-              />              
+              />
               {activeNavigation === "personalInfo" && <PersonalInfo />}
               {activeNavigation === "travelDocument" && <TravelDocument />}
             </div>
