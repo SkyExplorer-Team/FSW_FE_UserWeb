@@ -32,8 +32,6 @@ const Index: React.FC = () => {
     handleNavigationClick(e.key); // Call handleNavigationClick to update activeNavigation
   };
 
-  
-
   return (
     <>
       <div className="container mx-auto">
@@ -89,7 +87,7 @@ const Index: React.FC = () => {
                 selectedKeys={[current]}
                 mode="horizontal"
                 items={items}
-              />              
+              />
               {activeNavigation === "personalInfo" && <PersonalInfo />}
               {activeNavigation === "travelDocument" && <TravelDocument />}
             </div>

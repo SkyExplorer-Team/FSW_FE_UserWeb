@@ -104,6 +104,7 @@ const SignUpPage: React.FC = () => {
   const [selectedNationality, setSelectedNationality] = useState<string | null>(
     null
   );
+  const [locale, setLocale] = useState<string>("");
   const [isOtpResend, setIsOtpResend] = useState<boolean>(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
@@ -144,6 +145,15 @@ const SignUpPage: React.FC = () => {
 
   const handlePersonalFormChange =
     (fieldName: keyof PersonalFormData) => (value: string) => {
+      if (fieldName === "nationality") {
+        const selectedOption = nationalityOptions.find(
+          (option) => option.name === value
+        );
+        if (selectedOption) {
+          setLocale(selectedOption.id);
+        }
+      }
+
       setPersonalData({
         ...personalData,
         [fieldName]: value,
@@ -152,11 +162,21 @@ const SignUpPage: React.FC = () => {
 
   const handleContactFormChange =
     (fieldName: keyof ContactFormData) => (value: string) => {
-      setContactData({
-        ...contactData,
-        [fieldName]: value,
-      });
+      if (fieldName === "phoneNumber") {
+        const fullPhoneNumber = `${locale}${value}`;
+        console.log("Full Phone Number:", fullPhoneNumber);
+        setContactData({
+          ...contactData,
+          [fieldName]: fullPhoneNumber,
+        });
+      } else {
+        setContactData({
+          ...contactData,
+          [fieldName]: value,
+        });
+      }
     };
+
   const handlePasswordFormChange =
     (fieldName: keyof PasswordFormData) => (value: string) => {
       setPasswordData({
@@ -201,10 +221,42 @@ const SignUpPage: React.FC = () => {
     handleNext();
   };
 
-  const onContactFormFinish = (values: ContactFormData) => {
+  const onContactFormFinish = async (values: ContactFormData) => {
     console.log("Contact Form values:", values);
-    handleVerifyOTP(values.email); // Menambahkan pemanggilan handleVerifyOTP setelah mengisi formulir kontak
-    handleNext();
+
+    try {
+      await handleVerifyOTP(values.email); // Asynchronously verify OTP
+
+      // Verification successful, start the counter
+      startVerificationCodeCounter();
+
+      // Move to the next step
+      handleNext();
+    } catch (error) {
+      // Handle generic error scenarios during OTP verification
+      console.error("Error during OTP verification:", error);
+
+      if (error instanceof Error && error.message.includes("network")) {
+        // Handle network-related errors
+        console.error(
+          "Network error occurred. Please check your internet connection."
+        );
+      } else if (error instanceof Error && error.message.includes("timeout")) {
+        // Handle timeout errors
+        console.error("OTP verification timed out. Please try again.");
+      } else if (
+        error instanceof Error &&
+        error.message.includes("validation")
+      ) {
+        // Handle validation errors
+        console.error(
+          "Validation error during OTP verification. Please double-check your input."
+        );
+      } else {
+        // Handle other unexpected errors
+        console.error("An unexpected error occurred during OTP verification.");
+      }
+    }
   };
 
   const onVerificationFormFinish = (values: VerificationFormData) => {
@@ -314,12 +366,16 @@ const SignUpPage: React.FC = () => {
     try {
       const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
-      // Kirim permintaan ke API untuk verifikasi OTP
+      // Check if apiUrl is defined before making the request
+      if (!apiUrl) {
+        throw new Error("REACT_APP_API_BASE_URL is not defined.");
+      }
+
+      // Continue with the OTP verification logic
       const response = await fetch(`${apiUrl}/auth/verifyOTP?email=${email}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          // 'Authorization': 'Bearer token'
         },
       });
 
@@ -332,6 +388,7 @@ const SignUpPage: React.FC = () => {
       }
     } catch (error) {
       console.error("Error during OTP verification:", error);
+      // Handle the error appropriately, e.g., display an error message to the user
     }
   };
 
@@ -996,17 +1053,14 @@ const SignUpPage: React.FC = () => {
                       rules={[{ required: false }]}
                       style={{
                         display: "inline-block",
-                        width: "18%",
+                        width: "12%",
                         marginRight: "2%",
                       }}
                     >
                       <Input
-                        defaultValue="+62"
-                        readOnly={true}
+                        value={locale ? `+${locale}` : ""}
+                        readOnly
                         size="large"
-                        suffix={
-                          <FlagIcon code={"ID"} size={28} className="rounded" />
-                        }
                       />
                     </Form.Item>
                     <Form.Item
@@ -1025,7 +1079,7 @@ const SignUpPage: React.FC = () => {
                       ]}
                       style={{
                         display: "inline-block",
-                        width: "80%",
+                        width: "86%",
                       }}
                       className=" mb-5"
                     >
@@ -1033,13 +1087,12 @@ const SignUpPage: React.FC = () => {
                         size="large"
                         placeholder="Phone Number"
                         onChange={(e) =>
-                          handleContactFormChange("phoneNumber")(
-                            "+62" + e.target.value
-                          )
+                          handleContactFormChange("phoneNumber")(e.target.value)
                         }
                       />
                     </Form.Item>
                   </Form.Item>
+
                   <Form.Item
                     label="Email"
                     name="email"
