@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Logo from "../components/Logo";
-import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Radio, RadioChangeEvent, Select, Space } from "antd";
+import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Modal, Radio, RadioChangeEvent, Select, Space } from "antd";
 import { MenuProps } from "antd/lib";
 import { DownOutlined, TeamOutlined, DollarOutlined, SwapOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
@@ -33,22 +33,35 @@ const Index: React.FC = () => {
     const token = localStorage.getItem(
         'access_token',
     );
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
 
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
     let airports: Airport[] = [];
     let fromAirportDetails: { "label": string, "value": string }[] = [];
     let toAirportDetails: { "label": string, "value": string }[] = [];
     let fromAirport!: Airport;
     let toAirport!: Airport;
-    let departureDate: dayjs.Dayjs;
+    const [departureDate, setdepartureDate] = useState<dayjs.Dayjs>(dayjs());
+
     let returnDate: dayjs.Dayjs;
+    let accessToken: string | null;
+
     async function fetchInitialAirport() {
         const payload = {}
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + accessToken);
+        myHeaders.append("Content-Type", "application/json");
 
         const response = await fetch(
             api_base_url + "/api/airport",
             {
-                method: 'post',
-                headers: { 'Content-Type': 'application/json' },
+                method: 'get',
+                headers: myHeaders,
                 body: JSON.stringify(payload),
             }
         );
@@ -64,7 +77,6 @@ const Index: React.FC = () => {
 
         airports = responseJson['Airport']
     }
-    let accessToken: string | null;
     useRef(() => {
         accessToken = localStorage.getItem(
             'access_token',
@@ -73,9 +85,9 @@ const Index: React.FC = () => {
 
     useEffect(() => {
         console.log(accessToken)
-        // if (accessToken === null) {
-        //     navigate('/login')
-        // }
+        if (accessToken === null) {
+            navigate('/login')
+        }
         fetchInitialAirport()
 
         airports.map((val) => {
@@ -103,7 +115,7 @@ const Index: React.FC = () => {
     }
 
     const onDepartureDatePick: DatePickerProps['onChange'] = (date) => {
-        departureDate = date!;
+        setdepartureDate(date!);
         console.log(departureDate.toISOString());
     };
     const onReturnDatePick: DatePickerProps['onChange'] = (date) => {
@@ -164,7 +176,8 @@ const Index: React.FC = () => {
     };
 
     const handleSearch = async () => {
-        navigate('/result', { state: { trip: trip, seats: seat, cabin: cabin, fromAirport: fromAirport, toAirport: toAirport, departureDate: departureDate, returnDate: returnDate } })
+        showModal()
+
     };
 
 
@@ -475,7 +488,159 @@ const Index: React.FC = () => {
                 }} >
                     <HomeFooter />
                 </Footer>
-            </Layout >  </ConfigProvider >
+            </Layout >
+            <Modal
+                className=" bg-white rounded-2xl "
+                open={isModalOpen}
+                title="Alternative Departure Date"
+                closable={true}
+                footer={[
+                    <button
+                        onClick={handleOk}
+                        className="bg-white pr-6 border-neutral-light font-bold items-center justify-center">
+                        <p className="p-2">
+                            Close
+                        </p>
+                    </button>,
+
+                ]}
+            >
+                <div className="rounded-2xl">
+                    <div className="justify-start w-full items-start gap-6 ">
+                        <div className="flex-col justify-start items-center gap-3 w-full">
+                            <div className="self-stretch h-[106px] py-4 flex-col justify-center items-center gap-2 flex">
+                                <div className="justify-center items-center m-auto gap-5 inline-flex">
+                                    <div className="w-[100px] flex-col justify-start items-center inline-flex">
+                                        <div className="text-center text-neutral-900 text-4xl font-bold font-['Plus Jakarta Sans'] leading-[54px]">{fromAirport?.abv ?? ""}</div>
+                                        <div className="text-center text-gray-400 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">{fromAirport?.city ?? ""}</div>
+                                    </div>
+                                    <div className="w-9 h-9 justify-center items-center flex">
+                                        <div className="w-9 h-9 relative">
+                                            <img src="src/assets/arrow-right.svg"></img>
+                                        </div>
+                                    </div>
+                                    <div className="w-[100px] flex-col justify-start items-center inline-flex">
+                                        <div className="text-center text-neutral-900 text-4xl font-bold font-['Plus Jakarta Sans'] leading-[54px]">{toAirport?.abv ?? ""}</div>
+                                        <div className="text-center text-gray-400 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">{toAirport?.city ?? ""}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="bg-white rounded-2xl shadow border border-gray-200 flex-col justify-start items-start flex">
+                                <a onClick={() => {
+                                    navigate('/result', { state: { trip: trip, seats: seat, cabin: cabin, fromAirport: fromAirport, toAirport: toAirport, departureDate: departureDate, returnDate: returnDate } })
+
+                                }} className="self-stretch justify-start items-center inline-flex">
+                                    <div className="w-[88px] self-stretch px-4 py-2.5 bg-emerald-400 flex-col justify-center items-start gap-1 inline-flex">
+                                        <div className="self-stretch text-white text-xs font-medium font-['Plus Jakarta Sans'] leading-none">Depart</div>
+                                        <div className="self-stretch text-white text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">{(departureDate == undefined ? dayjs() : departureDate).format("DD MMM [\n]ddd") ?? ""}</div>
+                                    </div>
+                                    <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-emerald-100 flex-col justify-center items-center gap-2 inline-flex">
+                                        <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
+                                            <div className="self-stretch text-teal-700 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">From</div>
+                                            <div className="self-stretch text-teal-700 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">1,570K IDR</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div className="self-stretch h-[0px] border border-gray-100"></div>
+                                <a onClick={() => {
+                                    navigate('/result', { state: { trip: trip, seats: seat, cabin: cabin, fromAirport: fromAirport, toAirport: toAirport, departureDate: departureDate.add(1, 'day'), returnDate: returnDate } })
+
+                                }} className="self-stretch justify-start items-center inline-flex">
+                                    <div className="w-[88px] self-stretch px-4 py-2.5 bg-gray-100 flex-col justify-center items-start gap-1 inline-flex">
+                                        <div className="self-stretch text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">Depart</div>
+                                        <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">{(departureDate == undefined ? dayjs() : departureDate).add(1, "day").format("DD MMM") ?? ""}</div>
+                                    </div>
+                                    <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-white flex-col justify-center items-center gap-2 inline-flex">
+                                        <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
+                                            <div className="self-stretch text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">From</div>
+                                            <div className="self-stretch text-neutral-900 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">1,625K IDR</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div className="self-stretch h-[0px] border border-gray-100"></div>
+                                <a onClick={() => {
+                                    navigate('/result', { state: { trip: trip, seats: seat, cabin: cabin, fromAirport: fromAirport, toAirport: toAirport, departureDate: departureDate.add(1, 'day'), returnDate: returnDate } })
+
+                                }} className="self-stretch justify-start items-center inline-flex">                                    <div className="w-[88px] self-stretch px-4 py-2.5 bg-gray-100 flex-col justify-center items-start gap-1 inline-flex">
+                                        <div className="self-stretch text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">Depart</div>
+                                        <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">{(departureDate == undefined ? dayjs() : departureDate).add(2, "day").format("DD MMM") ?? ""}</div>
+                                    </div>
+                                    <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-white flex-col justify-center items-center gap-2 inline-flex">
+                                        <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
+                                            <div className="self-stretch text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">No Flight</div>
+                                            <div className="self-stretch text-neutral-900 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">Not Available</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div className="self-stretch h-[0px] border border-gray-100"></div>
+                                <a onClick={() => {
+                                    navigate('/result', { state: { trip: trip, seats: seat, cabin: cabin, fromAirport: fromAirport, toAirport: toAirport, departureDate: departureDate.add(1, 'day'), returnDate: returnDate } })
+
+                                }} className="self-stretch justify-start items-center inline-flex">                                    <div className="w-[88px] self-stretch px-4 py-2.5 bg-gray-100 flex-col justify-center items-start gap-1 inline-flex">
+                                        <div className="self-stretch text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">Depart</div>
+                                        <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">{(departureDate == undefined ? dayjs() : departureDate).add(3, "day").format("DD MMM") ?? ""}</div>
+                                    </div>
+                                    <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-white flex-col justify-center items-center gap-2 inline-flex">
+                                        <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
+                                            <div className="self-stretch text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">From</div>
+                                            <div className="self-stretch text-neutral-900 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">1,800K IDR</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div className="self-stretch h-[0px] border border-gray-100"></div>
+                                <a onClick={() => {
+                                    navigate('/result', { state: { trip: trip, seats: seat, cabin: cabin, fromAirport: fromAirport, toAirport: toAirport, departureDate: departureDate.add(1, 'day'), returnDate: returnDate } })
+
+                                }} className="self-stretch justify-start items-center inline-flex">                                    <div className="w-[88px] self-stretch px-4 py-2.5 bg-gray-100 flex-col justify-center items-start gap-1 inline-flex">
+                                        <div className="self-stretch text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">Depart</div>
+                                        <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">{(departureDate == undefined ? dayjs() : departureDate).add(4, "day").format("DD MMM") ?? ""}</div>
+                                    </div>
+                                    <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-white flex-col justify-center items-center gap-2 inline-flex">
+                                        <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
+                                            <div className="self-stretch text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">From</div>
+                                            <div className="self-stretch text-neutral-900 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">1,599K IDR</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div className="self-stretch h-[0px] border border-gray-100"></div>
+                                <a onClick={() => {
+                                    navigate('/result', { state: { trip: trip, seats: seat, cabin: cabin, fromAirport: fromAirport, toAirport: toAirport, departureDate: departureDate.add(1, 'day'), returnDate: returnDate } })
+
+                                }} className="self-stretch justify-start items-center inline-flex">                                    <div className="w-[88px] self-stretch px-4 py-2.5 bg-gray-100 flex-col justify-center items-start gap-1 inline-flex">
+                                        <div className="self-stretch text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">Depart</div>
+                                        <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">{(departureDate == undefined ? dayjs() : departureDate).add(5, "day").format("DD MMM") ?? ""}</div>
+                                    </div>
+                                    <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-white flex-col justify-center items-center gap-2 inline-flex">
+                                        <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
+                                            <div className="self-stretch text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">From</div>
+                                            <div className="self-stretch text-neutral-900 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">1,385K IDR</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div className="self-stretch h-[0px] border border-gray-100"></div>
+                                <a onClick={() => {
+                                    navigate('/result', { state: { trip: trip, seats: seat, cabin: cabin, fromAirport: fromAirport, toAirport: toAirport, departureDate: departureDate.add(1, 'day'), returnDate: returnDate } })
+
+                                }} className="self-stretch justify-start items-center inline-flex">                                    <div className="w-[88px] self-stretch px-4 py-2.5 bg-gray-100 flex-col justify-center items-start gap-1 inline-flex">
+                                        <div className="self-stretch text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">Depart</div>
+                                        <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">{(departureDate == undefined ? dayjs() : departureDate).add(6, "day").format("DD MMM") ?? ""}</div>
+                                    </div>
+                                    <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-white flex-col justify-center items-center gap-2 inline-flex">
+                                        <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
+                                            <div className="self-stretch text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">No Flight</div>
+                                            <div className="self-stretch text-neutral-900 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">Not Available</div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="self-stretch pt-8 flex-col justify-start items-start gap-6 flex">
+                        <div className=" text-center text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">The presented fare is the lowest available for each date and covers the entire journey, selected fare category,  pertains to a single adult traveler.</div>
+                    </div>
+                </div>
+            </Modal>
+        </ConfigProvider >
     );
 };
 
