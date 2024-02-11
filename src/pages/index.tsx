@@ -179,17 +179,17 @@ const Index: React.FC = () => {
     };
 
     const handleSearch = async () => {
-        navigate("/result", {
-            state: {
-                trip: trip,
-                seats: seat,
-                cabin: cabin,
-                fromAirport: fromAirport,
-                toAirport: toAirport,
-                departureDate: departureDate,
-                returnDate: returnDate,
-            },
-        });
+        // navigate("/result", {
+        //     state: {
+        //         trip: trip,
+        //         seats: seat,
+        //         cabin: cabin,
+        //         fromAirport: fromAirport,
+        //         toAirport: toAirport,
+        //         departureDate: departureDate,
+        //         returnDate: returnDate,
+        //     },
+        // });
         showModal()
     };
 
