@@ -559,7 +559,7 @@ const SignUpPage: React.FC = () => {
                   type="text"
                   onClick={handleSignIn}
                   className="cursor-pointer text-primary mb-4 left-0"
-                  to={""}
+                  to="/login"
                 >
                   Sign In
                 </Link>
