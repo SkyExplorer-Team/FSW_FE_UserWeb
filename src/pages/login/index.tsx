@@ -135,7 +135,7 @@ const SignIn: React.FC = () => {
         <img
           src="src/assets/sign-in.png"
           alt="Sign In Image"
-          className="h-full rounded p-10 object-contain "
+          className="h-full rounded p-10 object-contain hidden md:block"
         />
       </div>
       <div className=" flex items-center flex-grow p-4 md:py-10 md:px-16">
