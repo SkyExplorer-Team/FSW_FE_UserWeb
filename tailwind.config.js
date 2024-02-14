@@ -28,6 +28,7 @@ export default {
         },
         neutral: {
           light: "#d0d5dd",
+          gray: "#808991",
           DEFAULT: "#677084",
         },
         disabled: {
