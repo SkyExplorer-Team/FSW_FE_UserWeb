@@ -10,7 +10,6 @@ import {
   Select,
   DatePicker,
   Radio,
-  RadioChangeEvent,
   Checkbox,
   Card,
   Space,
@@ -19,7 +18,6 @@ import {
 import { DownOutlined, EditOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import SubmitButton from "../../components/SubmitButton";
-import { Option } from "antd/es/mentions";
 import moment, { Moment } from "moment";
 import { Rule } from "antd/es/form";
 import dayjs from "dayjs";
@@ -27,7 +25,6 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import GoogleSvg from "../../assets/google.svg";
 import TermsOfUseModal from "../../components/TermsOfUseModal";
 import PrivacyPolicyModal from "../../components/PrivacyPolicyModal";
-import { FlagIcon } from "react-flag-kit";
 
 dayjs.extend(customParseFormat);
 
@@ -91,8 +88,8 @@ const SignUpPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [termsVisible, setTermsVisible] = useState<boolean>(false);
   const [privacyVisible, setPrivacyVisible] = useState<boolean>(false);
-  const [verificationCode, setVerificationCode] = useState<string | null>(null);
-  const [counter, setCounter] = useState<number>(60);
+  const [verificationCode] = useState<string | null>(null);
+  // const [counter, setCounter] = useState<number>(60);
   const [verificationCodeCounter, setVerificationCodeCounter] =
     useState<number>(5);
   const [isNoFirstMiddleNameChecked, setIsNoFirstMiddleNameChecked] =
@@ -106,7 +103,7 @@ const SignUpPage: React.FC = () => {
   );
   const [locale, setLocale] = useState<string>("");
   const [isOtpResend, setIsOtpResend] = useState<boolean>(false);
-  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  // const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
   const navigate = useNavigate();
 
@@ -198,9 +195,13 @@ const SignUpPage: React.FC = () => {
     navigate("/login");
   };
 
-  const handleSignUpSuccess = () => {
-    // navigate("/index")
+  const handleHomepage = () => {
+    navigate("/");
   };
+
+  // const handleSignUpSuccess = () => {
+  //   // navigate("/index")
+  // };
 
   const handleTermsClick = () => {
     setTermsVisible(true);
@@ -290,18 +291,18 @@ const SignUpPage: React.FC = () => {
   const minutes = Math.floor(verificationCodeCounter / 60);
   const seconds = verificationCodeCounter % 60;
 
-  const validateNumber = (
-    _: any,
-    value: string,
-    callback: (error?: string) => void
-  ) => {
-    const regex = /^[0-9]*$/;
-    if (!value || regex.test(value)) {
-      callback();
-    } else {
-      callback("Masukkan hanya angka!");
-    }
-  };
+  // const validateNumber = (
+  //   _: any,
+  //   value: string,
+  //   callback: (error?: string) => void
+  // ) => {
+  //   const regex = /^[0-9]*$/;
+  //   if (!value || regex.test(value)) {
+  //     callback();
+  //   } else {
+  //     callback("Masukkan hanya angka!");
+  //   }
+  // };
 
   const validateFirstName: Rule = ({ getFieldValue }) => ({
     validator(_, value) {
@@ -323,49 +324,49 @@ const SignUpPage: React.FC = () => {
     },
   });
 
-  const handleRegister = async () => {
-    try {
-      const registerData = {
-        firstName: personalData.firstName,
-        lastName: personalData.lastName,
-        password: passwordData.password,
-        salutation: personalData.salutation,
-        email: contactData.email,
-        national: selectedNationality || "",
-        dob: personalData.dob,
-        phone: contactData.phoneNumber,
-        subscribe: true,
-        authProvider: "local",
-        providerId: "string",
-        registrationComplete: false, // Set to false by default
-        otpverified: false, // Set to false by default
-      };
+  // const handleRegister = async () => {
+  //   try {
+  //     const registerData = {
+  //       firstName: personalData.firstName,
+  //       lastName: personalData.lastName,
+  //       password: passwordData.password,
+  //       salutation: personalData.salutation,
+  //       email: contactData.email,
+  //       national: selectedNationality || "",
+  //       dob: personalData.dob,
+  //       phone: contactData.phoneNumber,
+  //       subscribe: true,
+  //       authProvider: "local",
+  //       providerId: "string",
+  //       registrationComplete: false, // Set to false by default
+  //       otpverified: false, // Set to false by default
+  //     };
 
-      const apiUrl = process.env.REACT_APP_API_BASE_URL;
+  //     const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
-      // Kirim permintaan ke API
-      const response = await fetch(`${apiUrl}/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(registerData),
-      });
+  //     // Kirim permintaan ke API
+  //     const response = await fetch(`${apiUrl}/auth/register`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(registerData),
+  //     });
 
-      if (response.ok) {
-        // Registrasi berhasil
-        const responseData = await response.json();
-        console.log("Registration successful:", responseData);
-        setRegistrationSuccess(true);
-        // navigate to dashboard
-      } else {
-        const errorData = await response.json();
-        console.error("Registration failed:", errorData);
-      }
-    } catch (error) {
-      console.error("Error during registration:", error);
-    }
-  };
+  //     if (response.ok) {
+  //       // Registrasi berhasil
+  //       const responseData = await response.json();
+  //       console.log("Registration successful:", responseData);
+  //       setRegistrationSuccess(true);
+  //       // navigate to dashboard
+  //     } else {
+  //       const errorData = await response.json();
+  //       console.error("Registration failed:", errorData);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during registration:", error);
+  //   }
+  // };
 
   const handleVerifyOTP = async (email: string) => {
     try {
@@ -404,33 +405,33 @@ const SignUpPage: React.FC = () => {
     return selectedOption ? selectedOption.name : "";
   };
 
-  const postNationality = async () => {
-    try {
-      const apiUrl = process.env.REACT_APP_API_BASE_URL;
+  // const postNationality = async () => {
+  //   try {
+  //     const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
-      // Kirim permintaan ke API untuk menambahkan nationality pilihan user
-      const response = await fetch(`${apiUrl}/api/national`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // 'Authorization': 'Bearer token'
-        },
-        body: JSON.stringify({
-          // Data nasional yang akan ditambahkan
-        }),
-      });
+  //     // Kirim permintaan ke API untuk menambahkan nationality pilihan user
+  //     const response = await fetch(`${apiUrl}/api/national`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         // 'Authorization': 'Bearer token'
+  //       },
+  //       body: JSON.stringify({
+  //         // Data nasional yang akan ditambahkan
+  //       }),
+  //     });
 
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log("Nationality added successfully:", responseData);
-      } else {
-        const errorData = await response.json();
-        console.error("Failed to add nationality:", errorData);
-      }
-    } catch (error) {
-      console.error("Error during adding nationality:", error);
-    }
-  };
+  //     if (response.ok) {
+  //       const responseData = await response.json();
+  //       console.log("Nationality added successfully:", responseData);
+  //     } else {
+  //       const errorData = await response.json();
+  //       console.error("Failed to add nationality:", errorData);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during adding nationality:", error);
+  //   }
+  // };
 
   const handleOtpResend = async (email: string) => {
     try {
@@ -465,37 +466,37 @@ const SignUpPage: React.FC = () => {
     }
   };
 
-  const handleSetPassword = async (email: string) => {
-    try {
-      const apiUrl = process.env.REACT_APP_API_BASE_URL;
+  // const handleSetPassword = async (email: string) => {
+  //   try {
+  //     const apiUrl = process.env.REACT_APP_API_BASE_URL;
 
-      // Kirim permintaan ke API untuk menetapkan kata sandi
-      const response = await fetch(`${apiUrl}/auth/setPassword`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: passwordData.password,
-          // Tambahkan parameter lain yang diperlukan untuk menetapkan kata sandi
-        }),
-      });
+  //     // Kirim permintaan ke API untuk menetapkan kata sandi
+  //     const response = await fetch(`${apiUrl}/auth/setPassword`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         email: email,
+  //         password: passwordData.password,
+  //         // Tambahkan parameter lain yang diperlukan untuk menetapkan kata sandi
+  //       }),
+  //     });
 
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log("Password set successfully:", responseData);
+  //     if (response.ok) {
+  //       const responseData = await response.json();
+  //       console.log("Password set successfully:", responseData);
 
-        // Lanjutkan ke langkah berikutnya setelah menetapkan kata sandi
-        handleNext();
-      } else {
-        const errorData = await response.json();
-        console.error("Failed to set password:", errorData);
-      }
-    } catch (error) {
-      console.error("Error during setting password:", error);
-    }
-  };
+  //       // Lanjutkan ke langkah berikutnya setelah menetapkan kata sandi
+  //       handleNext();
+  //     } else {
+  //       const errorData = await response.json();
+  //       console.error("Failed to set password:", errorData);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during setting password:", error);
+  //   }
+  // };
 
   useEffect(() => {
     if (verificationCodeCounter === 0) {
@@ -505,14 +506,14 @@ const SignUpPage: React.FC = () => {
 
   return (
     <div className="flex flex-col md:flex-row gap-4">
-      <div className="md:w-1/2 h-screen">
+      <div className="md:w-1/2 h-screen hidden md:block">
         <img
           src="src/assets/sign-up.png"
           alt="Sign Up Image"
           className="h-screen rounded p-10 object-contain fixed"
         />
       </div>
-      <div className="md:w-1/2 flex items-center p-4 md:py-10 md:px-16">
+      <div className="md:w-1/2 flex items-center p-4 md:py-10 md:px-16 overflow-auto">
         {isOnboarding ? (
           <div className="w-full flex flex-col gap-4">
             <Text className="text-4xl font-semibold">Create an Account</Text>
@@ -812,14 +813,14 @@ const SignUpPage: React.FC = () => {
                   className="bg-primary mb-2 mt-5"
                   size="large"
                   block={true}
-                  onClick={() => navigate("/src/pages/index.tsx")}
+                  onClick={handleHomepage}
                 >
                   Sign In
                 </Button>
               </div>
             )}
             {currentStep < 3 && (
-              <Steps current={currentStep} labelPlacement="vertical">
+              <Steps current={currentStep} style={{ flexDirection: "row" }}>
                 <Step title="Personal" />
                 <Step title="Contact" />
                 <Step title="Check" />
