@@ -420,8 +420,8 @@ const StatusResult: React.FC = () => {
             </div>
           </div>
           <div className="self-stretch justify-start items-center gap-6 inline-flex">
-            <div className="grow shrink basis-0 justify-start items-center gap-3 flex">
-              <div className=" justify-center flex-grow items-center gap-2 flex">
+            <div className="flex-col md:flex-row grow shrink basis-0 justify-start items-start gap-3 flex">
+              <div className="flex-col md:flex-row justify-center flex-grow items-center gap-2 flex">
                 <div className="flex-grow basis-0 flex-col justify-start items-start gap-2 inline-flex">
                   <div className="bg-white justify-start items-start gap-2.5 inline-flex">
                     <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
@@ -445,7 +445,7 @@ const StatusResult: React.FC = () => {
                         border: "0px solid",
                         backgroundColor: "transparent",
                       }}
-                      className="w-full"
+                      className="w-full md:w-auto"
                       value={fromAirport == undefined ? null : fromAirport.name}
                       optionFilterProp="children"
                       onChange={fromChange}
@@ -496,7 +496,7 @@ const StatusResult: React.FC = () => {
                       }}
                       value={toAirport == undefined ? null : toAirport.name}
                       showSearch
-                      className="w-full"
+                      className="w-full md:w-auto"
                       placeholder="Where to ?"
                       optionFilterProp="children"
                       onChange={toChange}
@@ -550,7 +550,7 @@ const StatusResult: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="self-stretch px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center gap-3 inline-flex">
+                    <div className="px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center gap-3 inline-flex">
                       <DatePicker
                         onChange={onDepartureDatePick}
                         style={{ width: "100%" }}
@@ -599,16 +599,16 @@ const StatusResult: React.FC = () => {
                   </div>
                 </div>
               )}
+              <button
+                onClick={handleSearch}
+                type="submit"
+                className="my-4 justify-center rounded-xl flex-col bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm"
+              >
+                <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
+                  Search Flights
+                </p>
+              </button>
             </div>
-            <button
-              onClick={handleSearch}
-              type="submit"
-              className="my-4 justify-center rounded-xl flex-col bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm"
-            >
-              <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
-                Search Flights
-              </p>
-            </button>
           </div>
         </div>
         {schedules.length != 0 ? (
