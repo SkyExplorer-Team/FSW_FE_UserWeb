@@ -242,7 +242,7 @@ const StatusResult: React.FC = () => {
                 Status
               </div>
               <Dropdown
-                className="flex hover:text-[#38A993] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7"
+                className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7"
                 menu={{ items }}
               >
                 <a onClick={(e) => e.preventDefault()}>
@@ -251,7 +251,7 @@ const StatusResult: React.FC = () => {
                 </a>
               </Dropdown>
               <Dropdown
-                className="flex hover:text-[#38A993] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7 "
+                className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7 "
                 menu={{ items }}
               >
                 <a onClick={(e) => e.preventDefault()}>
@@ -262,7 +262,7 @@ const StatusResult: React.FC = () => {
             </div>
           </div>
           <div className="gap-8 flex">
-            <a className="snap-center self-center align-middle hover:text-[#38A993] text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+            <a className="snap-center self-center align-middle hover:text-primary text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
               <div className="justify-start items-center gap-4 flex">
                 <ReactCountryFlag countryCode="ID" svg />
                 <div className="">IDR</div>
@@ -271,7 +271,7 @@ const StatusResult: React.FC = () => {
             </a>
 
             {token ? (
-              <div className="snap-center self-center align-middle hover:text-[#38A993] text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+              <div className="snap-center self-center align-middle hover:text-primary text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
                 <SkeletonAvatar className="mr-4" />
                 AAAAA
                 <DownOutlined />
@@ -305,7 +305,7 @@ const StatusResult: React.FC = () => {
               <Radio.Group
                 buttonStyle="outline"
                 size="large"
-                className="text-[#38A993]"
+                className="text-primary"
                 defaultValue={trip}
                 onChange={onChange}
               >

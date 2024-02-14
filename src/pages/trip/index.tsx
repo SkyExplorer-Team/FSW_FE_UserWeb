@@ -569,7 +569,7 @@ const Index: React.FC = () => {
                   Status
                 </div>
                 <Dropdown
-                  className="flex hover:text-[#38A993] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7"
+                  className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7"
                   menu={{ items }}
                 >
                   <a onClick={(e) => e.preventDefault()}>
@@ -578,7 +578,7 @@ const Index: React.FC = () => {
                   </a>
                 </Dropdown>
                 <Dropdown
-                  className="flex hover:text-[#38A993] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7 "
+                  className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7 "
                   menu={{ items }}
                 >
                   <a onClick={(e) => e.preventDefault()}>
@@ -589,7 +589,7 @@ const Index: React.FC = () => {
               </div>
               <div className="flex xl:hidden justify-start items-start md:gap-6">
                 <Dropdown
-                  className="flex hover:text-[#38A993] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7"
+                  className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7"
                   menu={{ items }}
                 >
                   <a onClick={(e) => e.preventDefault()}>
@@ -600,7 +600,7 @@ const Index: React.FC = () => {
               </div>
             </div>
             <div className="col-start-7 xl:col-start-10 col-end-13 gap-4 flex item-end justify-end">
-              <a className="snap-center self-center align-middle hover:text-[#38A993] text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+              <a className="snap-center self-center align-middle hover:text-primary text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
                 <div className="justify-start items-center px-2 md:gap-4 flex">
                   <ReactCountryFlag countryCode="ID" svg />
                   <div>IDR</div>
@@ -611,17 +611,17 @@ const Index: React.FC = () => {
               {token ? (
                 <div className="snap-center self-center align-middle text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
                   <div className="grid grid-cols-12 md:gap-4 border border-gray-200 rounded-[5px] p-2">
-                    <div className="col-start-1 col-end-11 hover:text-[#38A993] flex">
+                    <div className="col-start-1 col-end-11 hover:text-primary flex">
                       <div className="grid grid-cols-12 gap-2">
-                        <div className="col-start-1 md:col-end-3 hover:text-[#38A993] flex">
+                        <div className="col-start-1 md:col-end-3 hover:text-primary flex">
                           <SkeletonAvatar />
                         </div>
-                        <div className="col-start-5 md:col-start-3 col-end-13 hover:text-[#38A993] flex">
+                        <div className="col-start-5 md:col-start-3 col-end-13 hover:text-primary flex">
                           Lewis
                         </div>
                       </div>
                     </div>
-                    <div className="col-start-11 col-end-13 hover:text-[#38A993]">
+                    <div className="col-start-11 col-end-13 hover:text-primary">
                       <Dropdown overlay={menu} placement="bottomRight">
                         <a onClick={(e) => e.preventDefault()}>
                           <MenuOutlined />
@@ -983,7 +983,7 @@ const Index: React.FC = () => {
                                       <div className="text-center text-[#111] font-medium font-['Plus Jakarta Sans'] font-semibold text-lg  md:text-3xl">
                                         {schedule.departureDate.format("HH:mm")}
                                       </div>
-                                      <div className="text-center text-[#38A993] font-medium font-['Plus Jakarta Sans'] font-semibold text-lg  md:text-3xl">
+                                      <div className="text-center text-primary font-medium font-['Plus Jakarta Sans'] font-semibold text-lg  md:text-3xl">
                                         {schedule.airportDepartureCode}
                                       </div>
                                       <div className="text-center text-[#808991] font-medium font-['Plus Jakarta Sans'] font-semibold text-lg">
@@ -1090,7 +1090,7 @@ const Index: React.FC = () => {
                                       <div className="text-center text-[#111] font-medium font-['Plus Jakarta Sans'] font-semibold text-lg  md:text-3xl">
                                         {schedule.arrivalDate.format("HH:mm")}
                                       </div>
-                                      <div className="text-center text-[#38A993] font-medium font-['Plus Jakarta Sans'] font-semibold text-lg  md:text-3xl">
+                                      <div className="text-center text-primary font-medium font-['Plus Jakarta Sans'] font-semibold text-lg  md:text-3xl">
                                         {schedule.airportArrivalCode}
                                       </div>
                                       <div className="text-center text-[#808991] tfont-medium font-['Plus Jakarta Sans'] font-semibold text-lg">
@@ -1220,7 +1220,7 @@ const Index: React.FC = () => {
                                       <div className="text-center text-[#111] font-medium font-['Plus Jakarta Sans'] font-semibold text-lg  md:text-3xl">
                                         {schedule.departureDate.format("HH:mm")}
                                       </div>
-                                      <div className="text-center text-[#38A993] font-medium font-['Plus Jakarta Sans'] font-semibold text-lg  md:text-3xl">
+                                      <div className="text-center text-primary font-medium font-['Plus Jakarta Sans'] font-semibold text-lg  md:text-3xl">
                                         {schedule.airportDepartureCode}
                                       </div>
                                       <div className="text-center text-[#808991] font-medium font-['Plus Jakarta Sans'] font-semibold text-lg">
@@ -1327,7 +1327,7 @@ const Index: React.FC = () => {
                                       <div className="text-center text-[#111] font-medium font-['Plus Jakarta Sans'] font-semibold text-lg  md:text-3xl">
                                         {schedule.arrivalDate.format("HH:mm")}
                                       </div>
-                                      <div className="text-center text-[#38A993] font-medium font-['Plus Jakarta Sans'] font-semibold text-lg  md:text-3xl">
+                                      <div className="text-center text-primary font-medium font-['Plus Jakarta Sans'] font-semibold text-lg  md:text-3xl">
                                         {schedule.airportArrivalCode}
                                       </div>
                                       <div className="text-center text-[#808991] tfont-medium font-['Plus Jakarta Sans'] font-semibold text-lg">
