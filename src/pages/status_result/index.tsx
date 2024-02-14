@@ -34,6 +34,7 @@ import Dots from "../../../public/assets/dots.svg";
 import IconAirplane from "../../../public/assets/icon-airplane.svg";
 import ChevronRight from "../../../public/assets/chevron-right.svg";
 import Airplane from "../../../public/assets/airplane.svg";
+import GambarPocket from "../../../public/assets/gambar-samping.png";
 
 dayjs.extend(customParseFormat);
 
@@ -528,227 +529,237 @@ const StatusResult: React.FC = () => {
             ></img>
           </div>
         ) : (
-          <div className="flex flex-col w-full items-center justify-center h-screen">
-            <div className="bg-primary-background text-primary-dark p-2 rounded-lg flex gap-2">
-              <img src={IconInfo} alt="Icon Info" className="h-4 w-4" />
-              <p>
-                Scheduled departure and arrival timings may have changed. Select
-                the flight to view latest flight status.
-              </p>
+          <div className="flex my-5 mx-0 md:mx-5">
+            <div className="flex flex-col w-full items-center justify-center ">
+              <div className="bg-primary-background text-primary-dark p-1 md:p-2 rounded-lg flex items-center gap-1 md:gap-2 mx-4 md:mx-[12px]">
+                <img src={IconInfo} alt="Icon Info" className="h-4 w-4" />
+                <p className="text-sm md:text-md">
+                  Scheduled departure and arrival timings may have changed.
+                  Select the flight to view latest flight status.
+                </p>
+              </div>
+
+              {/* cards */}
+              <div className="flex flex-col gap-5 mt-4 mx-4 md:mx-[12px]">
+                <div className="flex">
+                  <div className="bg-white rounded-xl p-2 md:p-5 flex gap-2 md:gap-5 border-r border-dashed border-gray-200">
+                    <div className="flex flex-col">
+                      <p className="text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
+                        10:25
+                      </p>
+
+                      <p className="text-primary text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
+                        CGK
+                      </p>
+                      <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
+                        16 Jan
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-center justify-center">
+                      <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
+                        1h 45m
+                      </p>
+                      <div className="flex gap-2 p-2 items-center justify-center">
+                        <img src={Dots} alt="Icon dots" className="h-4 w-4" />
+                        <div className="w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
+
+                        <img
+                          src={IconAirplane}
+                          alt="Icon Airplane"
+                          className="h-4 w-4"
+                        />
+                        <div className="w-[30px] lg:w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
+
+                        <img src={Dots} alt="Icon dots" className="h-4 w-4" />
+                      </div>
+                      <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
+                        Direct
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <p className="text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
+                        10:25
+                      </p>
+                      <p className="text-primary text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
+                        SIN
+                      </p>
+                      <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
+                        16 Jan
+                      </p>
+                    </div>
+                  </div>
+                  <div className="bg-white flex flex-col p-2 md:p-8 items-center justify-center h-full gap-2 md:gap-4 rounded-xl">
+                    <div className="flex items-center gap-1">
+                      <div className="bg-primary rounded-2xl">
+                        <img
+                          src={Airplane}
+                          alt="Icon Airplane"
+                          className="h-4 md:h-8 w-4 md:w-8"
+                        />
+                      </div>
+                      <p className="text-xs md:text-lg font-semibold font-['Plus Jakarta Sans']">
+                        SE 955
+                      </p>
+                    </div>
+                    <button className="text-sm md:text-normal flex gap-0 md:gap-2 text-primary hover:text-primary-dark hover:text-semibold items-center justify-center">
+                      Details
+                      <img
+                        src={ChevronRight}
+                        alt="Icon Chevron right"
+                        className="h-3 w-3 md:h-4 md:w-4"
+                      />
+                    </button>
+                  </div>
+                </div>
+                <div className="flex">
+                  <div className="bg-white rounded-xl p-2 md:p-5 flex gap-2 md:gap-5 border-r border-dashed border-gray-200">
+                    <div className="flex flex-col">
+                      <p className="text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
+                        10:25
+                      </p>
+
+                      <p className="text-primary text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
+                        CGK
+                      </p>
+                      <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
+                        16 Jan
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-center justify-center">
+                      <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
+                        1h 45m
+                      </p>
+                      <div className="flex gap-2 p-2 items-center justify-center">
+                        <img src={Dots} alt="Icon dots" className="h-4 w-4" />
+                        <div className="w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
+
+                        <img
+                          src={IconAirplane}
+                          alt="Icon Airplane"
+                          className="h-4 w-4"
+                        />
+                        <div className="w-[30px] lg:w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
+
+                        <img src={Dots} alt="Icon dots" className="h-4 w-4" />
+                      </div>
+                      <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
+                        Direct
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <p className="text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
+                        10:25
+                      </p>
+                      <p className="text-primary text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
+                        SIN
+                      </p>
+                      <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
+                        16 Jan
+                      </p>
+                    </div>
+                  </div>
+                  <div className="bg-white flex flex-col p-2 md:p-5 items-center justify-center h-full gap-2 md:gap-4 rounded-xl">
+                    <div className="flex items-center gap-1">
+                      <div className="bg-primary rounded-2xl">
+                        <img
+                          src={Airplane}
+                          alt="Icon Airplane"
+                          className="h-4 md:h-8 w-4 md:w-8"
+                        />
+                      </div>
+                      <p className="text-xs md:text-lg font-semibold font-['Plus Jakarta Sans']">
+                        SE 955
+                      </p>
+                    </div>
+                    <button className="text-sm md:text-normal flex gap-0 md:gap-2 text-primary hover:text-primary-dark hover:text-semibold items-center justify-center">
+                      Details
+                      <img
+                        src={ChevronRight}
+                        alt="Icon Chevron right"
+                        className="h-3 w-3 md:h-4 md:w-4"
+                      />
+                    </button>
+                  </div>
+                </div>
+                <div className="flex">
+                  <div className="bg-white rounded-xl p-2 md:p-5 flex gap-2 md:gap-5 border-r border-dashed border-gray-200">
+                    <div className="flex flex-col">
+                      <p className="text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
+                        10:25
+                      </p>
+
+                      <p className="text-primary text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
+                        CGK
+                      </p>
+                      <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
+                        16 Jan
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-center justify-center">
+                      <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
+                        1h 45m
+                      </p>
+                      <div className="flex gap-2 p-2 items-center justify-center">
+                        <img src={Dots} alt="Icon dots" className="h-4 w-4" />
+                        <div className="w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
+
+                        <img
+                          src={IconAirplane}
+                          alt="Icon Airplane"
+                          className="h-4 w-4"
+                        />
+                        <div className="w-[30px] lg:w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
+
+                        <img src={Dots} alt="Icon dots" className="h-4 w-4" />
+                      </div>
+                      <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
+                        Direct
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <p className="text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
+                        10:25
+                      </p>
+                      <p className="text-primary text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
+                        SIN
+                      </p>
+                      <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
+                        16 Jan
+                      </p>
+                    </div>
+                  </div>
+                  <div className="bg-white flex flex-col p-2 md:p-5 items-center justify-center h-full gap-2 md:gap-4 rounded-xl">
+                    <div className="flex items-center gap-1">
+                      <div className="bg-primary rounded-2xl">
+                        <img
+                          src={Airplane}
+                          alt="Icon Airplane"
+                          className="h-4 md:h-8 w-4 md:w-8"
+                        />
+                      </div>
+                      <p className="text-xs md:text-lg font-semibold font-['Plus Jakarta Sans']">
+                        SE 955
+                      </p>
+                    </div>
+                    <button className="text-sm md:text-normal flex gap-0 md:gap-2 text-primary hover:text-primary-dark hover:text-semibold items-center justify-center">
+                      Details
+                      <img
+                        src={ChevronRight}
+                        alt="Icon Chevron right"
+                        className="h-3 w-3 md:h-4 md:w-4"
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* pagination */}
             </div>
-
-            {/* cards */}
-            <div className="flex flex-col gap-5 mt-4">
-              <div className="flex">
-                <div className="bg-white rounded-xl p-5 flex gap-5 border-r border-dashed border-gray-200">
-                  <div className="flex flex-col">
-                    <p className="text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-                      10:25
-                    </p>
-                    <p className="text-primary text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-                      CGK
-                    </p>
-                    <p className="text-neutral-gray text-sm font-semibold font-['Plus Jakarta Sans']">
-                      16 Jan
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-center justify-center">
-                    <p className="text-slate-800 text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-                      1h 45m
-                    </p>
-                    <div className="flex gap-2 p-2 items-center justify-center">
-                      <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-                      <div className="w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-                      <img
-                        src={IconAirplane}
-                        alt="Icon Airplane"
-                        className="h-4 w-4"
-                      />
-                      <div className="w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-                      <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-                    </div>
-                    <p className="text-slate-800 text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-                      Direct
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-end">
-                    <p className="text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-                      10:25
-                    </p>
-                    <p className="text-primary text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-                      SIN
-                    </p>
-                    <p className="text-neutral-gray text-sm font-semibold font-['Plus Jakarta Sans']">
-                      16 Jan
-                    </p>
-                  </div>
-                </div>
-                <div className="bg-white flex flex-col p-5 items-center justify-center h-full gap-4 rounded-xl">
-                  <div className="flex items-center gap-1">
-                    <div className="bg-primary rounded-2xl">
-                      <img
-                        src={Airplane}
-                        alt="Icon Airplane"
-                        className="h-8 w-8"
-                      />
-                    </div>
-                    <p className="text-xl font-semibold font-['Plus Jakarta Sans']">
-                      SE 955
-                    </p>
-                  </div>
-                  <button className="flex gap-2 text-primary hover:text-primary-dark hover:text-semibold items-center">
-                    Details
-                    <img
-                      src={ChevronRight}
-                      alt="Icon Chevron right"
-                      className="h-4 w-4"
-                    />
-                  </button>
-                </div>
-              </div>
-              <div className="flex">
-                <div className="bg-white rounded-xl p-5 flex gap-5 border-r border-dashed border-gray-200">
-                  <div className="flex flex-col">
-                    <p className="text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-                      10:25
-                    </p>
-                    <p className="text-primary text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-                      CGK
-                    </p>
-                    <p className="text-neutral-gray text-sm font-semibold font-['Plus Jakarta Sans']">
-                      16 Jan
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-center justify-center">
-                    <p className="text-slate-800 text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-                      1h 45m
-                    </p>
-                    <div className="flex gap-2 p-2 items-center justify-center">
-                      <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-                      <div className="w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-                      <img
-                        src={IconAirplane}
-                        alt="Icon Airplane"
-                        className="h-4 w-4"
-                      />
-                      <div className="w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-                      <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-                    </div>
-                    <p className="text-slate-800 text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-                      Direct
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-end">
-                    <p className="text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-                      10:25
-                    </p>
-                    <p className="text-primary text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-                      SIN
-                    </p>
-                    <p className="text-neutral-gray text-sm font-semibold font-['Plus Jakarta Sans']">
-                      16 Jan
-                    </p>
-                  </div>
-                </div>
-                <div className="bg-white flex flex-col p-5 items-center justify-center h-full gap-4 rounded-xl">
-                  <div className="flex items-center gap-1">
-                    <div className="bg-primary rounded-2xl">
-                      <img
-                        src={Airplane}
-                        alt="Icon Airplane"
-                        className="h-8 w-8"
-                      />
-                    </div>
-                    <p className="text-xl font-semibold font-['Plus Jakarta Sans']">
-                      SE 955
-                    </p>
-                  </div>
-                  <button className="flex gap-2 text-primary hover:text-primary-dark hover:text-semibold items-center">
-                    Details
-                    <img
-                      src={ChevronRight}
-                      alt="Icon Chevron right"
-                      className="h-4 w-4"
-                    />
-                  </button>
-                </div>
-              </div>
-              <div className="flex">
-                <div className="bg-white rounded-xl p-5 flex gap-5 border-r border-dashed border-gray-200">
-                  <div className="flex flex-col">
-                    <p className="text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-                      10:25
-                    </p>
-                    <p className="text-primary text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-                      CGK
-                    </p>
-                    <p className="text-neutral-gray text-sm font-semibold font-['Plus Jakarta Sans']">
-                      16 Jan
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-center justify-center">
-                    <p className="text-slate-800 text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-                      1h 45m
-                    </p>
-                    <div className="flex gap-2 p-2 items-center justify-center">
-                      <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-                      <div className="w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-                      <img
-                        src={IconAirplane}
-                        alt="Icon Airplane"
-                        className="h-4 w-4"
-                      />
-                      <div className="w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-                      <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-                    </div>
-                    <p className="text-slate-800 text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-                      Direct
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-end">
-                    <p className="text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-                      10:25
-                    </p>
-                    <p className="text-primary text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-                      SIN
-                    </p>
-                    <p className="text-neutral-gray text-sm font-semibold font-['Plus Jakarta Sans']">
-                      16 Jan
-                    </p>
-                  </div>
-                </div>
-                <div className="bg-white flex flex-col p-5 items-center justify-center h-full gap-4 rounded-xl">
-                  <div className="flex items-center gap-1">
-                    <div className="bg-primary rounded-2xl">
-                      <img
-                        src={Airplane}
-                        alt="Icon Airplane"
-                        className="h-8 w-8"
-                      />
-                    </div>
-                    <p className="text-xl font-semibold font-['Plus Jakarta Sans']">
-                      SE 955
-                    </p>
-                  </div>
-                  <button className="flex gap-2 text-primary hover:text-primary-dark hover:text-semibold items-center">
-                    Details
-                    <img
-                      src={ChevronRight}
-                      alt="Icon Chevron right"
-                      className="h-4 w-4"
-                    />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* pagination */}
+            <img
+              src={GambarPocket}
+              alt="Gambar Pocket"
+              className="hidden lg:block w-[309px] h-[345px]"
+            />
           </div>
         )}
       </Content>
