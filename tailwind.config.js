@@ -11,16 +11,20 @@ export default {
           dark: "rgba(34, 120, 121, 1)",
         },
         success: {
+          background: "#E3FAD9",
           light: "#96e28c",
           DEFAULT: "#3FA244",
+          dark: "#247535",
         },
         info: {
           light: "#6de1f0",
           DEFAULT: "#299FD1",
         },
         warning: {
+          lightest: "#FEF1CB",
           light: "#fac664",
           DEFAULT: "#ef8801",
+          dark: "#AC5200",
         },
         error: {
           light: "#ec8574",
