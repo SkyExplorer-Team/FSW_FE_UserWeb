@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Logo from "../components/Logo";
 import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Modal, Radio, RadioChangeEvent, Select, Space } from "antd";
 import { MenuProps } from "antd/lib";
@@ -43,11 +43,13 @@ const Index: React.FC = () => {
     const handleOk = () => {
         setIsModalOpen(false);
     };
-    let airports: Airport[] = [];
-    let fromAirportDetails: { "label": string, "value": string }[] = [];
-    let toAirportDetails: { "label": string, "value": string }[] = [];
-    let fromAirport!: Airport;
-    let toAirport!: Airport;
+    const [airports, setAirports] = useState<Airport[]>([])
+    const [airportDetails, setAirportDetails] = useState<{ "label": string, "value": string }[]>([]);
+    const [fromAirportDetails, setFromAirportDetails] = useState<{ "label": string, "value": string }[]>([]);
+    const [toAirportDetails, setToAirportDetails] = useState<{ "label": string, "value": string }[]>([]);
+    const [fromAirport, setFromAirport] = useState<Airport>();
+    const [toAirport, setToAirport] = useState<Airport>();
+
     const [departureDate, setdepartureDate] = useState<dayjs.Dayjs>(dayjs());
     const [userName, setUserName] = useState<string>("");
 
@@ -98,23 +100,28 @@ const Index: React.FC = () => {
             return;
         }
         // make Sure this ok ==============
-        airports = responseJson.data['airports'] as Airport[];
-        fromAirportDetails = airports.map((val) => {
+        setAirports(responseJson.data['airports']);
+
+        const det = airports.map((val) => {
             return { label: val.name ?? "", value: val.id ?? "" }
-        });
-        toAirportDetails = airports.map((val) => {
-            return { label: val.name ?? "", value: val.id ?? "" }
-        });
+        })
+        setAirportDetails(det);
+        setFromAirportDetails(det)
+        setToAirportDetails(det)
 
     }
+
+    useRef(() => {
+    })
 
     useEffect(() => {
         if (accessToken === null) {
             navigate('/login')
         }
-
         fetchInitialAirport();
+
         fetchName();
+
 
 
     });
@@ -152,27 +159,27 @@ const Index: React.FC = () => {
         value.format(dateFormat);
 
     const fromChange = (value: string) => {
-        fromAirport = airports.find((obj) => {
+        setFromAirport(airports.find((obj) => {
             return (obj.name = value);
-        })!;
+        }));
 
     };
     const toChange = (value: string) => {
-        toAirport = airports.find((obj) => {
+        setToAirport(airports.find((obj) => {
             return (obj.name = value);
-        })!;
+        }));
     };
 
     const fromSearch = (value: string) => {
-        fromAirportDetails = fromAirportDetails.filter((obj) => {
+        setFromAirportDetails(airportDetails.filter((obj) => {
             return obj.label.includes(value);
-        });
+        }));
     };
 
     const toSearch = (value: string) => {
-        toAirportDetails = toAirportDetails.filter((obj) => {
+        setAirportDetails(airportDetails.filter((obj) => {
             return obj.label.includes(value);
-        });
+        }));
     };
 
     const filterOption = (
@@ -219,7 +226,6 @@ const Index: React.FC = () => {
     const onChange = (e: RadioChangeEvent) => {
         setTrip(e.target.value);
     };
-
     return (
         <ConfigProvider
             theme={{
@@ -441,8 +447,26 @@ const Index: React.FC = () => {
                                                                     ></img>
                                                                 </>
                                                             }
-                                                            optionRender={(option) => {
-                                                                return <div>{option.value}</div>;
+                                                            optionRender={(option, i) => {
+                                                                const target = toAirportDetails[i.index];
+                                                                const a = airports.find(a => a.id == target.value)
+                                                                return (
+                                                                    <div className="w-[382px] h-[68px] py-2 justify-center items-center gap-4 inline-flex">
+                                                                        <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
+                                                                            <div className="text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                                                                                {a?.city ?? ""}, Indonesia
+                                                                            </div>
+                                                                            <div className="text-center text-neutral-900 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                                                                                {a?.name}
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="p-2 bg-emerald-100 rounded flex-col justify-center items-center gap-1 inline-flex">
+                                                                            <div className="text-center text-teal-700 text-xl font-bold font-['Plus Jakarta Sans'] leading-7">
+                                                                                {a?.abv}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                );
                                                             }}
                                                         />
                                                     </div>
@@ -450,8 +474,8 @@ const Index: React.FC = () => {
                                                 <Button
                                                     onClick={() => {
                                                         const temp = fromAirport;
-                                                        fromAirport = toAirport;
-                                                        toAirport = temp;
+                                                        setFromAirport(toAirport);
+                                                        setToAirport(temp);
                                                     }}
                                                     className=""
                                                     type="primary"
@@ -478,8 +502,9 @@ const Index: React.FC = () => {
                                                             value={
                                                                 toAirport == undefined ? null : toAirport.name
                                                             }
+
                                                             showSearch
-                                                            placeholder="Select a person"
+                                                            placeholder="Where To ?"
                                                             optionFilterProp="children"
                                                             onChange={toChange}
                                                             onSearch={toSearch}
@@ -497,28 +522,30 @@ const Index: React.FC = () => {
                                                                     ></img>
                                                                 </>
                                                             }
+                                                            options={toAirportDetails}
+
                                                             filterOption={filterOption}
-                                                            optionRender={(option) => {
-                                                                console.log(option.value);
+                                                            optionRender={(option, i) => {
+                                                                const target = toAirportDetails[i.index];
+                                                                const a = airports.find(a => a.id == target.value)
                                                                 return (
                                                                     <div className="w-[382px] h-[68px] py-2 justify-center items-center gap-4 inline-flex">
                                                                         <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
                                                                             <div className="text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                                                                                Jakarta, Indonesia
+                                                                                {a?.city ?? ""}, Indonesia
                                                                             </div>
                                                                             <div className="text-center text-neutral-900 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
-                                                                                Soekarno Hatta International
+                                                                                {a?.name}
                                                                             </div>
                                                                         </div>
                                                                         <div className="p-2 bg-emerald-100 rounded flex-col justify-center items-center gap-1 inline-flex">
                                                                             <div className="text-center text-teal-700 text-xl font-bold font-['Plus Jakarta Sans'] leading-7">
-                                                                                CGK
+                                                                                {a?.abv}
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 );
                                                             }}
-                                                            options={toAirportDetails}
                                                         />
                                                     </div>
                                                 </div>
