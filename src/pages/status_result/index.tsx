@@ -658,7 +658,7 @@ const StatusResult: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="bg-white flex flex-col p-2 md:p-5 items-center justify-center h-full gap-2 md:gap-4 rounded-xl">
+                  <div className="bg-white flex flex-col p-2md:p-8 items-center justify-center h-full gap-2 md:gap-4 rounded-xl">
                     <div className="flex items-center gap-1">
                       <div className="bg-primary rounded-2xl">
                         <img
@@ -728,7 +728,7 @@ const StatusResult: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="bg-white flex flex-col p-2 md:p-5 items-center justify-center h-full gap-2 md:gap-4 rounded-xl">
+                  <div className="bg-white flex flex-col p-2md:p-8 items-center justify-center h-full gap-2 md:gap-4 rounded-xl">
                     <div className="flex items-center gap-1">
                       <div className="bg-primary rounded-2xl">
                         <img
