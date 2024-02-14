@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../components/Logo";
 import { Button, ConfigProvider, DatePicker, DatePickerProps, Divider, Dropdown, Layout, Modal, Radio, RadioChangeEvent, Select, Space } from "antd";
 import { MenuProps } from "antd/lib";
@@ -25,10 +25,10 @@ const { Header, Content, Footer } = Layout;
 const api_base_url = "https://be-java-production.up.railway.app";
 
 interface Airport {
-    id: string;
-    name: string;
-    abv: string;
-    city: string;
+    id: string | undefined;
+    name: string | undefined;
+    abv: string | undefined;
+    city: string | undefined;
 }
 
 const Index: React.FC = () => {
@@ -49,12 +49,38 @@ const Index: React.FC = () => {
     let fromAirport!: Airport;
     let toAirport!: Airport;
     const [departureDate, setdepartureDate] = useState<dayjs.Dayjs>(dayjs());
+    const [userName, setUserName] = useState<string>("");
 
     let returnDate: dayjs.Dayjs;
-    let accessToken: string | null;
+    const accessToken = localStorage.getItem(
+        'access_token',
+    );
+
+    async function fetchName() {
+        const myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer " + accessToken);
+        myHeaders.append("Content-Type", "application/json");
+
+        const response = await fetch(
+            api_base_url + "/api/users/me",
+            {
+                method: 'get',
+                headers: myHeaders,
+            }
+        );
+        const responseJson = await response.json();
+        if (response.status !== 200) {
+            alert('error: ' + responseJson.message);
+            return;
+        }
+        // make Sure this ok ==============
+
+        setUserName(responseJson.data["firstName"]);
+
+
+    }
 
     async function fetchInitialAirport() {
-        const payload = {}
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + accessToken);
         myHeaders.append("Content-Type", "application/json");
@@ -64,39 +90,33 @@ const Index: React.FC = () => {
             {
                 method: 'get',
                 headers: myHeaders,
-                body: JSON.stringify(payload),
             }
         );
-        console.log(response)
         const responseJson = await response.json();
         if (response.status !== 200) {
             alert('error: ' + responseJson.message);
             return;
         }
         // make Sure this ok ==============
-        console.log(responseJson);
-        console.log("responseJson");
+        airports = responseJson.data['airports'] as Airport[];
+        fromAirportDetails = airports.map((val) => {
+            return { label: val.name ?? "", value: val.id ?? "" }
+        });
+        toAirportDetails = airports.map((val) => {
+            return { label: val.name ?? "", value: val.id ?? "" }
+        });
 
-        airports = responseJson['Airport']
     }
-    useRef(() => {
-        accessToken = localStorage.getItem(
-            'access_token',
-        );
-    })
-
 
     useEffect(() => {
-        console.log(accessToken);
-        // if (accessToken === null) {
-        //     navigate('/login')
-        // }
-        fetchInitialAirport();
+        if (accessToken === null) {
+            navigate('/login')
+        }
 
-        airports.map((val) => {
-            fromAirportDetails.push({ label: val.name, value: val.id });
-            toAirportDetails.push({ label: val.name, value: val.id });
-        });
+        fetchInitialAirport();
+        fetchName();
+
+
     });
 
     const [seat, setSeat] = useState(
@@ -119,11 +139,9 @@ const Index: React.FC = () => {
 
     const onDepartureDatePick: DatePickerProps["onChange"] = (date) => {
         setdepartureDate(date!);
-        console.log(departureDate.toISOString());
     };
     const onReturnDatePick: DatePickerProps["onChange"] = (date) => {
         returnDate = date!;
-        console.log(returnDate.toISOString());
     };
 
     const navigate = useNavigate();
@@ -138,7 +156,6 @@ const Index: React.FC = () => {
             return (obj.name = value);
         })!;
 
-        console.log(`selected ${fromAirport.name} ${fromAirport.abv}`);
     };
     const toChange = (value: string) => {
         toAirport = airports.find((obj) => {
@@ -276,8 +293,8 @@ const Index: React.FC = () => {
                             {token ? (
                                 <div className="snap-center self-center align-middle hover:text-[#38A993] text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
                                     <SkeletonAvatar className="mr-4" />
-                                    AAAAA
-                                    <DownOutlined />
+                                    {userName}
+                                    <DownOutlined className="ml-2" />
                                 </div>
                             ) : (
                                 <button
