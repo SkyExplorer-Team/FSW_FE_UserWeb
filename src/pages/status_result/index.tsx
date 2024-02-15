@@ -29,12 +29,10 @@ import CabinField from "../../components/cabin_field";
 import PassengerField from "../../components/passenger_field";
 import LogoImage from "../../components/LogoImage";
 import IconInfo from "../../../public/assets/info-circle.svg";
-import Dots from "../../../public/assets/dots.svg";
-// import Line from "../../../public/assets/line-dash.svg";
-import IconAirplane from "../../../public/assets/icon-airplane.svg";
-import ChevronRight from "../../../public/assets/chevron-right.svg";
-import Airplane from "../../../public/assets/airplane.svg";
+
 import GambarPocket from "../../../public/assets/gambar-samping.png";
+import FlightCard from "../../components/FlightCard";
+import StatusFlightDetail from "../../components/StatusFlightDetail";
 
 dayjs.extend(customParseFormat);
 
@@ -227,282 +225,73 @@ const StatusResult: React.FC = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 3; // Number of cards per page
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalStatus, setModalStatus] = useState<"Departed" | "Arrived">(
+    "Arrived"
+  ); // Initial status for the modal
+
+  // Handle Details button click
+  const handleDetailsClick = (status: "Departed" | "Arrived") => {
+    // Show the modal based on the status
+    setModalStatus(status);
+    setModalVisible(true);
+  };
 
   // Define your card components
   const Card1 = (
-    <div className="flex">
-      <div className="bg-white rounded-xl p-2 md:p-5 flex gap-2 md:gap-5 border-r border-dashed border-gray-200">
-        <div className="flex flex-col">
-          <p className="text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            10:25
-          </p>
-
-          <p className="text-primary text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            CGK
-          </p>
-          <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
-            16 Jan
-          </p>
-        </div>
-        <div className="flex flex-col items-center justify-center">
-          <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-            1h 45m
-          </p>
-          <div className="flex gap-2 p-2 items-center justify-center">
-            <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-            <div className="w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-            <img src={IconAirplane} alt="Icon Airplane" className="h-4 w-4" />
-            <div className="w-[30px] lg:w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-            <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-          </div>
-          <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-            Direct
-          </p>
-        </div>
-        <div className="flex flex-col items-end">
-          <p className="text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            10:25
-          </p>
-          <p className="text-primary text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            SIN
-          </p>
-          <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
-            16 Jan
-          </p>
-        </div>
-      </div>
-      <div className="bg-white flex flex-col px-2 py-5 md:p-8 items-center justify-center h-full gap-2 md:gap-4 rounded-xl">
-        <div className="flex items-center gap-1">
-          <div className="bg-primary rounded-2xl">
-            <img
-              src={Airplane}
-              alt="Icon Airplane"
-              className="h-4 md:h-8 w-4 md:w-8"
-            />
-          </div>
-          <p className="text-xs md:text-lg font-semibold font-['Plus Jakarta Sans']">
-            SE 955
-          </p>
-        </div>
-        <button className="text-sm md:text-normal flex gap-0 md:gap-2 text-primary hover:text-primary-dark hover:text-semibold items-center justify-center">
-          Details
-          <img
-            src={ChevronRight}
-            alt="Icon Chevron right"
-            className="h-3 w-3 md:h-4 md:w-4"
-          />
-        </button>
-      </div>
-    </div>
+    <FlightCard
+      time="10:25"
+      origin="CGK"
+      date="16 Jan"
+      duration="1h 45m"
+      direct={true}
+      destination="SIN"
+      flightNumber="SE 955"
+      status="Arrived"
+      handleDetailsClick={handleDetailsClick}
+    />
   );
 
   const Card2 = (
-    <div className="flex">
-      <div className="bg-white rounded-xl p-2 md:p-5 flex gap-2 md:gap-5 border-r border-dashed border-gray-200">
-        <div className="flex flex-col">
-          <p className="text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            10:25
-          </p>
-
-          <p className="text-primary text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            CGK
-          </p>
-          <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
-            16 Jan
-          </p>
-        </div>
-        <div className="flex flex-col items-center justify-center">
-          <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-            1h 45m
-          </p>
-          <div className="flex gap-2 p-2 items-center justify-center">
-            <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-            <div className="w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-            <img src={IconAirplane} alt="Icon Airplane" className="h-4 w-4" />
-            <div className="w-[30px] lg:w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-            <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-          </div>
-          <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-            Direct
-          </p>
-        </div>
-        <div className="flex flex-col items-end">
-          <p className="text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            10:25
-          </p>
-          <p className="text-primary text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            SIN
-          </p>
-          <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
-            16 Jan
-          </p>
-        </div>
-      </div>
-      <div className="bg-white flex flex-col px-2 py-5 md:p-8 items-center justify-center h-full gap-2 md:gap-4 rounded-xl">
-        <div className="flex items-center gap-1">
-          <div className="bg-primary rounded-2xl">
-            <img
-              src={Airplane}
-              alt="Icon Airplane"
-              className="h-4 md:h-8 w-4 md:w-8"
-            />
-          </div>
-          <p className="text-xs md:text-lg font-semibold font-['Plus Jakarta Sans']">
-            SE 955
-          </p>
-        </div>
-        <button className="text-sm md:text-normal flex gap-0 md:gap-2 text-primary hover:text-primary-dark hover:text-semibold items-center justify-center">
-          Details
-          <img
-            src={ChevronRight}
-            alt="Icon Chevron right"
-            className="h-3 w-3 md:h-4 md:w-4"
-          />
-        </button>
-      </div>
-    </div>
+    <FlightCard
+      time="10:25"
+      origin="CGK"
+      date="16 Jan"
+      duration="1h 45m"
+      direct={true}
+      destination="SIN"
+      flightNumber="SE 955"
+      status="Arrived"
+      handleDetailsClick={handleDetailsClick}
+    />
   );
 
   const Card3 = (
-    <div className="flex">
-      <div className="bg-white rounded-xl p-2 md:p-5 flex gap-2 md:gap-5 border-r border-dashed border-gray-200">
-        <div className="flex flex-col">
-          <p className="text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            10:25
-          </p>
-
-          <p className="text-primary text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            CGK
-          </p>
-          <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
-            16 Jan
-          </p>
-        </div>
-        <div className="flex flex-col items-center justify-center">
-          <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-            1h 45m
-          </p>
-          <div className="flex gap-2 p-2 items-center justify-center">
-            <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-            <div className="w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-            <img src={IconAirplane} alt="Icon Airplane" className="h-4 w-4" />
-            <div className="w-[30px] lg:w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-            <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-          </div>
-          <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-            Direct
-          </p>
-        </div>
-        <div className="flex flex-col items-end">
-          <p className="text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            10:25
-          </p>
-          <p className="text-primary text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            SIN
-          </p>
-          <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
-            16 Jan
-          </p>
-        </div>
-      </div>
-      <div className="bg-white flex flex-col px-2 py-5 md:p-8 items-center justify-center h-full gap-2 md:gap-4 rounded-xl">
-        <div className="flex items-center gap-1">
-          <div className="bg-primary rounded-2xl">
-            <img
-              src={Airplane}
-              alt="Icon Airplane"
-              className="h-4 md:h-8 w-4 md:w-8"
-            />
-          </div>
-          <p className="text-xs md:text-lg font-semibold font-['Plus Jakarta Sans']">
-            SE 955
-          </p>
-        </div>
-        <button className="text-sm md:text-normal flex gap-0 md:gap-2 text-primary hover:text-primary-dark hover:text-semibold items-center justify-center">
-          Details
-          <img
-            src={ChevronRight}
-            alt="Icon Chevron right"
-            className="h-3 w-3 md:h-4 md:w-4"
-          />
-        </button>
-      </div>
-    </div>
+    <FlightCard
+      time="10:25"
+      origin="CGK"
+      date="16 Jan"
+      duration="1h 45m"
+      direct={true}
+      destination="SIN"
+      flightNumber="SE 955"
+      status="Departed"
+      handleDetailsClick={handleDetailsClick}
+    />
   );
 
   const Card4 = (
-    <div className="flex">
-      <div className="bg-white rounded-xl p-2 md:p-5 flex gap-2 md:gap-5 border-r border-dashed border-gray-200">
-        <div className="flex flex-col">
-          <p className="text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            10:25
-          </p>
-
-          <p className="text-primary text-sm md:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            CGK
-          </p>
-          <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
-            16 Jan
-          </p>
-        </div>
-        <div className="flex flex-col items-center justify-center">
-          <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-            1h 45m
-          </p>
-          <div className="flex gap-2 p-2 items-center justify-center">
-            <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-            <div className="w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-            <img src={IconAirplane} alt="Icon Airplane" className="h-4 w-4" />
-            <div className="w-[30px] lg:w-[78.11px] h-[5px] border-t border-dashed border-gray-300" />
-
-            <img src={Dots} alt="Icon dots" className="h-4 w-4" />
-          </div>
-          <p className="text-slate-800 text-sm lg:text-[15.03px] font-normal font-['Plus Jakarta Sans']">
-            Direct
-          </p>
-        </div>
-        <div className="flex flex-col items-end">
-          <p className="text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            10:25
-          </p>
-          <p className="text-primary text-sm lg:text-2xl font-semibold font-['Plus Jakarta Sans'] leading-9">
-            SIN
-          </p>
-          <p className="text-neutral-gray text-xs md:text-normal font-medium md:font-semibold font-['Plus Jakarta Sans']">
-            16 Jan
-          </p>
-        </div>
-      </div>
-      <div className="bg-white flex flex-col px-2 py-5 md:p-8 items-center justify-center h-full gap-2 md:gap-4 rounded-xl">
-        <div className="flex items-center gap-1">
-          <div className="bg-primary rounded-2xl">
-            <img
-              src={Airplane}
-              alt="Icon Airplane"
-              className="h-4 md:h-8 w-4 md:w-8"
-            />
-          </div>
-          <p className="text-xs md:text-lg font-semibold font-['Plus Jakarta Sans']">
-            SE 955
-          </p>
-        </div>
-        <button className="text-sm md:text-normal flex gap-0 md:gap-2 text-primary hover:text-primary-dark hover:text-semibold items-center justify-center">
-          Details
-          <img
-            src={ChevronRight}
-            alt="Icon Chevron right"
-            className="h-3 w-3 md:h-4 md:w-4"
-          />
-        </button>
-      </div>
-    </div>
+    <FlightCard
+      time="10:25"
+      origin="CGK"
+      date="16 Jan"
+      duration="1h 45m"
+      direct={true}
+      destination="SIN"
+      flightNumber="SE 955"
+      status="Arrived"
+      handleDetailsClick={handleDetailsClick}
+    />
   );
 
   // Calculate the start and end index of the cards based on the current page and page size
@@ -510,7 +299,12 @@ const StatusResult: React.FC = () => {
   const endIndex = startIndex + pageSize;
 
   // get all cards
-  const allCards = [Card1, Card2, Card3, Card4];
+  const allCards = [
+    { card: Card1, status: "Arrived" },
+    { card: Card2, status: "Arrived" },
+    { card: Card3, status: "Departed" },
+    { card: Card4, status: "Arrived" },
+  ];
 
   // Get the cards to display on the current page
   const currentCards = allCards.slice(startIndex, endIndex);
@@ -519,6 +313,7 @@ const StatusResult: React.FC = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
   return (
     <Layout className="">
       <Header
@@ -625,8 +420,8 @@ const StatusResult: React.FC = () => {
             </div>
           </div>
           <div className="self-stretch justify-start items-center gap-6 inline-flex">
-            <div className="grow shrink basis-0 justify-start items-center gap-3 flex">
-              <div className=" justify-center flex-grow items-center gap-2 flex">
+            <div className="flex-col md:flex-row grow shrink basis-0 justify-start items-start gap-3 flex">
+              <div className="flex-col md:flex-row justify-center flex-grow items-center gap-2 flex">
                 <div className="flex-grow basis-0 flex-col justify-start items-start gap-2 inline-flex">
                   <div className="bg-white justify-start items-start gap-2.5 inline-flex">
                     <div className="text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
@@ -650,7 +445,7 @@ const StatusResult: React.FC = () => {
                         border: "0px solid",
                         backgroundColor: "transparent",
                       }}
-                      className="w-full"
+                      className="w-full md:w-auto"
                       value={fromAirport == undefined ? null : fromAirport.name}
                       optionFilterProp="children"
                       onChange={fromChange}
@@ -701,7 +496,7 @@ const StatusResult: React.FC = () => {
                       }}
                       value={toAirport == undefined ? null : toAirport.name}
                       showSearch
-                      className="w-full"
+                      className="w-full md:w-auto"
                       placeholder="Where to ?"
                       optionFilterProp="children"
                       onChange={toChange}
@@ -755,7 +550,7 @@ const StatusResult: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="self-stretch px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center gap-3 inline-flex">
+                    <div className="px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center gap-3 inline-flex">
                       <DatePicker
                         onChange={onDepartureDatePick}
                         style={{ width: "100%" }}
@@ -804,16 +599,16 @@ const StatusResult: React.FC = () => {
                   </div>
                 </div>
               )}
+              <button
+                onClick={handleSearch}
+                type="submit"
+                className="my-4 justify-center rounded-xl flex-col bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm"
+              >
+                <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
+                  Search Flights
+                </p>
+              </button>
             </div>
-            <button
-              onClick={handleSearch}
-              type="submit"
-              className="my-4 justify-center rounded-xl flex-col bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm"
-            >
-              <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
-                Search Flights
-              </p>
-            </button>
           </div>
         </div>
         {schedules.length != 0 ? (
@@ -837,9 +632,16 @@ const StatusResult: React.FC = () => {
               {/* cards */}
               <div className="flex flex-col gap-5 mt-4 mx-4 md:mx-[12px] mb-5">
                 {currentCards.map((card, index) => (
-                  <div key={index}>{card}</div>
+                  <div key={index}>{card.card}</div>
                 ))}
               </div>
+
+              {/* Render the modal based on the modalStatus state */}
+              <StatusFlightDetail
+                open={modalVisible}
+                onCancel={() => setModalVisible(false)}
+                status={modalStatus}
+              />
 
               {/* pagination */}
               <Pagination
