@@ -36,11 +36,10 @@ dayjs.extend(customParseFormat);
 
 const { Header, Content, Footer } = Layout;
 interface Airport {
-  nationalId: string;
-  name: string;
-  abv: string;
-  lat: number | null;
-  long: number | null;
+  id: string | undefined;
+  name: string | undefined;
+  abv: string | undefined;
+  city: string | undefined;
 }
 
 interface Schedule {
@@ -52,15 +51,23 @@ interface Schedule {
 }
 const api_base_url = "https://be-java-production.up.railway.app";
 
+const accessToken = localStorage.getItem("access_token");
+
 const Index: React.FC = () => {
   const token = localStorage.getItem("access_token");
   const navigate = useNavigate();
-  let fromAirportDetails: { label: string; value: string }[] = [];
-  let toAirportDetails: { label: string; value: string }[] = [];
-  let fromAirport!: Airport;
-  let toAirport!: Airport;
-  let departureDate: dayjs.Dayjs;
-  let returnDate: dayjs.Dayjs;
+  const [fromAirportDetails, setFromAirportDetails] = useState<
+    { label: string; value: string }[]
+  >([]);
+  const [toAirportDetails, setToAirportDetails] = useState<
+    { label: string; value: string }[]
+  >([]);
+  const [fromAirport, setFromAirport] = useState<Airport>();
+  const [toAirport, setToAirport] = useState<Airport>();
+
+  const [departureDate, setDepartureDate] = useState<dayjs.Dayjs>(dayjs());
+  const [returnDate, setReturnDate] = useState<dayjs.Dayjs>(dayjs());
+
   let schedules: Schedule[] = [];
   const airports: Airport[] = [];
   const [seat, setSeat] = useState(
@@ -82,31 +89,31 @@ const Index: React.FC = () => {
   const location = useLocation();
 
   async function fetchInitialSchedule() {
-    fromAirport = location.state.fromAirport;
-    toAirport = location.state.toAirport;
-    departureDate = location.state.departureDate;
-    returnDate = location.state.returnDate;
+    setFromAirport(location.state.fromAirport);
+    setToAirport(location.state.toAirport);
+    setDepartureDate(location.state.departureDate);
+    setReturnDate(location.state.returnDate);
     setSeat(location.state.seats);
     setTrip(location.state.trip);
     const payload = {
-      from: fromAirport.nationalId,
-      to: toAirport.nationalId,
+      from: fromAirport?.id ?? "",
+      to: toAirport?.id ?? "",
       departure: departureDate.format("YYYY-MM-DD HH:mm:ss.sss"),
     };
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer " + accessToken);
+    myHeaders.append("Content-Type", "application/json");
+
     const response = await fetch(api_base_url + "/api/airport", {
       method: "post",
-      headers: { "Content-Type": "application/json" },
+      headers: myHeaders,
       body: JSON.stringify(payload),
     });
-    console.log(response);
     const responseJson = await response.json();
     if (response.status !== 200) {
       alert("error: " + responseJson.message);
       return;
     }
-    // make Sure this ok ==============
-    console.log(responseJson);
-    console.log("responseJson");
   }
 
   const items: MenuProps["items"] = [
@@ -135,11 +142,11 @@ const Index: React.FC = () => {
   };
 
   const onDepartureDatePick: DatePickerProps["onChange"] = (date) => {
-    departureDate = date!;
+    setDepartureDate(date!);
     console.log(departureDate.toISOString());
   };
   const onReturnDatePick: DatePickerProps["onChange"] = (date) => {
-    returnDate = date!;
+    setReturnDate(date!);
     console.log(returnDate.toISOString());
   };
   const dateFormat = "dddd, DD MMM YYYY";
@@ -148,31 +155,29 @@ const Index: React.FC = () => {
     value.format(dateFormat);
 
   const fromChange = (value: string) => {
-    fromAirport = airports.find((obj) => {
+    setFromAirport(airports.find((obj) => {
       return (obj.name = value);
-    })!;
+    })!);
 
-    console.log(`selected ${fromAirport.name} ${fromAirport.abv}`);
   };
   const toChange = (value: string) => {
-    toAirport = airports.find((obj) => {
+    setToAirport(airports.find((obj) => {
       return (obj.name = value);
-    })!;
+    })!);
 
-    console.log(`selected ${toAirport.name} ${toAirport.abv}`);
   };
 
   const fromSearch = (value: string) => {
-    fromAirportDetails = fromAirportDetails.filter((obj) => {
+    setFromAirportDetails(fromAirportDetails.filter((obj) => {
       return obj.label.includes(value);
-    });
+    }));
     console.log("search:", value);
   };
 
   const toSearch = (value: string) => {
-    toAirportDetails = toAirportDetails.filter((obj) => {
+    setToAirportDetails(toAirportDetails.filter((obj) => {
       return obj.label.includes(value);
-    });
+    }));
 
     console.log("search:", value);
   };
@@ -185,12 +190,16 @@ const Index: React.FC = () => {
     url.searchParams.append("cabinClassId", "1");
     url.searchParams.append("ticketTypeId", "1");
     url.searchParams.append("date", departureDate.toISOString());
-    url.searchParams.append("fromAirportId", fromAirport.nationalId);
-    url.searchParams.append("toAirportId", toAirport.nationalId);
+    url.searchParams.append("fromAirportId", fromAirport?.id ?? "");
+    url.searchParams.append("toAirportId", toAirport?.id ?? "");
+
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer " + accessToken);
+    myHeaders.append("Content-Type", "application/json");
 
     const response = await fetch(url.toString(), {
       method: "get",
-      headers: { "Content-Type": "application/json" },
+      headers: myHeaders,
       body: JSON.stringify(payload),
     });
     console.log(response);
@@ -424,7 +433,9 @@ const Index: React.FC = () => {
                         }}
                         className="w-full"
                         value={
-                          fromAirport == undefined ? null : fromAirport.name
+                          fromAirport == undefined
+                            ? null
+                            : fromAirport.name
                         }
                         optionFilterProp="children"
                         onChange={fromChange}
@@ -439,8 +450,28 @@ const Index: React.FC = () => {
                             ></img>
                           </>
                         }
-                        optionRender={(option) => {
-                          return <div>{option.value}</div>;
+                        optionRender={(_, i) => {
+                          const target = toAirportDetails[i.index];
+                          const a = airports.find(
+                            (a) => a.id == target.value
+                          );
+                          return (
+                            <div className="w-[382px] h-[68px] py-2 justify-center items-center gap-4 inline-flex">
+                              <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
+                                <div className="text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                                  {a?.city ?? ""}, Indonesia
+                                </div>
+                                <div className="text-center text-neutral-900 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                                  {a?.name}
+                                </div>
+                              </div>
+                              <div className="p-2 bg-emerald-100 rounded flex-col justify-center items-center gap-1 inline-flex">
+                                <div className="text-center text-teal-700 text-xl font-bold font-['Plus Jakarta Sans'] leading-7">
+                                  {a?.abv}
+                                </div>
+                              </div>
+                            </div>
+                          );
                         }}
                       />
                     </div>
@@ -448,8 +479,8 @@ const Index: React.FC = () => {
                   <Button
                     onClick={() => {
                       const temp = fromAirport;
-                      fromAirport = toAirport;
-                      toAirport = temp;
+                      setFromAirport(toAirport);
+                      setToAirport(temp);
                     }}
                     className=""
                     type="primary"
@@ -486,6 +517,7 @@ const Index: React.FC = () => {
                           border: "0px solid",
                           backgroundColor: "transparent",
                         }}
+                        options={toAirportDetails}
                         notFoundContent={
                           <>
                             <img
@@ -495,27 +527,29 @@ const Index: React.FC = () => {
                           </>
                         }
                         filterOption={filterOption}
-                        optionRender={(option) => {
-                          console.log(option.value);
+                        optionRender={(_, i) => {
+                          const target = toAirportDetails[i.index];
+                          const a = airports.find(
+                            (a) => a.id == target.value
+                          );
                           return (
                             <div className="w-[382px] h-[68px] py-2 justify-center items-center gap-4 inline-flex">
                               <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
                                 <div className="text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                                  Jakarta, Indonesia
+                                  {a?.city ?? ""}, Indonesia
                                 </div>
                                 <div className="text-center text-neutral-900 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
-                                  Soekarno Hatta International
+                                  {a?.name}
                                 </div>
                               </div>
                               <div className="p-2 bg-emerald-100 rounded flex-col justify-center items-center gap-1 inline-flex">
                                 <div className="text-center text-teal-700 text-xl font-bold font-['Plus Jakarta Sans'] leading-7">
-                                  CGK
+                                  {a?.abv}
                                 </div>
                               </div>
                             </div>
                           );
                         }}
-                        options={toAirportDetails}
                       />
                     </div>
                   </div>
@@ -623,7 +657,7 @@ const Index: React.FC = () => {
                             <div className="grow shrink basis-0 self-stretch pt-3 flex-col justify-between items-center inline-flex">
                               <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Plus Jakarta Sans'] ">
                                 {" "}
-                                {hours}h {minutes}m{}
+                                {hours}h {minutes}m{ }
                               </div>
                               <div className="w-[225px] pt-3 justify-center items-center gap-1 inline-flex">
                                 <div className="w-[16.39px] h-[15.58px] relative">

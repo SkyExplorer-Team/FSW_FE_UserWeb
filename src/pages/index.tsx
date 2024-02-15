@@ -801,7 +801,7 @@ const Index: React.FC = () => {
                                                 cabin: cabin,
                                                 fromAirport: fromAirport,
                                                 toAirport: toAirport,
-                                                departureDate: departureDate.add(1, "day"),
+                                                departureDate: departureDate.add(2, "day"),
                                                 returnDate: returnDate,
                                             },
                                         });
@@ -840,7 +840,7 @@ const Index: React.FC = () => {
                                                 cabin: cabin,
                                                 fromAirport: fromAirport,
                                                 toAirport: toAirport,
-                                                departureDate: departureDate.add(1, "day"),
+                                                departureDate: departureDate.add(3, "day"),
                                                 returnDate: returnDate,
                                             },
                                         });
@@ -879,7 +879,7 @@ const Index: React.FC = () => {
                                                 cabin: cabin,
                                                 fromAirport: fromAirport,
                                                 toAirport: toAirport,
-                                                departureDate: departureDate.add(1, "day"),
+                                                departureDate: departureDate.add(4, "day"),
                                                 returnDate: returnDate,
                                             },
                                         });
@@ -918,7 +918,7 @@ const Index: React.FC = () => {
                                                 cabin: cabin,
                                                 fromAirport: fromAirport,
                                                 toAirport: toAirport,
-                                                departureDate: departureDate.add(1, "day"),
+                                                departureDate: departureDate.add(5, "day"),
                                                 returnDate: returnDate,
                                             },
                                         });
@@ -957,7 +957,7 @@ const Index: React.FC = () => {
                                                 cabin: cabin,
                                                 fromAirport: fromAirport,
                                                 toAirport: toAirport,
-                                                departureDate: departureDate.add(1, "day"),
+                                                departureDate: departureDate.add(6, "day"),
                                                 returnDate: returnDate,
                                             },
                                         });
