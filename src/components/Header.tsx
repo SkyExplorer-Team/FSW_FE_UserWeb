@@ -17,13 +17,6 @@ const { Header } = Layout;
 
 const api_base_url = "https://be-java-production.up.railway.app";
 
-interface Airport {
-  id: string | undefined;
-  name: string | undefined;
-  abv: string | undefined;
-  city: string | undefined;
-}
-
 const HeaderComponent: React.FC = () => {
   const token = localStorage.getItem("access_token");
   const [userName, setUserName] = useState<string | null>(null);

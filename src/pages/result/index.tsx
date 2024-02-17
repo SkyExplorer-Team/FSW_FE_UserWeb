@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   ConfigProvider,
@@ -136,11 +136,8 @@ const Index: React.FC = () => {
     setAirportDetails(det);
     setFromAirportDetails(det);
     setToAirportDetails(det);
+
   }
-
-  useRef(() => {
-
-  })
 
   useEffect(() => {
     fetchInitialAirport();

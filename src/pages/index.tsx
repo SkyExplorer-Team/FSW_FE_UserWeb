@@ -131,7 +131,7 @@ const Index: React.FC = () => {
         fetchInitialAirport();
 
         fetchName();
-    });
+    }, []);
 
     const [seat, setSeat] = useState(
         new Map<string, number>([
@@ -610,7 +610,6 @@ const Index: React.FC = () => {
                                                         <div className="self-stretch px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center gap-3 inline-flex">
                                                             <DatePicker
                                                                 onChange={onDepartureDatePick}
-                                                                defaultValue={dayjs()}
                                                                 disabledDate={(d) => {
                                                                     return d.isBefore(dayjs().add(-1, "day")) || d.isAfter(dayjs().add(2, "month"))
                                                                 }}
@@ -633,7 +632,6 @@ const Index: React.FC = () => {
 
                                                         <div className="py-[8px] rounded-xl border border-gray-100 justify-start items-center">
                                                             <DatePicker
-                                                                defaultValue={dayjs()}
 
                                                                 disabledDate={(d) => {
                                                                     return d.isBefore(dayjs().add(-1, "day")) || d.isAfter(dayjs().add(2, "month"))
@@ -655,7 +653,6 @@ const Index: React.FC = () => {
 
                                                         <div className="py-[8px] rounded-xl border border-gray-100 justify-start items-center">
                                                             <DatePicker
-                                                                defaultValue={dayjs()}
 
                                                                 disabledDate={(d) => {
                                                                     return d.isBefore(dayjs().add(-1, "day")) || d.isAfter(dayjs().add(2, "month"))
