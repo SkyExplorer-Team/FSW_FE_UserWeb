@@ -46,6 +46,8 @@ interface Airport {
     city: string | undefined;
 }
 
+
+
 const Index: React.FC = () => {
     const token = localStorage.getItem("access_token");
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,9 +72,10 @@ const Index: React.FC = () => {
     const [toAirport, setToAirport] = useState<Airport>();
 
     const [departureDate, setdepartureDate] = useState<dayjs.Dayjs>(dayjs());
+    const [returnDate, setReturnDate] = useState<dayjs.Dayjs>(dayjs());
+
     const [userName, setUserName] = useState<string>("");
 
-    let returnDate: dayjs.Dayjs;
     const accessToken = localStorage.getItem("access_token");
 
     async function fetchName() {
@@ -152,7 +155,7 @@ const Index: React.FC = () => {
         setdepartureDate(date!);
     };
     const onReturnDatePick: DatePickerProps["onChange"] = (date) => {
-        returnDate = date!;
+        setReturnDate(date!);
     };
 
     const navigate = useNavigate();
@@ -245,6 +248,12 @@ const Index: React.FC = () => {
         e.preventDefault();
         setIsClicked(!isClicked);
     };
+
+    const disabledDate: DatePickerProps['disabledDate'] = (current) => {
+        // Can not select days before today and today
+        return current && current < dayjs().endOf('day');
+    };
+
     return (
         <ConfigProvider
             theme={{
@@ -601,6 +610,9 @@ const Index: React.FC = () => {
                                                         <div className="self-stretch px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center gap-3 inline-flex">
                                                             <DatePicker
                                                                 onChange={onDepartureDatePick}
+                                                                disabledDate={(d) => {
+                                                                    return d.isBefore(dayjs().add(-1, "day")) || d.isAfter(dayjs().add(2, "month"))
+                                                                }}
                                                                 style={{ width: "100%" }}
                                                                 className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal"
                                                                 bordered={false}
@@ -620,6 +632,9 @@ const Index: React.FC = () => {
 
                                                         <div className="py-[8px] rounded-xl border border-gray-100 justify-start items-center">
                                                             <DatePicker
+                                                                disabledDate={(d) => {
+                                                                    return d.isBefore(dayjs().add(-1, "day")) || d.isAfter(dayjs().add(2, "month"))
+                                                                }}
                                                                 onChange={onDepartureDatePick}
                                                                 style={{ width: "100%" }}
                                                                 className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal"
@@ -637,6 +652,10 @@ const Index: React.FC = () => {
 
                                                         <div className="py-[8px] rounded-xl border border-gray-100 justify-start items-center">
                                                             <DatePicker
+                                                                disabledDate={(d) => {
+                                                                    return d.isBefore(dayjs().add(-1, "day")) || d.isAfter(dayjs().add(2, "month"))
+                                                                }}
+
                                                                 onChange={onReturnDatePick}
                                                                 style={{ width: "100%" }}
                                                                 className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal"
@@ -650,6 +669,9 @@ const Index: React.FC = () => {
                                         </div>
                                         <button
                                             onClick={handleSearch}
+                                            disabled={
+                                                fromAirport && toAirport ? false : true
+                                            }
                                             type="submit"
                                             className="my-4 justify-center rounded-2xl flex-col bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm"
                                         >

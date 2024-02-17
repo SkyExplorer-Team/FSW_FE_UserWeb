@@ -919,7 +919,10 @@ const Index: React.FC = () => {
                   <div className="justify-start items-start gap-1.5 inline-flex">
                     <div className="w-[18px] h-[18px] justify-center items-center gap-[3.72px] flex">
                       <div className="w-[17.77px] h-[17.77px] relative">
-                        <div className="w-[16.76px] h-[16.76px] left-[0.62px] top-[0.62px] absolute bg-primary rounded-full" />
+                        <div className="w-[16.76px] h-[16.76px] left-[0.62px] top-[0.62px] absolute bg-primary rounded-full" >
+                          <LogoImage />
+                        </div>
+
                         <div className="w-[12.57px] h-[12.57px] left-[8.97px] top-0 absolute origin-top-left rotate-[45.56deg]">
                           <div className="w-[12.57px] h-[12.57px] left-0 top-0 absolute">
                           </div>
