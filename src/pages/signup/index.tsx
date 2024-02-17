@@ -91,7 +91,7 @@ const SignUpPage: React.FC = () => {
   const [verificationCode] = useState<string | null>(null);
   // const [counter, setCounter] = useState<number>(60);
   const [verificationCodeCounter, setVerificationCodeCounter] =
-    useState<number>(5);
+    useState<number>(60);
   const [isNoFirstMiddleNameChecked, setIsNoFirstMiddleNameChecked] =
     useState<boolean>(false);
   // const [nationalityOptions, setNationalityOptions] = useState([]);
@@ -205,6 +205,13 @@ const SignUpPage: React.FC = () => {
         if (selectedOption) {
           setLocale(selectedOption.id);
         }
+      }
+
+      if (fieldName === "firstName" && isNoFirstMiddleNameChecked) {
+        setPersonalData({
+          ...personalData,
+          [fieldName]: "",
+        });
       }
 
       setPersonalData({
@@ -823,6 +830,7 @@ const SignUpPage: React.FC = () => {
                       }
                     />
                   </Form.Item>
+
                   <Form.Item
                     name="noFirstMiddleName"
                     valuePropName="checked"
@@ -832,6 +840,17 @@ const SignUpPage: React.FC = () => {
                       className="font-normal"
                       onChange={(e) => {
                         setIsNoFirstMiddleNameChecked(e.target.checked);
+                        if (e.target.checked) {
+                          // Jika checkbox dicentang, set nilai firstName menjadi string kosong
+                          setPersonalData((prevData) => ({
+                            ...prevData,
+                            firstName: "",
+                          }));
+                        }
+                        // cek
+                        setTimeout(() => {
+                          console.log("Personal Form values:", personalData);
+                        }, 0);
                       }}
                     >
                       This passenger doesn’t have a first & middle name in the
@@ -861,7 +880,6 @@ const SignUpPage: React.FC = () => {
                       }
                     />
                   </Form.Item>
-
                   <Form.Item
                     label="Nationality"
                     name="nationality"
@@ -880,7 +898,6 @@ const SignUpPage: React.FC = () => {
                       suffix={<DownOutlined style={{ color: "#d9d9d9" }} />}
                     />
                   </Form.Item>
-
                   {/* Nationality Modal */}
                   <Modal
                     title="Select your nationality"
@@ -917,7 +934,6 @@ const SignUpPage: React.FC = () => {
                       ))}
                     </div>
                   </Modal>
-
                   <Form.Item
                     label="Date of Birth"
                     name="dob"
@@ -940,10 +956,12 @@ const SignUpPage: React.FC = () => {
                           }
 
                           const today = moment().startOf("day");
+                          const minDate = moment().subtract(17, "years");
 
                           if (
                             selectedDate.isAfter(today) ||
-                            selectedDate.isSame(today)
+                            selectedDate.isSame(today) ||
+                            selectedDate.isAfter(minDate)
                           ) {
                             return Promise.reject(
                               "Please select a valid date of birth"
@@ -959,7 +977,9 @@ const SignUpPage: React.FC = () => {
                       className="font-normal"
                       style={{ width: "100%" }}
                       disabledDate={(currentDate) =>
-                        currentDate && currentDate >= moment().endOf("day")
+                        currentDate &&
+                        (currentDate >= moment().endOf("day") ||
+                          currentDate > moment().subtract(17, "years"))
                       }
                       onChange={(currentDate) =>
                         handlePersonalFormChange("dob")(
@@ -969,6 +989,7 @@ const SignUpPage: React.FC = () => {
                       format={"DD MMMM YYYY"}
                     />
                   </Form.Item>
+
                   <Form.Item>
                     <SubmitButton form={personalInfoForm} />
                   </Form.Item>
@@ -1121,12 +1142,7 @@ const SignUpPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <Checkbox
-                  className="font-normal my-2"
-                  onChange={(e) => {
-                    setIsNoFirstMiddleNameChecked(e.target.checked);
-                  }}
-                >
+                <Checkbox className="font-normal my-2">
                   Subscribe to newsletter to receive latest offer and promotion
                   every month.
                 </Checkbox>
