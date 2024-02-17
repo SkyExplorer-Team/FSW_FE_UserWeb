@@ -56,30 +56,37 @@ interface VerificationFormData {
 const nationalityOptions: {
   name: string;
   id: string;
+  countryCode: string;
 }[] = [
   {
     id: "ae6e9985-8683-494d-9c91-93a7f36d6003",
     name: "UNITED STATES",
+    countryCode: "+1",
   },
   {
     id: "45930fd0-5990-469c-80cd-9d7648250139",
     name: "CHINA",
+    countryCode: "+86",
   },
   {
     id: "4f42934e-35b6-4fa8-832c-7cdf88c464dc",
     name: "UNITED KINGDOM",
+    countryCode: "+44",
   },
   {
     id: "6fb3e59a-ab7b-45d2-be0f-ce700633d459",
     name: "UNITED ARAB EMIRATES",
+    countryCode: "+971",
   },
   {
     id: "7e9ac63c-d3f0-46d6-bd58-1cc46b88f2c8",
     name: "INDONESIA",
+    countryCode: "+62",
   },
   {
     id: "2a9160ff-e1ad-410f-827f-05946127fe04",
     name: "JAPAN",
+    countryCode: "+81",
   },
 ];
 
@@ -120,6 +127,13 @@ const SignUpPage: React.FC = () => {
             nationality: values.nationality,
             dob: values.dob.format("DD MMMM YYYY").toString(),
           });
+
+          if (isNoFirstMiddleNameChecked) {
+            setPersonalData({
+              ...personalData,
+              firstName: "",
+            });
+          }
         })
         .catch((errorInfo) => {
           console.log("Validation failed:", errorInfo);
@@ -445,6 +459,10 @@ const SignUpPage: React.FC = () => {
       setIsOtpResend(false);
     }
   }, [verificationCodeCounter]);
+
+  const phoneCode = nationalityOptions.find(
+    (option) => option.name === personalData.nationality
+  )?.countryCode;
 
   return (
     <div className="flex flex-col md:flex-row gap-4">
@@ -846,11 +864,12 @@ const SignUpPage: React.FC = () => {
                             ...prevData,
                             firstName: "",
                           }));
+                          console.log("Personal Form values:", personalData);
                         }
                         // cek
-                        setTimeout(() => {
-                          console.log("Personal Form values:", personalData);
-                        }, 0);
+                        // setTimeout(() => {
+                        //   console.log("Personal Form values:", personalData);
+                        // }, 0);
                       }}
                     >
                       This passenger doesn’t have a first & middle name in the
@@ -1021,11 +1040,7 @@ const SignUpPage: React.FC = () => {
                         marginRight: "2%",
                       }}
                     >
-                      <Input
-                        value={locale ? `+${locale}` : ""}
-                        readOnly
-                        size="large"
-                      />
+                      <Input placeholder={phoneCode} readOnly size="large" />
                     </Form.Item>
                     <Form.Item
                       name="phoneNumber"

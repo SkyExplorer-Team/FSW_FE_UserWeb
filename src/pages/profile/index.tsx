@@ -8,9 +8,9 @@ import SkeletonAvatar from "antd/lib/skeleton/Avatar";
 import { useNavigate } from "react-router-dom";
 
 import type { MenuProps } from "antd";
-import { Menu, Card, Dropdown } from "antd";
+import { Menu, Dropdown } from "antd";
 import HomeFooter from "../../components/home_footer";
-import { DownOutlined, MenuOutlined, RightOutlined } from "@ant-design/icons";
+import { DownOutlined, MenuOutlined } from "@ant-design/icons";
 
 const items: MenuProps["items"] = [
   {
@@ -280,21 +280,51 @@ const menu = (
 
 const Index: React.FC = () => {
   const navigate = useNavigate();
+
   const token = localStorage.getItem("access_token");
   const handleSignUp = () => {
     navigate("/signup");
   };
+
   const [activeNavigation, setActiveNavigation] = useState("personalInfo");
+  const [current, setCurrent] = useState("personalInfo"); // Updated default value
+  const [formValues, setFormValues] = useState({
+    salutation:"",
+    firstName: "",
+    lastName: "",
+    nationality: "",
+    dateOfBirth: "",
+    phoneNumber: "",
+    email: "",
+    // ... other form fields
+  });
 
   const handleNavigationClick = (navigation: string) => {
     setActiveNavigation(navigation);
   };
 
-  const [current, setCurrent] = useState("personalInfo"); // Updated default value
-
-  const onClick: MenuProps["onClick"] = (e) => {
+  const onClick = (e: any) => {
     setCurrent(e.key);
-    handleNavigationClick(e.key); // Call handleNavigationClick to update activeNavigation
+    handleNavigationClick(e.key);
+  };
+
+  const handleSaveButtonClick = () => {
+    // Handle saving logic based on the active section
+    if (activeNavigation === "personalInfo") {
+      // Implement savePersonalInfo logic if needed
+      // Perbarui formValues dengan data dari PersonalInfo
+      setFormValues((prevFormValues) => ({
+        ...prevFormValues,
+        firstName: formValues.firstName,
+        lastName: formValues.lastName,
+        dateOfBirth: formValues.dateOfBirth,
+      }));
+      console.log("Saving personal information:", formValues);
+    } else if (activeNavigation === "travelDocument") {
+      // Implement saveTravelDocument logic if needed
+      console.log("Saving travel document information:", formValues);
+    }
+    // Add more conditions for other sections if needed
   };
 
   return (
@@ -310,7 +340,7 @@ const Index: React.FC = () => {
               Status
             </div>
             <Dropdown
-              className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7"
+              className="flex hover:text-[#38A993] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7"
               menu={{ items }}
             >
               <a onClick={(e) => e.preventDefault()}>
@@ -319,7 +349,7 @@ const Index: React.FC = () => {
               </a>
             </Dropdown>
             <Dropdown
-              className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7 "
+              className="flex hover:text-[#38A993] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7 "
               menu={{ items }}
             >
               <a onClick={(e) => e.preventDefault()}>
@@ -330,7 +360,7 @@ const Index: React.FC = () => {
           </div>
           <div className="flex xl:hidden justify-start items-start md:gap-6">
             <Dropdown
-              className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7"
+              className="flex hover:text-[#38A993] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7"
               menu={{ items }}
             >
               <a onClick={(e) => e.preventDefault()}>
@@ -341,7 +371,7 @@ const Index: React.FC = () => {
           </div>
         </div>
         <div className="col-start-7 xl:col-start-10 col-end-13 gap-4 flex item-end justify-end">
-          <a className="snap-center self-center align-middle hover:text-primary text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+          <a className="snap-center self-center align-middle hover:text-[#38A993] text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
             <div className="justify-start items-center px-2 md:gap-4 flex">
               <ReactCountryFlag countryCode="ID" svg />
               <div>IDR</div>
@@ -352,17 +382,17 @@ const Index: React.FC = () => {
           {token ? (
             <div className="snap-center self-center align-middle text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
               <div className="grid grid-cols-12 md:gap-4 border border-gray-200 rounded-[5px] p-2">
-                <div className="col-start-1 col-end-11 hover:text-primary flex">
+                <div className="col-start-1 col-end-11 hover:text-[#38A993] flex">
                   <div className="grid grid-cols-12 gap-2">
-                    <div className="col-start-1 md:col-end-3 hover:text-primary flex">
+                    <div className="col-start-1 md:col-end-3 hover:text-[#38A993] flex">
                       <SkeletonAvatar />
                     </div>
-                    <div className="col-start-5 md:col-start-3 col-end-13 hover:text-primary flex">
+                    <div className="col-start-5 md:col-start-3 col-end-13 hover:text-[#38A993] flex">
                       Lewis
                     </div>
                   </div>
                 </div>
-                <div className="col-start-11 col-end-13 hover:text-primary">
+                <div className="col-start-11 col-end-13 hover:text-[#38A993]">
                   <Dropdown overlay={menu} placement="bottomRight">
                     <a onClick={(e) => e.preventDefault()}>
                       <MenuOutlined />
@@ -386,7 +416,7 @@ const Index: React.FC = () => {
       </div>
       <div className="container mx-auto">
         <div className="grid grid-cols-12 gap-4">
-          <div className="h-screen flex col-span-12 md:col-span-3">
+        <div className="h-screen flex col-span-12 md:col-span-3">
             <div
               className=" w-full hidden xl:block col-start-2 col-span-2 py-6  bg-white rounded-[16px] shadow border border-gray-200 flex-col justify-center items-center gap-4"
               style={{ height: "800px" }}
@@ -670,7 +700,9 @@ const Index: React.FC = () => {
             >
               <div className="heading">
                 <h1 className="profile-title">Profile</h1>
-                <button className="btn-save">Save</button>
+                <button className="btn-save" onClick={handleSaveButtonClick}>
+                  Save
+                </button>
               </div>
               <Menu
                 onClick={onClick}
@@ -678,8 +710,18 @@ const Index: React.FC = () => {
                 mode="horizontal"
                 items={items}
               />
-              {activeNavigation === "personalInfo" && <PersonalInfo />}
-              {activeNavigation === "travelDocument" && <TravelDocument />}
+              {activeNavigation === "personalInfo" && (
+                <PersonalInfo
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                />
+              )}
+              {activeNavigation === "travelDocument" && (
+                <TravelDocument
+                  formValues={formValues}
+                  setFormValues={setFormValues}
+                />
+              )}
             </div>
           </div>
         </div>
