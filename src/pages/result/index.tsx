@@ -7,6 +7,7 @@ import {
   Divider,
   Dropdown,
   Layout,
+  Modal,
   Pagination,
   PaginationProps,
   Radio,
@@ -26,12 +27,15 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import ReactCountryFlag from "react-country-flag";
 import { useLocation, useNavigate } from "react-router-dom";
-import SkeletonAvatar from "antd/lib/skeleton/Avatar";
 import Logo from "../../components/Logo";
 import HomeFooter from "../../components/home_footer";
 import CabinField from "../../components/cabin_field";
 import PassengerField from "../../components/passenger_field";
 import LogoImage from "../../components/LogoImage";
+import IconMenu from "../../../public/assets/menu.svg";
+import IconUser from "../../../public/assets/user.svg";
+
+import Airplane from "/public/assets/airplane.svg";
 
 dayjs.extend(customParseFormat);
 
@@ -75,16 +79,38 @@ const Index: React.FC = () => {
   const [airports, setAirports] = useState<Airport[]>([]);
 
   const [seat, setSeat] = useState(location.state.seats);
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   const [page, setPage] = useState<number>(1);
-  const [scheduleToRender, setScheduleToRender] = useState<Schedule[]>([]
-  );
+  const [scheduleToRender, setScheduleToRender] = useState<Schedule[]>([]);
+  const [userName, setUserName] = useState<string>("");
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
   const [airportDetails, setAirportDetails] = useState<
     { label: string; value: string }[]
   >([]);
 
 
+  async function fetchName() {
+    const myHeaders = new Headers();
+    myHeaders.append("Authorization", "Bearer " + accessToken);
+    myHeaders.append("Content-Type", "application/json");
 
+    const response = await fetch(api_base_url + "/api/users/me", {
+      method: "get",
+      headers: myHeaders,
+    });
+    const responseJson = await response.json();
+    if (response.status !== 200) {
+      alert("error: " + responseJson.message);
+      return;
+    }
+    // make Sure this ok ==============
+
+    setUserName(responseJson.data["firstName"]);
+  }
 
   async function fetchInitialAirport() {
 
@@ -119,6 +145,7 @@ const Index: React.FC = () => {
   useEffect(() => {
     fetchInitialAirport();
     handleSearch();
+    fetchName();
   }), [];
 
   const cabinClass = [{
@@ -334,10 +361,13 @@ const Index: React.FC = () => {
               </a>
 
               {token ? (
-                <div className="snap-center self-center align-middle hover:text-primary text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                  <SkeletonAvatar className="mr-4" />
-                  AAAAA
-                  <DownOutlined />
+                <div className="flex items-center justify-center gap-4 border rounded-lg p-2 hover:text-primary text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                  {/* <SkeletonAvatar className="mr-4" /> */}
+                  <div className="bg-[#D0D5DD] rounded-xl p-1">
+                    <img src={IconUser} alt="Icon Menu" className="h-4 w-4" />
+                  </div>
+                  {userName}
+                  <img src={IconMenu} alt="Icon Menu" className="h-4 w-4" />
                 </div>
               ) : (
                 <button
@@ -664,6 +694,52 @@ const Index: React.FC = () => {
               ,
             </div>
           </div>
+          <div className="content-center pt-8 pb-4 justify-center origin-center items-center text-center">
+            <div className="w-[646px] h-[152px] content-center text-left px-4 pt-4 pb-2 bg-white rounded-2xl flex-col gap-2 inline-flex">
+              <div className="self-stretch justify-start items-start gap-4 inline-flex">
+                <a onClick={() => {
+                  setCabin(0)
+                }} className={"grow shrink basis-0 p-3 " + ((cabin == 0) ? "bg-primary" : " bg-white rounded-xl") + " rounded-xl flex-col justify-center items-start gap-3 inline-flex"}>
+                  <div className={"self-stretch " + ((cabin == 0) ? "text-white" : "text-neutral-900") + " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"}>ECONOMY SAVER</div>
+                  <div className="self-stretch justify-between items-center inline-flex">
+                    <div className={((cabin == 0) ? "text-white" : "text-gray-500") + " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"}>Start from</div>
+                    <div className={((cabin == 0) ? "text-white" : "text-neutral-900") + " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"}>IDR 1,570K</div>
+                  </div>
+                </a>
+                <a onClick={() => {
+                  setCabin(1)
+                }} className={"grow shrink basis-0 p-3 " + ((cabin == 1) ? "bg-primary" : " bg-white rounded-xl") + " rounded-xl flex-col justify-center items-start gap-3 inline-flex"}>
+                  <div className={"self-stretch " + ((cabin == 1) ? "text-white" : "text-neutral-900") + " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"}>ECONOMY FLEXI</div>
+                  <div className="self-stretch justify-between items-center inline-flex">
+                    <div className={((cabin == 1) ? "text-white" : "text-gray-500") + " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"}>Start from</div>
+                    <div className={((cabin == 1) ? "text-white" : "text-neutral-900") + " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"}>IDR 2,535K</div>
+                  </div>
+                </a>
+                <a onClick={() => {
+                  setCabin(2)
+                }} className={"grow shrink basis-0 p-3 " + ((cabin == 2) ? "bg-primary" : " bg-white rounded-xl") + " rounded-xl flex-col justify-center items-start gap-3 inline-flex"}>
+                  <div className={"self-stretch " + ((cabin == 2) ? " text-white" : "text-neutral-900") + " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"}>ECONOMY PLUS</div>
+                  <div className="self-stretch justify-between items-center inline-flex">
+                    <div className={((cabin == 2) ? "text-white" : "text-gray-500") + " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"}>Start from</div>
+                    <div className={((cabin == 2) ? "text-white" : "text-neutral-900") + " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"}>IDR3,290K</div>
+                  </div>
+                </a>
+              </div>
+              <div className="self-stretch justify-between items-center inline-flex">
+                <div className="w-[195px] text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">10 Seat(s) left</div>
+                <div className="py-3 rounded-lg flex-col justify-center items-center gap-3 inline-flex">
+                  <div className="self-stretch justify-center items-center gap-3 inline-flex">
+                    <div className="text-center text-emerald-400 text-xs font-bold font-['Plus Jakarta Sans'] leading-none">Compare Fare</div>
+                    <div className="w-3 h-3 justify-center items-center flex">
+                      <div className="w-3 h-3 relative">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {schedules?.length != 0 ? (
             <div className="flex-col min-h-[50vh]">
               <img
@@ -678,7 +754,10 @@ const Index: React.FC = () => {
                   const hours = Math.floor(value.duration / 60);
                   const minutes = value.duration % 60;
                   return (
-                    <div className="justify-center items-center">
+                    <a onClick={() => {
+                      handleOk()
+                    }}
+                      className="justify-center items-center">
                       <div className=" shadow justify-center items-center inline-flex">
                         <div className="grow shrink basis-0 px-6 pb-5 bg-white rounded-xl flex-col justify-center items-center gap-2.5 inline-flex">
                           <div className="self-stretch justify-start items-end gap-[5.01px] inline-flex">
@@ -766,7 +845,7 @@ const Index: React.FC = () => {
                         total={schedules.length}
                         pageSize={4}
                       />
-                    </div>
+                    </a>
                   );
                 })}
               </div>
@@ -782,7 +861,177 @@ const Index: React.FC = () => {
           <HomeFooter />
         </Footer>
       </Layout>{" "}
-    </ConfigProvider>
+      <Modal
+        className=" bg-white shadow border p-0 w-fit border-zinc-300 "
+        open={isModalOpen}
+        title={
+          <div className="self-stretch w-full border-zinc-300 border-b  p-4 justify-start items-center gap-4 inline-flex">
+            <div className="grow shrink basis-0 text-center text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Flight Detail</div>
+          </div>
+        }
+        closable={true}
+        width={"fit-content"}
+
+        footer={<div></div>}
+      >
+        <div className="w-full rounded-3xl flex-col justify-start items-start inline-flex">
+          <div className="pt-8 px-8 justify-center items-center gap-8 inline-flex">
+            <div className="self-stretch flex-col justify-start items-start gap-6 inline-flex">
+              <div className="w-[382px] h-6 text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Jakarta (CGK) to Singapore (SIN)</div>
+              <div className="w-[428px] h-[391px] relative">
+                <div className="left-0 top-[4px] absolute text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Total travel time</div>
+                <div className="px-3 py-1 left-[115px] top-0 absolute bg-emerald-100 rounded-lg justify-center items-center gap-2.5 inline-flex">
+                  <div className="text-teal-700 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">1h 45m</div>
+                </div>
+                <div className="h-14 left-[2px] top-[48px] absolute flex-col justify-center items-center gap-2 inline-flex">
+                  <div className="self-stretch text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">10:25</div>
+                  <div className="self-stretch text-center text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Jan 16</div>
+                </div>
+                <div className="h-14 left-0 top-[335px] absolute flex-col justify-center items-center gap-2 inline-flex">
+                  <div className="self-stretch text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">13:10</div>
+                  <div className="self-stretch text-center text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Jan 16</div>
+                </div>
+                <div className="left-[146px] top-[48px] absolute flex-col justify-start items-start gap-1.5 inline-flex">
+                  <div className="w-[282px] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Jakarta (CGK), Indonesia</div>
+                  <div className="w-[282px] text-neutral-900 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">Soekarno Hatta International</div>
+                  <div className="w-[282px] text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">Terminal 4</div>
+                </div>
+                <div className="left-[146px] top-[307px] absolute flex-col justify-start items-start gap-1.5 inline-flex">
+                  <div className="w-[282px] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Singapore (SIN), Singapore</div>
+                  <div className="w-[282px] text-neutral-900 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">Changi</div>
+                  <div className="w-[282px] text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">Terminal 2</div>
+                </div>
+                <div className="w-5 h-[300px] left-[94px] top-[56px] absolute">
+                  <div className="w-28 h-[0px] left-[5px] top-[173px] absolute origin-top-left rotate-90 border-2 border-emerald-400"></div>
+                  <div className="w-28 h-[0px] left-[5px] top-[14px] absolute origin-top-left rotate-90 border-2 border-emerald-400"></div>
+                  <div className="w-3 h-3 -left-[2px]  -top-[3px] absolute bg-white rounded-full border-2 border-emerald-400" />
+                  <div className="w-8 h-8 -left-[12px] top-[135px] rounded-full rotate-90 bg-primary absolute">
+
+                    <img
+                      src={Airplane}
+                      alt="Icon Airplane"
+                      className="rotate-45"
+                    />
+                  </div>
+                  <div className="w-3 h-3 -left-[2px] top-[290px] absolute bg-primary rounded-full border-2 border-emerald-400" />
+                </div>
+                <div className="h-[66px] px-6 py-3 left-[146px] top-[176px] absolute bg-gray-100 rounded-2xl border border-gray-200 flex-col justify-center items-start gap-1 inline-flex">
+                  <div className="justify-start items-start gap-1.5 inline-flex">
+                    <div className="w-[18px] h-[18px] justify-center items-center gap-[3.72px] flex">
+                      <div className="w-[17.77px] h-[17.77px] relative">
+                        <div className="w-[16.76px] h-[16.76px] left-[0.62px] top-[0.62px] absolute bg-primary rounded-full" />
+                        <div className="w-[12.57px] h-[12.57px] left-[8.97px] top-0 absolute origin-top-left rotate-[45.56deg]">
+                          <div className="w-[12.57px] h-[12.57px] left-0 top-0 absolute">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex-col justify-center items-start gap-1.5 inline-flex">
+                      <div className="text-slate-700 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">SkyExplorer • SE 955</div>
+                      <div className="flex-col justify-center items-start gap-1 flex">
+                        <div className="text-center text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">Boeing 777-300ER</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="left-[8px] top-[199px] absolute text-center text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">1h 45m</div>
+              </div>
+            </div>
+            <div className="self-stretch flex-col justify-between items-center inline-flex">
+              <div className="h-[386px] flex-col justify-center items-start gap-4 flex">
+                <div className="self-stretch justify-start items-center gap-4 inline-flex">
+                  <div className="grow shrink basis-0 flex-col justify-start items-start gap-0.5 inline-flex">
+                    <div className="text-primary text-lg font-bold font-['Plus Jakarta Sans'] leading-7">Economy Saver</div>
+                    <div className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal">Fare Conditions</div>
+                  </div>
+                  <div className="py-3 rounded-lg flex-col justify-center items-center gap-3 inline-flex">
+                    <div className="self-stretch justify-center items-center gap-3 inline-flex">
+                      <div className="text-center text-primary text-xs font-bold font-['Plus Jakarta Sans'] leading-none">Compare Fare</div>
+                      <div className="w-3 h-3 justify-center items-center flex">
+                        <div className="w-3 h-3 relative">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="self-stretch justify-start items-center gap-12 inline-flex">
+                  <div className="flex-col justify-start items-start gap-5 inline-flex">
+                    <div className="self-stretch justify-start items-center gap-2 inline-flex">
+                      <div className="w-5 h-5 relative" />
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Cabin Baggage</div>
+                    </div>
+                    <div className="self-stretch justify-start items-start gap-2 inline-flex">
+                      <div className="w-5 h-5 p-[1.67px] justify-center items-center flex">
+                        <div className="w-[16.67px] h-[16.67px] relative">
+                        </div>
+                      </div>
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Checked Baggage</div>
+                    </div>
+                    <div className="self-stretch justify-start items-center gap-2 inline-flex">
+                      <div className="w-5 h-5 relative" />
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Seat Selection</div>
+                    </div>
+                    <div className="self-stretch justify-start items-center gap-2 inline-flex">
+                      <div className="w-5 h-5 pl-[3.33px] pr-[1.67px] py-[1.67px] justify-center items-center flex">
+                        <div className="w-[15px] h-[16.67px] relative">
+                        </div>
+                      </div>
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Baggage Delay Protection</div>
+                    </div>
+                    <div className="self-stretch justify-start items-center gap-2 inline-flex">
+                      <div className="w-5 h-5 relative" />
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Meal Pack</div>
+                    </div>
+                    <div className="self-stretch justify-start items-center gap-2 inline-flex">
+                      <div className="w-5 h-5 justify-center items-center flex">
+                        <div className="w-5 h-5 relative">
+                        </div>
+                      </div>
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Cancellation</div>
+                    </div>
+                    <div className="self-stretch justify-start items-center gap-2 inline-flex">
+                      <div className="w-5 h-5 justify-center items-center flex">
+                        <div className="w-5 h-5 relative">
+                        </div>
+                      </div>
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Flight Change</div>
+                    </div>
+                    <div className="self-stretch justify-start items-center gap-2 inline-flex">
+                      <div className="w-5 h-5 justify-center items-center flex">
+                        <div className="w-5 h-5 relative">
+                        </div>
+                      </div>
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">No Show</div>
+                    </div>
+                  </div>
+                  <div className="grow shrink basis-0 flex-col justify-center items-start gap-5 inline-flex">
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">1 pc x 7 kg</div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">1 pc x 23 kg</div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Standard Seat</div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Not Include</div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Include</div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Not Allowed</div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Not Allowed</div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Not Allowed</div>
+                  </div>
+                </div>
+              </div>
+              <div className="justify-start items-center gap-[63px] inline-flex">
+                <div className="h-9 justify-start items-center gap-1 flex">
+                  <div className="text-primary text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">1,950K IDR </div>
+                  <div className="text-gray-500 text-xl font-medium font-['Plus Jakarta Sans'] leading-7">/pax</div>
+                </div>
+                <a onClick={() => {
+                  setIsModalOpen(false)
+                }} className="w-[136px] p-3.5 bg-primary rounded-[10px] flex-col justify-center items-center gap-3 inline-flex">
+                  <div className="self-stretch text-center text-white text-sm font-bold font-['Plus Jakarta Sans'] leading-tight">Select Flight</div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Modal>
+    </ConfigProvider >
   );
 };
 
