@@ -138,7 +138,7 @@ const Index: React.FC = () => {
         ])
     );
 
-    const [cabin, setCabin] = useState<number>(1);
+    const [cabin, setCabin] = useState<number>(0);
 
     const changeSeats = (targetMap: Map<string, number>) => {
         setSeat(targetMap);
@@ -422,9 +422,9 @@ const Index: React.FC = () => {
                                                     <Space>
                                                         <DollarOutlined style={{ fontSize: 24 }} />
                                                         <div className="text-base font-semibold font-['Plus Jakarta Sans'] leading-normal">
-                                                            {cabin == 1 ? (
+                                                            {cabin == 0 ? (
                                                                 <>Economy</>
-                                                            ) : cabin == 2 ? (
+                                                            ) : cabin == 1 ? (
                                                                 <>Business</>
                                                             ) : (
                                                                 <>First</>
