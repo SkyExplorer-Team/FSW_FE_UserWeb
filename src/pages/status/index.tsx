@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
 import PassengerField from "../../components/passenger_field";
 import CabinField from "../../components/cabin_field";
 import SkeletonAvatar from "antd/lib/skeleton/Avatar";
+import HeaderComponent from "../../components/Header";
 import HomeInfo1 from "../../components/home_info1";
 import HomeFooter from "../../components/home_footer";
 
@@ -194,78 +195,7 @@ const StatusPage: React.FC = () => {
 
   return (
     <Layout>
-      <Header
-        style={{
-          top: 0,
-          zIndex: 1,
-          marginBottom: "12px",
-          paddingTop: "4px",
-          paddingBottom: "8px",
-          position: "sticky",
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "white",
-        }}
-      >
-        <div className="justify-around flex w-full">
-          <div className="justify-start items-center gap-8 flex">
-            <Logo></Logo>
-            <div className="justify-start items-start gap-6 flex">
-              <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                Explore
-              </div>
-              <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                Status
-              </div>
-              <Dropdown
-                className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7"
-                menu={{ items }}
-              >
-                <a onClick={(e) => e.preventDefault()}>
-                  <div className="pr-2">Cabin</div>
-                  <DownOutlined />
-                </a>
-              </Dropdown>
-              <Dropdown
-                className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7 "
-                menu={{ items }}
-              >
-                <a onClick={(e) => e.preventDefault()}>
-                  <div className="pr-2">Baggage</div>
-                  <DownOutlined />
-                </a>
-              </Dropdown>
-            </div>
-          </div>
-          <div className="gap-8 flex">
-            <a className="snap-center self-center align-middle hover:text-primary text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-              <div className="justify-start items-center gap-4 flex">
-                <ReactCountryFlag countryCode="ID" svg />
-                <div className="">IDR</div>
-                <DownOutlined />
-              </div>
-            </a>
-
-            {token ? (
-              <div className="snap-center self-center align-middle hover:text-primary text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                <SkeletonAvatar className="mr-4" />
-                AAAAA
-                <DownOutlined />
-              </div>
-            ) : (
-              <button
-                onClick={handleSignUp}
-                type="submit"
-                className="my-4 justify-center rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm"
-              >
-                <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
-                  Sign Up
-                </p>
-              </button>
-            )}
-          </div>
-        </div>
-      </Header>
+      <HeaderComponent />
       <Content>
         <div>
           <div className="relative">

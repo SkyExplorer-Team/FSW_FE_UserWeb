@@ -1,4 +1,4 @@
-import SkeletonAvatar from "antd/lib/skeleton/Avatar";
+import React from "react";
 
 const HomeNavSide: React.FC = () => {
   return (

@@ -4,6 +4,7 @@ import Logo from "../../components/Logo";
 import ReactCountryFlag from "react-country-flag";
 import { useNavigate } from "react-router-dom";
 import SkeletonAvatar from "antd/lib/skeleton/Avatar";
+import HeaderComponent from "../../components/Header";
 import HomeFooter from "../../components/home_footer";
 import IconExplore from "/public/assets/explore.svg";
 import GambarCabin1 from "/public/assets/cabin-1.png";
@@ -17,18 +18,7 @@ const AppLayout: React.FC = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Header
-        style={{
-          background: "#fff",
-          padding: 16,
-          position: "relative",
-          zIndex: 100,
-        }}
-      >
-        {/* Your header content here */}
-
-        <h1>Your Header Title</h1>
-      </Header>
+      <HeaderComponent />
       <Content style={{ position: "relative", zIndex: 1, height: "auto" }}>
         <div className="bg-primary h-[200px] relative flex items-center justify-center z-2"></div>
         <div className="my-5 mx-[20px] bg-white rounded-lg p-5 h-auto mt-[-150px] z-3 relative">

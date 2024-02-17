@@ -16,7 +16,6 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import ReactCountryFlag from "react-country-flag";
 import { useNavigate } from "react-router-dom";
-import SkeletonAvatar from "antd/lib/skeleton/Avatar";
 import HomeFooter from "../../components/home_footer";
 import HomeNavSide from "../../components/home_navside";
 import ProfileMenu from "../../components/ProfileMenu";
