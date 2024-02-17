@@ -132,7 +132,7 @@ const Index: React.FC = () => {
         fetchInitialAirport();
 
         fetchName();
-    }, [airportDetails]);
+    }, [airports]);
 
     const [seat, setSeat] = useState(
         new Map<string, number>([
