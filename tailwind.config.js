@@ -31,6 +31,8 @@ export default {
           DEFAULT: "#c81a23",
         },
         neutral: {
+          link: "#485466",
+          background: "#F2F4F7",
           light: "#d0d5dd",
           gray: "#808991",
           DEFAULT: "#677084",

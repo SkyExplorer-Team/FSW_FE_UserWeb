@@ -15,8 +15,8 @@ import { MenuProps } from "antd/lib";
 import {
   DownOutlined,
   SwapOutlined,
-  TeamOutlined,
-  DollarOutlined,
+  // TeamOutlined,
+  // DollarOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -25,10 +25,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 import SkeletonAvatar from "antd/lib/skeleton/Avatar";
 import Logo from "../../components/Logo";
 import HomeFooter from "../../components/home_footer";
-import CabinField from "../../components/cabin_field";
-import PassengerField from "../../components/passenger_field";
-import LogoImage from "../../components/LogoImage";
-import IconInfo from "../../../public/assets/info-circle.svg";
+// import CabinField from "../../components/cabin_field";
+// import PassengerField from "../../components/passenger_field";
+// import LogoImage from "../../components/LogoImage";
+import IconInfo from "/public/assets/info-circle.svg";
 
 import GambarPocket from "../../../public/assets/gambar-samping.png";
 import FlightCard from "../../components/FlightCard";
