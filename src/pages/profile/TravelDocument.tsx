@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Select, Form, Input, Typography, Checkbox, DatePicker } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { Select, Form, Input, Typography, DatePicker } from "antd";
 import type { DatePickerProps } from "antd";
 import { FlagIcon, FlagIconCode } from "react-flag-kit";
 
@@ -12,12 +11,7 @@ interface ContactFormData {
 const { Option } = Select;
 
 const TravelDocument: React.FC = () => {
-  const [isNoFirstMiddleNameChecked, setIsNoFirstMiddleNameChecked] =
-    useState<boolean>(false);
-
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`);
-  };
+    
 
   const nationalityOptions = [
     { flag: "🇺🇸", name: "United States", value: "US" },
@@ -114,8 +108,7 @@ const TravelDocument: React.FC = () => {
             value={selectedNationality}
             className="font-normal"
             placeholder="Select your nationality"
-            style={{ height: "40px" }}
-            suffix={<DownOutlined style={{ color: "#d9d9d9" }} />}
+            style={{ height: "40px" }}            
           >
             {nationalityOptions.map((option) => (
               <Option key={option.value} value={option.value}>
@@ -160,14 +153,13 @@ const TravelDocument: React.FC = () => {
             value={selectedNationality}
             className="font-normal"
             placeholder="Select your nationality"
-            style={{ height: "40px" }}
-            suffix={<DownOutlined style={{ color: "#d9d9d9" }} />}
+            style={{ height: "40px" }}            
           >
             {nationalityOptions.map((option) => (
               <Option key={option.value} value={option.value}>
                 <div style={{ display: "flex", fontWeight: "bold" }}>
                   <FlagIcon
-                    code={option.value}
+                    code={option.value as FlagIconCode}
                     size={32}
                     className="mr-4 rounded"
                   ></FlagIcon>
