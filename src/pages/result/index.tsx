@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   ConfigProvider,
@@ -22,6 +22,7 @@ import {
   DollarOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
+
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import ReactCountryFlag from "react-country-flag";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -54,6 +55,7 @@ const api_base_url = "https://be-java-production.up.railway.app";
 const accessToken = localStorage.getItem("access_token");
 
 const Index: React.FC = () => {
+  const location = useLocation();
   const token = localStorage.getItem("access_token");
   const navigate = useNavigate();
   const [fromAirportDetails, setFromAirportDetails] = useState<
@@ -62,59 +64,90 @@ const Index: React.FC = () => {
   const [toAirportDetails, setToAirportDetails] = useState<
     { label: string; value: string }[]
   >([]);
-  const [fromAirport, setFromAirport] = useState<Airport>();
-  const [toAirport, setToAirport] = useState<Airport>();
+  const [fromAirport, setFromAirport] = useState<Airport>(location.state.fromAirport);
+  const [toAirport, setToAirport] = useState<Airport>(location.state.toAirport);
 
-  const [departureDate, setDepartureDate] = useState<dayjs.Dayjs>(dayjs());
-  const [returnDate, setReturnDate] = useState<dayjs.Dayjs>(dayjs());
+  const [departureDate, setDepartureDate] = useState<dayjs.Dayjs>(dayjs(location.state.departureDate, "YYYY-MM-DD"));
+  const [returnDate, setReturnDate] = useState<dayjs.Dayjs>(dayjs(location.state.returnDate, "YYYY-MM-DD"));
 
-  let schedules: Schedule[] = [];
-  const airports: Airport[] = [];
-  const [seat, setSeat] = useState(
-    new Map<string, number>([
-      ["adults", 0],
-      ["children", 0],
-      ["infant", 0],
-    ])
-  );
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [trip, setTrip] = useState<string>(location.state.trip);
+  const [airports, setAirports] = useState<Airport[]>([]);
+
+  const [seat, setSeat] = useState(location.state.seats);
+
   const [page, setPage] = useState<number>(1);
-  const [scheduleToRender, setScheduleToRender] = useState<Schedule[]>(
-    schedules.slice(0, 3)
+  const [scheduleToRender, setScheduleToRender] = useState<Schedule[]>([]
   );
-  const [trip, setTrip] = useState<string>("one-way");
+  const [airportDetails, setAirportDetails] = useState<
+    { label: string; value: string }[]
+  >([]);
 
-  useEffect(() => {
-    fetchInitialSchedule();
-  });
-  const location = useLocation();
 
-  async function fetchInitialSchedule() {
-    setFromAirport(location.state.fromAirport);
-    setToAirport(location.state.toAirport);
-    setDepartureDate(location.state.departureDate);
-    setReturnDate(location.state.returnDate);
-    setSeat(location.state.seats);
-    setTrip(location.state.trip);
-    const payload = {
-      from: fromAirport?.id ?? "",
-      to: toAirport?.id ?? "",
-      departure: departureDate.format("YYYY-MM-DD HH:mm:ss.sss"),
-    };
+
+
+  async function fetchInitialAirport() {
+
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + accessToken);
     myHeaders.append("Content-Type", "application/json");
 
     const response = await fetch(api_base_url + "/api/airport", {
-      method: "post",
+      method: "get",
       headers: myHeaders,
-      body: JSON.stringify(payload),
     });
     const responseJson = await response.json();
     if (response.status !== 200) {
       alert("error: " + responseJson.message);
       return;
     }
+    // make Sure this ok ==============
+    setAirports(responseJson.data["airports"]);
+
+    const det = airports.map((val) => {
+      return { label: val.name ?? "", value: val.id ?? "" };
+    });
+    setAirportDetails(det);
+    setFromAirportDetails(det);
+    setToAirportDetails(det);
   }
+
+  useRef(() => {
+
+  })
+
+  useEffect(() => {
+    fetchInitialAirport();
+    handleSearch();
+  }), [];
+
+  const cabinClass = [{
+    "name": "ECONOMY",
+    "id": "78324468-f3a8-45a2-b0bb-393979ad98ef"
+  },
+  {
+    "name": "BUSINESS",
+    "id": "c7697502-59af-42c1-ae07-cb4839207c2a"
+  },
+  {
+    "name": "FIRST",
+    "id": "16ca89c7-242d-4f5f-aabc-43504c4d4bfb"
+  }
+  ]
+
+  const ticketType = [{
+    "name": "SAVER",
+    "id": "228aaef8-8dd1-45fa-8b0d-7b8e03abc765"
+  },
+  {
+    "name": "FLEXI",
+    "id": "1bed4209-2022-4f46-ab59-516a1ae6af15"
+  },
+  {
+    "name": "PLUS",
+    "id": "abe66727-0be4-405b-8b9b-f4798f5ab1a1"
+  }
+  ]
 
   const items: MenuProps["items"] = [
     {
@@ -143,53 +176,57 @@ const Index: React.FC = () => {
 
   const onDepartureDatePick: DatePickerProps["onChange"] = (date) => {
     setDepartureDate(date!);
-    console.log(departureDate.toISOString());
+    console.log(departureDate?.toISOString() ?? "");
   };
   const onReturnDatePick: DatePickerProps["onChange"] = (date) => {
     setReturnDate(date!);
-    console.log(returnDate.toISOString());
+    console.log(returnDate?.toISOString() ?? "");
   };
   const dateFormat = "dddd, DD MMM YYYY";
 
   const customFormat: DatePickerProps["format"] = (value) =>
     value.format(dateFormat);
 
-  const fromChange = (value: string) => {
-    setFromAirport(airports.find((obj) => {
-      return (obj.name = value);
-    })!);
 
+  const fromChange = (value: string) => {
+    setFromAirport(
+      airports.find((obj) => {
+        return (obj.id == value);
+      })!
+    );
   };
   const toChange = (value: string) => {
-    setToAirport(airports.find((obj) => {
-      return (obj.name = value);
-    })!);
+    setToAirport(
+      airports.find((obj) => {
+        return (obj.id == value);
+      })!
+    );
 
   };
 
   const fromSearch = (value: string) => {
-    setFromAirportDetails(fromAirportDetails.filter((obj) => {
-      return obj.label.includes(value);
-    }));
-    console.log("search:", value);
+    setFromAirportDetails(
+      airportDetails.filter((obj) => {
+        return obj.label.includes(value);
+      })
+    );
   };
 
   const toSearch = (value: string) => {
-    setToAirportDetails(toAirportDetails.filter((obj) => {
-      return obj.label.includes(value);
-    }));
-
-    console.log("search:", value);
+    setToAirportDetails(
+      airportDetails.filter((obj) => {
+        return obj.label.includes(value);
+      })
+    );
   };
   const handleSearch = async () => {
-    console.log("Searching...");
-    //case found:
-    const payload = {};
 
-    const url = new URL(api_base_url + "/schedule-detail/getSchedules");
-    url.searchParams.append("cabinClassId", "1");
-    url.searchParams.append("ticketTypeId", "1");
-    url.searchParams.append("date", departureDate.toISOString());
+    console.log("Searching...", dayjs.isDayjs(departureDate));
+    //case found:
+    const url = new URL(api_base_url + "/api/schedule-detail/getSchedules");
+    url.searchParams.append("cabinClassId", cabinClass[0].id);
+    url.searchParams.append("ticketTypeId", ticketType[0].id);
+    url.searchParams.append("date", departureDate?.format("YYYY-MM-DD") ?? "");
     url.searchParams.append("fromAirportId", fromAirport?.id ?? "");
     url.searchParams.append("toAirportId", toAirport?.id ?? "");
 
@@ -200,7 +237,6 @@ const Index: React.FC = () => {
     const response = await fetch(url.toString(), {
       method: "get",
       headers: myHeaders,
-      body: JSON.stringify(payload),
     });
     console.log(response);
     const responseJson = await response.json();
@@ -209,9 +245,12 @@ const Index: React.FC = () => {
       return;
     }
     // implement get schedules ==============
-    schedules = responseJson["schedules"];
+    setSchedules(responseJson["schedules"]);
     setPage(1);
-    setScheduleToRender(schedules.slice((page - 1) * 4, page * 4 - 1));
+    if (responseJson["schedules"]) {
+
+      setScheduleToRender(schedules.slice((page - 1) * 4, page * 4 - 1));
+    }
   };
   const onChangePage: PaginationProps["onShowSizeChange"] = (current) => {
     console.log(page);
@@ -228,7 +267,6 @@ const Index: React.FC = () => {
     option?: { label: string; value: string }
   ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
-  console.log(schedules.length);
   return (
     <ConfigProvider
       theme={{
@@ -323,7 +361,7 @@ const Index: React.FC = () => {
               display: "flex",
               alignItems: "center",
             }}
-            className="w-full px-[51px] py-6  bg-white border border-gray-100 flex-col justify-center items-start gap-6 inline-flex"
+            className="w-full px-8 py-6  bg-white border border-gray-100 flex-col justify-center items-start gap-6 inline-flex"
           >
             <div className="w-full self-stretch items-center gap-6 inline-flex">
               <div className="justify-start items-start gap-9 flex">
@@ -565,6 +603,7 @@ const Index: React.FC = () => {
 
                       <div className="self-stretch px-5 py-[8px] rounded-xl border border-gray-100 justify-start items-center gap-3 inline-flex">
                         <DatePicker
+                          value={departureDate}
                           onChange={onDepartureDatePick}
                           style={{ width: "100%" }}
                           className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal"
@@ -625,7 +664,7 @@ const Index: React.FC = () => {
               ,
             </div>
           </div>
-          {schedules.length != 0 ? (
+          {schedules?.length != 0 ? (
             <div className="flex-col min-h-[50vh]">
               <img
                 className="p-8 m-auto w-[430px]"
