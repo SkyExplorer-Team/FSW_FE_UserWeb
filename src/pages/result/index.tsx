@@ -143,7 +143,7 @@ const Index: React.FC = () => {
     fetchInitialAirport();
     handleSearch();
     fetchName();
-  }), [];
+  }, []);
 
   const cabinClass = [{
     "name": "ECONOMY",
@@ -692,7 +692,7 @@ const Index: React.FC = () => {
             </div>
           </div>
           <div className="relative min-h-[50vh] ">
-            <img className="absolute right-0 " src="../../public/assets/download.png" />
+            <img className="absolute top-8 right-8 " src="../../public/assets/download.png" />
 
             <div className="content-center pt-8 pb-4 justify-center origin-center items-center text-center">
               <div className="w-[646px] h-[152px] content-center text-left px-4 pt-4 pb-2 bg-white rounded-2xl flex-col gap-2 inline-flex">
