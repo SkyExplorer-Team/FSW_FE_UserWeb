@@ -120,6 +120,7 @@ const Index: React.FC = () => {
         setAirportDetails(det);
         setFromAirportDetails(det);
         setToAirportDetails(det);
+        console.log(airportDetails)
     }
 
     useRef(() => { });
@@ -131,7 +132,7 @@ const Index: React.FC = () => {
         fetchInitialAirport();
 
         fetchName();
-    }, []);
+    }, [airportDetails]);
 
     const [seat, setSeat] = useState(
         new Map<string, number>([
