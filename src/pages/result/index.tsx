@@ -691,163 +691,167 @@ const Index: React.FC = () => {
               ,
             </div>
           </div>
-          <div className="content-center pt-8 pb-4 justify-center origin-center items-center text-center">
-            <div className="w-[646px] h-[152px] content-center text-left px-4 pt-4 pb-2 bg-white rounded-2xl flex-col gap-2 inline-flex">
-              <div className="self-stretch justify-start items-start gap-4 inline-flex">
-                <a onClick={() => {
-                  setCabin(0)
-                }} className={"grow shrink basis-0 p-3 " + ((cabin == 0) ? "bg-primary" : " bg-white rounded-xl") + " rounded-xl flex-col justify-center items-start gap-3 inline-flex"}>
-                  <div className={"self-stretch " + ((cabin == 0) ? "text-white" : "text-neutral-900") + " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"}>ECONOMY SAVER</div>
-                  <div className="self-stretch justify-between items-center inline-flex">
-                    <div className={((cabin == 0) ? "text-white" : "text-gray-500") + " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"}>Start from</div>
-                    <div className={((cabin == 0) ? "text-white" : "text-neutral-900") + " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"}>IDR 1,570K</div>
-                  </div>
-                </a>
-                <a onClick={() => {
-                  setCabin(1)
-                }} className={"grow shrink basis-0 p-3 " + ((cabin == 1) ? "bg-primary" : " bg-white rounded-xl") + " rounded-xl flex-col justify-center items-start gap-3 inline-flex"}>
-                  <div className={"self-stretch " + ((cabin == 1) ? "text-white" : "text-neutral-900") + " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"}>ECONOMY FLEXI</div>
-                  <div className="self-stretch justify-between items-center inline-flex">
-                    <div className={((cabin == 1) ? "text-white" : "text-gray-500") + " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"}>Start from</div>
-                    <div className={((cabin == 1) ? "text-white" : "text-neutral-900") + " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"}>IDR 2,535K</div>
-                  </div>
-                </a>
-                <a onClick={() => {
-                  setCabin(2)
-                }} className={"grow shrink basis-0 p-3 " + ((cabin == 2) ? "bg-primary" : " bg-white rounded-xl") + " rounded-xl flex-col justify-center items-start gap-3 inline-flex"}>
-                  <div className={"self-stretch " + ((cabin == 2) ? " text-white" : "text-neutral-900") + " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"}>ECONOMY PLUS</div>
-                  <div className="self-stretch justify-between items-center inline-flex">
-                    <div className={((cabin == 2) ? "text-white" : "text-gray-500") + " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"}>Start from</div>
-                    <div className={((cabin == 2) ? "text-white" : "text-neutral-900") + " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"}>IDR3,290K</div>
-                  </div>
-                </a>
-              </div>
-              <div className="self-stretch justify-between items-center inline-flex">
-                <div className="w-[195px] text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">10 Seat(s) left</div>
-                <div className="py-3 rounded-lg flex-col justify-center items-center gap-3 inline-flex">
-                  <div className="self-stretch justify-center items-center gap-3 inline-flex">
-                    <div className="text-center text-emerald-400 text-xs font-bold font-['Plus Jakarta Sans'] leading-none">Compare Fare</div>
-                    <div className="w-3 h-3 justify-center items-center flex">
-                      <div className="w-3 h-3 relative">
+          <div className="relative min-h-[50vh] ">
+            <img className="absolute right-0 " src="../../public/assets/download.png" />
+
+            <div className="content-center pt-8 pb-4 justify-center origin-center items-center text-center">
+              <div className="w-[646px] h-[152px] content-center text-left px-4 pt-4 pb-2 bg-white rounded-2xl flex-col gap-2 inline-flex">
+                <div className="self-stretch justify-start items-start gap-4 inline-flex">
+                  <a onClick={() => {
+                    setCabin(0)
+                  }} className={"grow shrink basis-0 p-3 " + ((cabin == 0) ? "bg-primary" : " bg-white rounded-xl") + " rounded-xl flex-col justify-center items-start gap-3 inline-flex"}>
+                    <div className={"self-stretch " + ((cabin == 0) ? "text-white" : "text-neutral-900") + " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"}>ECONOMY SAVER</div>
+                    <div className="self-stretch justify-between items-center inline-flex">
+                      <div className={((cabin == 0) ? "text-white" : "text-gray-500") + " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"}>Start from</div>
+                      <div className={((cabin == 0) ? "text-white" : "text-neutral-900") + " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"}>IDR 1,570K</div>
+                    </div>
+                  </a>
+                  <a onClick={() => {
+                    setCabin(1)
+                  }} className={"grow shrink basis-0 p-3 " + ((cabin == 1) ? "bg-primary" : " bg-white rounded-xl") + " rounded-xl flex-col justify-center items-start gap-3 inline-flex"}>
+                    <div className={"self-stretch " + ((cabin == 1) ? "text-white" : "text-neutral-900") + " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"}>ECONOMY FLEXI</div>
+                    <div className="self-stretch justify-between items-center inline-flex">
+                      <div className={((cabin == 1) ? "text-white" : "text-gray-500") + " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"}>Start from</div>
+                      <div className={((cabin == 1) ? "text-white" : "text-neutral-900") + " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"}>IDR 2,535K</div>
+                    </div>
+                  </a>
+                  <a onClick={() => {
+                    setCabin(2)
+                  }} className={"grow shrink basis-0 p-3 " + ((cabin == 2) ? "bg-primary" : " bg-white rounded-xl") + " rounded-xl flex-col justify-center items-start gap-3 inline-flex"}>
+                    <div className={"self-stretch " + ((cabin == 2) ? " text-white" : "text-neutral-900") + " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"}>ECONOMY PLUS</div>
+                    <div className="self-stretch justify-between items-center inline-flex">
+                      <div className={((cabin == 2) ? "text-white" : "text-gray-500") + " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"}>Start from</div>
+                      <div className={((cabin == 2) ? "text-white" : "text-neutral-900") + " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"}>IDR3,290K</div>
+                    </div>
+                  </a>
+                </div>
+                <div className="self-stretch justify-between items-center inline-flex">
+                  <div className="w-[195px] text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">10 Seat(s) left</div>
+                  <div className="py-3 rounded-lg flex-col justify-center items-center gap-3 inline-flex">
+                    <div className="self-stretch justify-center items-center gap-3 inline-flex">
+                      <div className="text-center text-emerald-400 text-xs font-bold font-['Plus Jakarta Sans'] leading-none">Compare Fare</div>
+                      <div className="w-3 h-3 justify-center items-center flex">
+                        <div className="w-3 h-3 relative">
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          {schedules?.length != 0 ? (
-            <div className="flex-col min-h-[50vh]">
-              <img
-                className="p-8 m-auto w-[430px]"
-                src="src/assets/not-found.svg"
-              ></img>
-            </div>
-          ) : (
-            <div className="flex w-full">
-              <div className="w-full flex-col justify-center items-center gap-5 inline-flex py-8">
-                {scheduleToRender.map((value) => {
-                  const hours = Math.floor(value.duration / 60);
-                  const minutes = value.duration % 60;
-                  return (
-                    <a onClick={() => {
-                      handleOk()
-                    }}
-                      className="justify-center items-center">
-                      <div className=" shadow justify-center items-center inline-flex">
-                        <div className="grow shrink basis-0 px-6 pb-5 bg-white rounded-xl flex-col justify-center items-center gap-2.5 inline-flex">
-                          <div className="self-stretch justify-start items-end gap-[5.01px] inline-flex">
-                            <div className="w-[65px] flex-col justify-start items-start gap-1 inline-flex">
-                              <div className="text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
-                                {value.arrivalDate.format("HH:mm")}
-                              </div>
-                              <div className="text-primary text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
-                                CGK
-                              </div>
-                              <div className="self-stretch text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
-                                {value.arrivalDate.format("D MMM")}
-                              </div>
-                            </div>
-                            <div className="grow shrink basis-0 self-stretch pt-3 flex-col justify-between items-center inline-flex">
-                              <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Plus Jakarta Sans'] ">
-                                {" "}
-                                {hours}h {minutes}m{ }
-                              </div>
-                              <div className="w-[225px] pt-3 justify-center items-center gap-1 inline-flex">
-                                <div className="w-[16.39px] h-[15.58px] relative">
-                                  <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-primary rounded-full" />
-                                  <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-primary rounded-full" />
-                                </div>
-                                <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
-                                <div className="w-10 rotate-45 justify-center items-center flex">
-                                  <img src="airplane.svg" alt="" />
-                                </div>
-                                <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
-                                <div className="w-[16.39px] h-[15.58px] relative">
-                                  <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-primary rounded-full" />
-
-                                  <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-primary rounded-full" />
-                                </div>
-                              </div>
-                              <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Plus Jakarta Sans'] ">
-                                Direct
-                              </div>
-                            </div>
-                            <div className="w-[61px] flex-col justify-start items-end gap-1 inline-flex">
-                              <div className="text-right text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
-                                {value.arrivalDate
-                                  .add(value.duration, "minute")
-                                  .format("HH:mm")}
-                              </div>
-                              <div className="text-right text-primary text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
-                                SIN
-                              </div>
-                              <div className="self-stretch text-right text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
-                                {value.arrivalDate
-                                  .add(value.duration, "minute")
-                                  .format("D MMM")}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="self-stretch px-6 py-5 bg-white rounded-xl flex-col justify-center items-start gap-3 inline-flex">
-                          <div className="self-stretch justify-start items-center gap-2 inline-flex">
-                            <div className="w-[31.60px] h-[31.60px] relative">
-                              <LogoImage />
-                            </div>
-                            <div className="flex-col justify-center items-start inline-flex">
-                              <div className="text-center text-neutral-900 text-xs font-semibold font-['Plus Jakarta Sans'] leading-none">
-                                SE 955
-                              </div>
-                              <div className="text-center text-gray-500 text-xs font-light font-['Plus Jakarta Sans'] leading-none">
-                                Boeing 777-300ER
-                              </div>
-                            </div>
-                          </div>
-                          <div className="self-stretch justify-start items-center gap-1 inline-flex">
-                            <div className="text-primary text-xl font-bold font-['Plus Jakarta Sans'] leading-7">
-                              IDR 1,950K
-                            </div>
-                            <div className="text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">
-                              /pax
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <Pagination
-                        className="text-center pt-8"
-                        onChange={onChangePage}
-                        defaultCurrent={1}
-                        total={schedules.length}
-                        pageSize={4}
-                      />
-                    </a>
-                  );
-                })}
+            {schedules?.length != 0 ? (
+              <div className="flex-col ">
+                <img
+                  className="p-8 m-auto w-[430px]"
+                  src="src/assets/not-found.svg"
+                ></img>
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="flex w-full">
+                <div className="w-full flex-col justify-center items-center gap-5 inline-flex py-8">
+                  {scheduleToRender.map((value) => {
+                    const hours = Math.floor(value.duration / 60);
+                    const minutes = value.duration % 60;
+                    return (
+                      <a onClick={() => {
+                        handleOk()
+                      }}
+                        className="justify-center items-center">
+                        <div className=" shadow justify-center items-center inline-flex">
+                          <div className="grow shrink basis-0 px-6 pb-5 bg-white rounded-xl flex-col justify-center items-center gap-2.5 inline-flex">
+                            <div className="self-stretch justify-start items-end gap-[5.01px] inline-flex">
+                              <div className="w-[65px] flex-col justify-start items-start gap-1 inline-flex">
+                                <div className="text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
+                                  {value.arrivalDate.format("HH:mm")}
+                                </div>
+                                <div className="text-primary text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
+                                  CGK
+                                </div>
+                                <div className="self-stretch text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                                  {value.arrivalDate.format("D MMM")}
+                                </div>
+                              </div>
+                              <div className="grow shrink basis-0 self-stretch pt-3 flex-col justify-between items-center inline-flex">
+                                <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Plus Jakarta Sans'] ">
+                                  {" "}
+                                  {hours}h {minutes}m{ }
+                                </div>
+                                <div className="w-[225px] pt-3 justify-center items-center gap-1 inline-flex">
+                                  <div className="w-[16.39px] h-[15.58px] relative">
+                                    <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-primary rounded-full" />
+                                    <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-primary rounded-full" />
+                                  </div>
+                                  <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
+                                  <div className="w-10 rotate-45 justify-center items-center flex">
+                                    <img src="airplane.svg" alt="" />
+                                  </div>
+                                  <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
+                                  <div className="w-[16.39px] h-[15.58px] relative">
+                                    <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-primary rounded-full" />
+
+                                    <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-primary rounded-full" />
+                                  </div>
+                                </div>
+                                <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Plus Jakarta Sans'] ">
+                                  Direct
+                                </div>
+                              </div>
+                              <div className="w-[61px] flex-col justify-start items-end gap-1 inline-flex">
+                                <div className="text-right text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
+                                  {value.arrivalDate
+                                    .add(value.duration, "minute")
+                                    .format("HH:mm")}
+                                </div>
+                                <div className="text-right text-primary text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
+                                  SIN
+                                </div>
+                                <div className="self-stretch text-right text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                                  {value.arrivalDate
+                                    .add(value.duration, "minute")
+                                    .format("D MMM")}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="self-stretch px-6 py-5 bg-white rounded-xl flex-col justify-center items-start gap-3 inline-flex">
+                            <div className="self-stretch justify-start items-center gap-2 inline-flex">
+                              <div className="w-[31.60px] h-[31.60px] relative">
+                                <LogoImage />
+                              </div>
+                              <div className="flex-col justify-center items-start inline-flex">
+                                <div className="text-center text-neutral-900 text-xs font-semibold font-['Plus Jakarta Sans'] leading-none">
+                                  SE 955
+                                </div>
+                                <div className="text-center text-gray-500 text-xs font-light font-['Plus Jakarta Sans'] leading-none">
+                                  Boeing 777-300ER
+                                </div>
+                              </div>
+                            </div>
+                            <div className="self-stretch justify-start items-center gap-1 inline-flex">
+                              <div className="text-primary text-xl font-bold font-['Plus Jakarta Sans'] leading-7">
+                                IDR 1,950K
+                              </div>
+                              <div className="text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">
+                                /pax
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <Pagination
+                          className="text-center pt-8"
+                          onChange={onChangePage}
+                          defaultCurrent={1}
+                          total={schedules.length}
+                          pageSize={4}
+                        />
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
         </Content>
 
         <Footer

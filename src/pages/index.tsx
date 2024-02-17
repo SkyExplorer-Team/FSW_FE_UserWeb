@@ -249,11 +249,6 @@ const Index: React.FC = () => {
         setIsClicked(!isClicked);
     };
 
-    const disabledDate: DatePickerProps['disabledDate'] = (current) => {
-        // Can not select days before today and today
-        return current && current < dayjs().endOf('day');
-    };
-
     return (
         <ConfigProvider
             theme={{
