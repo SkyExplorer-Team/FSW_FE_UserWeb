@@ -60,6 +60,7 @@ const accessToken = localStorage.getItem("access_token");
 
 const Index: React.FC = () => {
   const location = useLocation();
+
   const token = localStorage.getItem("access_token");
   const navigate = useNavigate();
   const [fromAirportDetails, setFromAirportDetails] = useState<
@@ -71,8 +72,9 @@ const Index: React.FC = () => {
   const [fromAirport, setFromAirport] = useState<Airport>(location.state.fromAirport);
   const [toAirport, setToAirport] = useState<Airport>(location.state.toAirport);
 
+  console.log(location.state.returnDate)
   const [departureDate, setDepartureDate] = useState<dayjs.Dayjs>(dayjs(location.state.departureDate, "YYYY-MM-DD"));
-  const [returnDate, setReturnDate] = useState<dayjs.Dayjs>(dayjs(location.state.returnDate, "YYYY-MM-DD"));
+  const [returnDate, setReturnDate] = useState<dayjs.Dayjs>(location.state.returnDate ? dayjs(location.state.returnDate, "YYYY-MM-DD") : dayjs());
 
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [trip, setTrip] = useState<string>(location.state.trip);
@@ -140,10 +142,17 @@ const Index: React.FC = () => {
   }
 
   useEffect(() => {
-    fetchInitialAirport();
-    handleSearch();
-    fetchName();
-  }, []);
+    if (toAirportDetails.length <= 0) {
+      console.log(airports)
+      if (accessToken === null) {
+        navigate("/login");
+      }
+      fetchInitialAirport();
+      handleSearch();
+      fetchName();
+    }
+
+  });
 
   const cabinClass = [{
     "name": "ECONOMY",

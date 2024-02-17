@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "../components/Logo";
 import {
     Button,
@@ -62,12 +62,8 @@ const Index: React.FC = () => {
     const [airportDetails, setAirportDetails] = useState<
         { label: string; value: string }[]
     >([]);
-    const [fromAirportDetails, setFromAirportDetails] = useState<
-        { label: string; value: string }[]
-    >([]);
-    const [toAirportDetails, setToAirportDetails] = useState<
-        { label: string; value: string }[]
-    >([]);
+    const [fromAirportDetails, setFromAirportDetails] = useState<{ label: string; value: string }[]>([]);
+    const [toAirportDetails, setToAirportDetails] = useState<{ label: string; value: string }[]>([]);
     const [fromAirport, setFromAirport] = useState<Airport>();
     const [toAirport, setToAirport] = useState<Airport>();
 
@@ -77,7 +73,6 @@ const Index: React.FC = () => {
     const [userName, setUserName] = useState<string>("");
 
     const accessToken = localStorage.getItem("access_token");
-
     async function fetchName() {
         const myHeaders = new Headers();
         myHeaders.append("Authorization", "Bearer " + accessToken);
@@ -120,20 +115,19 @@ const Index: React.FC = () => {
         setAirportDetails(det);
         setFromAirportDetails(det);
         setToAirportDetails(det);
-        console.log(airportDetails)
     }
 
-    useRef(() => { });
-
     useEffect(() => {
-        if (accessToken === null) {
-            navigate("/login");
+        if (toAirportDetails.length <= 0) {
+            console.log(airports)
+            if (accessToken === null) {
+                navigate("/login");
+            }
+            fetchInitialAirport();
+            fetchName();
+            fetchInitialAirport();
         }
-        fetchInitialAirport();
-
-        fetchName();
-    }, [airports]);
-
+    });
     const [seat, setSeat] = useState(
         new Map<string, number>([
             ["adults", 0],
@@ -486,7 +480,8 @@ const Index: React.FC = () => {
                                                                     <img
                                                                         className="p-8 w-[430px]"
                                                                         src="src/assets/not-found.svg"
-                                                                    ></img>
+                                                                    >
+                                                                    </img>
                                                                 </>
                                                             }
                                                             optionRender={(_, i) => {
@@ -747,7 +742,7 @@ const Index: React.FC = () => {
                                                 fromAirport: fromAirport,
                                                 toAirport: toAirport,
                                                 departureDate: departureDate.format("YYYY-MM-DD"),
-                                                returnDate: returnDate,
+                                                returnDate: returnDate.format("YYYY-MM-DD"),
                                             },
                                         });
                                     }}
@@ -786,7 +781,7 @@ const Index: React.FC = () => {
                                                 fromAirport: fromAirport,
                                                 toAirport: toAirport,
                                                 departureDate: departureDate.add(1, "day").format("YYYY-MM-DD"),
-                                                returnDate: returnDate,
+                                                returnDate: returnDate.format("YYYY-MM-DD"),
                                             },
                                         });
                                     }}
@@ -824,7 +819,7 @@ const Index: React.FC = () => {
                                                 fromAirport: fromAirport,
                                                 toAirport: toAirport,
                                                 departureDate: departureDate.add(2, "day").format("YYYY-MM-DD"),
-                                                returnDate: returnDate,
+                                                returnDate: returnDate.format("YYYY-MM-DD"),
                                             },
                                         });
                                     }}
@@ -863,7 +858,7 @@ const Index: React.FC = () => {
                                                 fromAirport: fromAirport,
                                                 toAirport: toAirport,
                                                 departureDate: departureDate.add(3, "day").format("YYYY-MM-DD"),
-                                                returnDate: returnDate,
+                                                returnDate: returnDate.format("YYYY-MM-DD"),
                                             },
                                         });
                                     }}
@@ -902,7 +897,7 @@ const Index: React.FC = () => {
                                                 fromAirport: fromAirport,
                                                 toAirport: toAirport,
                                                 departureDate: departureDate.add(4, "day").format("YYYY-MM-DD"),
-                                                returnDate: returnDate,
+                                                returnDate: returnDate.format("YYYY-MM-DD"),
                                             },
                                         });
                                     }}
@@ -941,7 +936,7 @@ const Index: React.FC = () => {
                                                 fromAirport: fromAirport,
                                                 toAirport: toAirport,
                                                 departureDate: departureDate.add(5, "day").format("YYYY-MM-DD"),
-                                                returnDate: returnDate,
+                                                returnDate: returnDate.format("YYYY-MM-DD"),
                                             },
                                         });
                                     }}
@@ -980,7 +975,7 @@ const Index: React.FC = () => {
                                                 fromAirport: fromAirport,
                                                 toAirport: toAirport,
                                                 departureDate: departureDate.add(6, "day").format("YYYY-MM-DD"),
-                                                returnDate: returnDate,
+                                                returnDate: returnDate.format("YYYY-MM-DD"),
                                             },
                                         });
                                     }}
