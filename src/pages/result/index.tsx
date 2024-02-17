@@ -35,6 +35,7 @@ import PassengerField from "../../components/passenger_field";
 import LogoImage from "../../components/LogoImage";
 import IconMenu from "../../../public/assets/menu.svg";
 import IconUser from "../../../public/assets/user.svg";
+import GambarPocket from "../../../public/assets/gambar-samping.png";
 
 import Airplane from "/assets/airplane.svg";
 
@@ -626,8 +627,8 @@ const Index: React.FC = () => {
           </div>
           <div className="relative min-h-[50vh] ">
             <img
-              className="absolute top-8 right-8 "
-              src="../../public/assets/download.png"
+              className="absolute top-8 right-8 w-[309px] h-[345px]"
+              src={GambarPocket}
             />
 
             <div className="content-center pt-8 pb-4 justify-center origin-center items-center text-center">
