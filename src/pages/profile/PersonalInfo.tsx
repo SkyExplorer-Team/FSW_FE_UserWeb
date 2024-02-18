@@ -49,14 +49,18 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
   formValues,
   setFormValues,
 }) => {
-  const [isNoFirstNameChecked, setIsNoFirstNameChecked] =
+  const [isNoFirstMiddleNameChecked, setIsNoFirstMiddleNameChecked] =
     useState<boolean>(false);
   const [userData, setUserData] = useState<UserData>(Object);
+  const [dobData, setDobData] = useState<any>("");
   useEffect(() => {
     // Fetch user data from the API
 
     fetchUserData();
   }, []); // Empty dependency array means this effect runs once on mount
+  const tokenNew =
+    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvd2VuQHN1c2FudG8ubWUiLCJpYXQiOjE3MDc4ODcyNTksImV4cCI6MTcwODg4NzI1OX0.PpiWO9ittMOhTRaeCtm-7rgPOAKS1EeYhADpLbztoG8"; // Gantilah dengan nilai token yang sebenarnya
+  localStorage.setItem("access_token", tokenNew);
 
   const fetchUserData = async () => {
     try {
@@ -81,24 +85,23 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
       // Check if the request was successful
       if (userData.status === "success") {
         // Extract relevant user data
+        const {
+          salutation,
+          firstName,
+          lastName,
+          nationality,
+          // dob,
+          phone,
+          email,
+        } = userData.data;
+
         setUserData(userData.data);
         setSelectedNationality(userData.data.national);
         console.log(userData.data.nationality);
         const [year, month, day] = userData.data.dob;
         userData.data.dob = `${year}-${month.toString().padStart(2, "0")}-${day
           .toString()
-          .padStart(2, "0")}`;
-        form.setFieldsValue({
-          salutation: userData.data.salutation,
-          firstName: userData.data.firstName,
-          lastName: userData.data.lastName,
-          dateOfBirth: dayjs(userData.data.dob),
-          national: userData.data.national,
-          phoneNumber: userData.data.phone,
-          email: userData.data.email,
-
-          // ... (set other fields as needed)
-        });
+          .padStart(2, "0")}`;               
       } else {
         console.error("Failed to fetch user data:", userData.status);
       }
@@ -106,14 +109,15 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
       console.error("Error fetching user data:", error);
     }
   };
-
+  
+  
   const handleChange = (value: string) => {
     setFormValues((prevFormValues: FormValues) => ({
       ...prevFormValues,
       salutation: value,
     }));
   };
-
+  
   const nationalityOptions = [
     { flag: "🇺🇸", name: "Amerika Serikat", value: "US" },
     { flag: "🇬🇧", name: "Inggris", value: "GB" },
@@ -133,12 +137,12 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
   });
 
   const handleContactFormChange =
-    (fieldName: keyof ContactFormData) => (value: string) => {
-      setContactData({
-        ...contactData,
-        [fieldName]: value,
+  (fieldName: keyof ContactFormData) => (value: string) => {
+    setContactData({
+      ...contactData,
+      [fieldName]: value,
       });
-
+      
       // Meneruskan lebih banyak data ke komponen induk
       setFormValues((prevFormValues: FormValues) => ({
         ...prevFormValues,
@@ -146,14 +150,14 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
         // Tambahkan properti lainnya jika diperlukan
       }));
     };
-
-  const [selectedNationality, setSelectedNationality] = useState<string>("");
-
-  const handleChangeNationality = (value: string) => {
-    setSelectedNationality(value);
-    setFormValues((prevFormValues: FormValues) => ({
-      ...prevFormValues,
-      nationality: value,
+    
+    const [selectedNationality, setSelectedNationality] = useState<string>("");
+    
+    const handleChangeNationality = (value: string) => {
+      setSelectedNationality(value);
+      setFormValues((prevFormValues: FormValues) => ({
+        ...prevFormValues,
+        nationality: value,
     }));
   };
   const onChange: DatePickerProps["onChange"] = (date, dateString) => {
@@ -161,26 +165,26 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
       ...prevFormValues,
       dateOfBirth: dateString,
     }));
-  };
+  };  
   const defaultDate = userData.dob;
-
+  console.log(typeof defaultDate);
+  
   const [form] = Form.useForm();
-
+  
   return (
     <>
       <h2 className="title-personal_info">Informasi Pribadi</h2>
       <h2 className="sub_title-personal_info">
         Harap lengkapi profil Anda dengan informasi yang diperlukan.
       </h2>
-      <Form form={form} initialValues={{ lastName: userData.lastName }}>
-        <Typography.Title
-          style={{ paddingBottom: 0, marginBottom: 0, marginTop: 10 }}
-          level={5}
-        >
-          salutation
-        </Typography.Title>
-        {/* --------------------------------------------------------- */}
-        <Form.Item name="salutation">
+      <Form form={form}>
+        <Form.Item>
+          <Typography.Title
+            style={{ paddingBottom: 0, marginBottom: 0, marginTop: 10 }}
+            level={5}
+          >
+            salutation
+          </Typography.Title>
           <Select
             defaultValue="Mrs"
             style={{ width: "100%", height: "40px" }}
@@ -192,46 +196,49 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
               { value: "Ms", label: "Ms" },
             ]}
           />
-          {/* --------------------------------------------------------- */}
         </Form.Item>
         <Form.Item>
-          <Typography.Title level={5}>First & Middle Name</Typography.Title>
-          <Form.Item name="firstName" style={{ marginBottom: 0 }}>
-            <Input
-              placeholder="Lewis Carl"
-              disabled={isNoFirstNameChecked}
-              style={{ height: "40px" }}
-              onChange={(e) =>
-                setFormValues((prevFormValues: FormValues) => ({
-                  ...prevFormValues,
-                  firstName: e.target.value,
-                }))
-              }
-            />
-          </Form.Item>
-
+          <Typography.Title
+            style={{ paddingBottom: 0, marginBottom: 0 }}
+            level={5}
+          >
+            First & Middle Name
+          </Typography.Title>
+          <Input
+            placeholder="Lewis Carl"
+            disabled={isNoFirstMiddleNameChecked}
+            style={{ height: "40px" }}
+            onChange={(e) =>
+              setFormValues((prevFormValues: FormValues) => ({
+                ...prevFormValues,
+                firstMiddleName: e.target.value,
+              }))
+            }
+            defaultValue={userData.firstName}
+          />
           <Checkbox
             className="font-normal"
             onChange={(e) => {
-              setIsNoFirstNameChecked(e.target.checked);
+              setIsNoFirstMiddleNameChecked(e.target.checked);
               form.setFieldsValue({
-                firstName: e.target.checked ? undefined : "",
+                firstMiddleName: e.target.checked ? undefined : "",
               });
             }}
           >
             This Passanger doesnt have a first name in the passport
           </Checkbox>
         </Form.Item>
-        <Typography.Title
-          style={{ paddingBottom: 0, marginBottom: 0 }}
-          level={5}
-        >
-          Last Name
-        </Typography.Title>
-        <Form.Item name="lastName">
+        <Form.Item>
+          <Typography.Title
+            style={{ paddingBottom: 0, marginBottom: 0 }}
+            level={5}
+          >
+            Last Name
+          </Typography.Title>
           <Input
             placeholder="Davidson"
             style={{ height: "40px" }}
+            value={userData.lastName}
             onChange={(e) =>
               setFormValues((prevFormValues: FormValues) => ({
                 ...prevFormValues,
@@ -247,44 +254,42 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
           >
             Nationality
           </Typography.Title>
-          <Form.Item name="national">
-            <Select
-              showSearch
-              optionFilterProp="children"
-              onChange={handleChangeNationality}
-              value={selectedNationality}
-              className="font-normal"
-              placeholder="Pilih kewarganegaraan Anda"
-              style={{ height: "40px", width: "100%" }}
-              dropdownRender={(menu) => (
-                <div>
-                  {menu}
-                  <div
-                    style={{
-                      textAlign: "center",
-                      padding: "8px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    <DownOutlined style={{ color: "#d9d9d9" }} />
-                  </div>
+          <Select
+            showSearch
+            optionFilterProp="children"
+            onChange={handleChangeNationality}
+            value={selectedNationality}
+            className="font-normal"
+            placeholder="Pilih kewarganegaraan Anda"
+            style={{ height: "40px", width: "100%" }}
+            dropdownRender={(menu) => (
+              <div>
+                {menu}
+                <div
+                  style={{
+                    textAlign: "center",
+                    padding: "8px",
+                    cursor: "pointer",
+                  }}
+                >
+                  <DownOutlined style={{ color: "#d9d9d9" }} />
                 </div>
-              )}
-            >
-              {nationalityOptions.map((option) => (
-                <Option key={option.value} value={option.name}>
-                  <div style={{ display: "flex", fontWeight: "bold" }}>
-                    <FlagIcon
-                      code={option.value as FlagIconCode}
-                      size={32}
-                      className="mr-4 rounded"
-                    ></FlagIcon>
-                    {option.name}
-                  </div>
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
+              </div>
+            )}
+          >
+            {nationalityOptions.map((option) => (
+              <Option key={option.value} value={option.name}>
+                <div style={{ display: "flex", fontWeight: "bold" }}>
+                  <FlagIcon
+                    code={option.value as FlagIconCode}
+                    size={32}
+                    className="mr-4 rounded"
+                  ></FlagIcon>
+                  {option.name}
+                </div>
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item>
           <Typography.Title
@@ -293,14 +298,13 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
           >
             Date of Birth
           </Typography.Title>
-          <Form.Item name="dateOfBirth">
-            <DatePicker
-              format={"YYYY/MM/DD"}
-              onChange={onChange} // Perubahan di sini
-              placeholder="7 Januari 1985"
-              style={{ width: "100%", height: "40px" }}
-            />
-          </Form.Item>
+          <DatePicker
+          format={'YYYY/MM/DD'}
+            onChange={onChange} // Perubahan di sini
+            placeholder="7 Januari 1985"
+            style={{ width: "100%", height: "40px" }}
+            defaultValue={dayjs('2004-01-08')}
+          />
         </Form.Item>
 
         <h2 className="title-personal_info">Contact Detail</h2>
@@ -335,7 +339,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
             />
           </Form.Item>
           <Form.Item
-            name="phoneNumber"
+            name="phoneNumber"            
             style={{
               display: "inline-block",
               width: "80%",
@@ -347,23 +351,24 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
               onChange={(e) =>
                 handleContactFormChange("phoneNumber")("+62" + e.target.value)
               }
+              defaultValue='085161644408'
             />
           </Form.Item>
         </Form.Item>
-        <Form.Item>
+        <Form.Item          
+        >
           <Typography.Title
             style={{ paddingBottom: 0, marginBottom: 0 }}
             level={5}
           >
             Email
           </Typography.Title>
-          <Form.Item name="email">
-            <Input
-              size="large"
-              onChange={(e) => handleContactFormChange("email")(e.target.value)}
-              className="mb-5"
-            />
-          </Form.Item>
+          <Input
+            size="large"
+            onChange={(e) => handleContactFormChange("email")(e.target.value)}
+            className="mb-5"
+            value={userData.email}
+          />
         </Form.Item>
       </Form>
     </>
