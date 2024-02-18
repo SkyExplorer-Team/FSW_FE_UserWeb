@@ -15,7 +15,6 @@ import {
   Select,
   Space,
 } from "antd";
-import { MenuProps } from "antd/lib";
 import {
   DownOutlined,
   SwapOutlined,
@@ -25,23 +24,19 @@ import {
 import dayjs from "dayjs";
 
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import ReactCountryFlag from "react-country-flag";
 import { useLocation, useNavigate } from "react-router-dom";
-import Logo from "../../components/Logo";
 import HeaderComponent from "../../components/Header";
 import HomeFooter from "../../components/home_footer";
 import CabinField from "../../components/cabin_field";
 import PassengerField from "../../components/passenger_field";
 import LogoImage from "../../components/LogoImage";
-import IconMenu from "../../../public/assets/menu.svg";
-import IconUser from "../../../public/assets/user.svg";
 import GambarPocket from "/assets/gambar-samping.png";
 
 import Airplane from "/assets/airplane.svg";
 
 dayjs.extend(customParseFormat);
 
-const { Header, Content, Footer } = Layout;
+const { Content, Footer } = Layout;
 interface Airport {
   id: string | undefined;
   name: string | undefined;
@@ -50,11 +45,33 @@ interface Airport {
 }
 
 interface Schedule {
+  id: string;
   name: string;
+  from: Airport;
+  to: Airport;
   departureDate: dayjs.Dayjs;
-  plane: string;
+  plane: {
+    "id": string;
+    "code": string;
+    "name": string;
+  };
   arrivalDate: dayjs.Dayjs;
   duration: number;
+  price: number;
+}
+interface ScheduleResult {
+  id: string;
+  name: string;
+  from: Airport;
+  to: Airport;
+  timeDeparture: string[];
+  airplane: {
+    "id": string;
+    "code": string;
+    "name": string;
+  };
+  timeArrive: string[];
+  price: number;
 }
 const api_base_url = "https://be-java-production.up.railway.app";
 
@@ -63,7 +80,6 @@ const accessToken = localStorage.getItem("access_token");
 const Index: React.FC = () => {
   const location = useLocation();
 
-  const token = localStorage.getItem("access_token");
   const navigate = useNavigate();
   const [fromAirportDetails, setFromAirportDetails] = useState<
     { label: string; value: string }[]
@@ -76,7 +92,6 @@ const Index: React.FC = () => {
   );
   const [toAirport, setToAirport] = useState<Airport>(location.state.toAirport);
 
-  console.log(location.state.returnDate);
   const [departureDate, setDepartureDate] = useState<dayjs.Dayjs>(
     dayjs(location.state.departureDate, "YYYY-MM-DD")
   );
@@ -87,18 +102,22 @@ const Index: React.FC = () => {
   );
 
   const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [modalSched, setModalSched] = useState<Schedule>();
+
   const [trip, setTrip] = useState<string>(location.state.trip);
   const [airports, setAirports] = useState<Airport[]>([]);
 
   const [seat, setSeat] = useState(location.state.seats);
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [page, setPage] = useState<number>(1);
   const [scheduleToRender, setScheduleToRender] = useState<Schedule[]>([]);
-  const [userName, setUserName] = useState<string>("");
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
+  const [, setUserName] = useState<string>("");
+
+  const handleOpen = (schedule: Schedule) => {
+    setModalSched(schedule);
+    setIsModalOpen(true);
+  }
 
   const [airportDetails, setAirportDetails] = useState<
     { label: string; value: string }[]
@@ -190,20 +209,6 @@ const Index: React.FC = () => {
     },
   ];
 
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: (
-        <a target="_blank" rel="noopener noreferrer" href="/">
-          Items
-        </a>
-      ),
-    },
-  ];
-
-  const handleSignUp = () => {
-    navigate("/signup");
-  };
 
   const [cabin, setCabin] = useState<number>(0);
 
@@ -276,17 +281,44 @@ const Index: React.FC = () => {
       method: "get",
       headers: myHeaders,
     });
-    console.log(response);
     const responseJson = await response.json();
+
     if (response.status !== 200) {
       alert("error: " + responseJson.message);
       return;
     }
     // implement get schedules ==============
-    setSchedules(responseJson["schedules"]);
-    setPage(1);
-    if (responseJson["schedules"]) {
-      setScheduleToRender(schedules.slice((page - 1) * 4, page * 4 - 1));
+
+
+    const res = responseJson["data"] as ScheduleResult[];
+    const target = res.map<Schedule>(val => {
+      const dep = dayjs(val.timeDeparture[0] + "-" + val.timeDeparture[1] + "-" + val.timeDeparture[2] + " " + val.timeDeparture[3] + ":" + val.timeDeparture[4], "YYYY-M-D H:m")
+      const ar = dayjs(val.timeArrive[0] + "-" + val.timeArrive[1] + "-" + val.timeArrive[2] + " " + val.timeArrive[3] + ":" + val.timeArrive[4], "YYYY-M-D H:m")
+      return ({
+        id: val.id,
+        name: val.name,
+        from: val.from,
+        to: val.to,
+        departureDate: dep,
+        plane: val.airplane,
+        arrivalDate: ar,
+        duration: dep.diff(ar, "minute"),
+        price: val.price
+      })
+    })
+
+
+
+    await setSchedules(target);
+    await setPage(1);
+
+    if (schedules.length != 0) {
+      if (schedules.length > 4) {
+        await setScheduleToRender(schedules.slice((page - 1) * 4, page * 4));
+
+      } else {
+        await setScheduleToRender(schedules.slice(0, schedules.length));
+      }
     }
   };
   const onChangePage: PaginationProps["onShowSizeChange"] = (current) => {
@@ -767,7 +799,7 @@ const Index: React.FC = () => {
               </div>
             </div>
 
-            {schedules?.length != 0 ? (
+            {(schedules.length == 0) ? (
               <div className="flex-col ">
                 <img
                   className="p-8 m-auto w-[430px]"
@@ -775,109 +807,124 @@ const Index: React.FC = () => {
                 ></img>
               </div>
             ) : (
-              <div className="flex w-full">
+              <div className="flex flex-col w-full">
                 <div className="w-full flex-col justify-center items-center gap-5 inline-flex py-8">
-                  {scheduleToRender.map((value) => {
-                    const hours = Math.floor(value.duration / 60);
-                    const minutes = value.duration % 60;
-                    return (
-                      <a
-                        onClick={() => {
-                          handleOk();
-                        }}
-                        className="justify-center items-center"
-                      >
-                        <div className=" shadow justify-center items-center inline-flex">
-                          <div className="grow shrink basis-0 px-6 pb-5 bg-white rounded-xl flex-col justify-center items-center gap-2.5 inline-flex">
-                            <div className="self-stretch justify-start items-end gap-[5.01px] inline-flex">
-                              <div className="w-[65px] flex-col justify-start items-start gap-1 inline-flex">
-                                <div className="text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
-                                  {value.arrivalDate.format("HH:mm")}
-                                </div>
-                                <div className="text-primary text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
-                                  CGK
-                                </div>
-                                <div className="self-stretch text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
-                                  {value.arrivalDate.format("D MMM")}
-                                </div>
-                              </div>
-                              <div className="grow shrink basis-0 self-stretch pt-3 flex-col justify-between items-center inline-flex">
-                                <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Plus Jakarta Sans'] ">
-                                  {" "}
-                                  {hours}h {minutes}m{}
-                                </div>
-                                <div className="w-[225px] pt-3 justify-center items-center gap-1 inline-flex">
-                                  <div className="w-[16.39px] h-[15.58px] relative">
-                                    <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-primary rounded-full" />
-                                    <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-primary rounded-full" />
-                                  </div>
-                                  <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
-                                  <div className="w-10 rotate-45 justify-center items-center flex">
-                                    <img src="airplane.svg" alt="" />
-                                  </div>
-                                  <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
-                                  <div className="w-[16.39px] h-[15.58px] relative">
-                                    <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-primary rounded-full" />
+                  {
+                    scheduleToRender.map((value) => {
+                      if (schedules.length > 0 && scheduleToRender.length == 0) {
+                        if (schedules.length > 4) {
+                          setScheduleToRender(schedules.slice((page - 1) * 4, page * 4));
 
-                                    <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-primary rounded-full" />
+                        } else {
+                          setScheduleToRender(schedules.slice(0, schedules.length));
+                        }
+                      }
+                      const hours = Math.floor(value.duration / 60);
+                      const minutes = value.duration % 60;
+                      return <>
+                        <a
+                          onClick={() => {
+                            handleOpen(value)
+                          }}
+                          className="justify-center items-center"
+                        >
+                          <div className=" shadow justify-center items-center inline-flex">
+                            <div className="grow shrink basis-0 px-6 pb-5 bg-white rounded-xl flex-col justify-center items-center gap-2.5 inline-flex">
+                              <div className="self-stretch justify-start items-end gap-[5.01px] inline-flex">
+                                <div className="w-[65px] flex-col justify-start items-start gap-1 inline-flex">
+                                  <div className="text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
+                                    {value.arrivalDate.format("HH:mm")}
+                                  </div>
+                                  <div className="text-primary text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
+                                    {value.from.abv}
+                                  </div>
+                                  <div className="self-stretch text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                                    {value.arrivalDate.format("D MMM")}
                                   </div>
                                 </div>
-                                <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Plus Jakarta Sans'] ">
-                                  Direct
+                                <div className="grow shrink basis-0 self-stretch pt-3 flex-col justify-between items-center inline-flex">
+                                  <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Plus Jakarta Sans'] ">
+                                    {" "}
+                                    {hours}h {minutes}m{ }
+                                  </div>
+                                  <div className="w-[225px] pt-3 justify-center items-center gap-1 inline-flex">
+                                    <div className="w-[16.39px] h-[15.58px] relative">
+                                      <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-primary rounded-full" />
+                                      <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-primary rounded-full" />
+                                    </div>
+                                    <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
+                                    <div className="w-10 rotate-45 justify-center items-center flex">
+                                      <img src="airplane.svg" alt="" />
+                                    </div>
+                                    <div className="grow shrink basis-0 h-[0px] border border-gray-200"></div>
+                                    <div className="w-[16.39px] h-[15.58px] relative">
+                                      <div className="w-[16.39px] h-[15.58px] left-0 top-0 absolute opacity-50 bg-primary rounded-full" />
+
+                                      <div className="w-[9.84px] h-[9.35px] left-[3.28px] top-[3.12px] absolute bg-primary rounded-full" />
+                                    </div>
+                                  </div>
+                                  <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Plus Jakarta Sans'] ">
+                                    Direct
+                                  </div>
+                                </div>
+                                <div className="w-[61px] flex-col justify-start items-end gap-1 inline-flex">
+                                  <div className="text-right text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
+                                    {value.arrivalDate
+                                      .add(value.duration, "minute")
+                                      .format("HH:mm")}
+                                  </div>
+                                  <div className="text-right text-primary text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
+                                    {value.to.abv}
+                                  </div>
+                                  <div className="self-stretch text-right text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                                    {value.arrivalDate
+                                      .add(value.duration, "minute")
+                                      .format("D MMM")}
+                                  </div>
                                 </div>
                               </div>
-                              <div className="w-[61px] flex-col justify-start items-end gap-1 inline-flex">
-                                <div className="text-right text-neutral-900 text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
-                                  {value.arrivalDate
-                                    .add(value.duration, "minute")
-                                    .format("HH:mm")}
+                            </div>
+                            <div className="self-stretch px-6 py-5 bg-white rounded-xl flex-col justify-center items-start gap-3 inline-flex">
+                              <div className="self-stretch justify-start items-center gap-2 inline-flex">
+                                <div className="w-[31.60px] h-[31.60px] relative">
+                                  <LogoImage />
                                 </div>
-                                <div className="text-right text-primary text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
-                                  SIN
+                                <div className="flex-col justify-center items-start inline-flex">
+                                  <div className="text-center text-neutral-900 text-xs font-semibold font-['Plus Jakarta Sans'] leading-none">
+                                    SE 955
+                                  </div>
+                                  <div className="text-center text-gray-500 text-xs font-light font-['Plus Jakarta Sans'] leading-none">
+                                    Boeing 777-300ER
+                                  </div>
                                 </div>
-                                <div className="self-stretch text-right text-gray-500 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
-                                  {value.arrivalDate
-                                    .add(value.duration, "minute")
-                                    .format("D MMM")}
+                              </div>
+                              <div className="self-stretch justify-start items-center gap-1 inline-flex">
+                                <div className="text-primary text-xl font-bold font-['Plus Jakarta Sans'] leading-7">
+                                  IDR 1,950K
+                                </div>
+                                <div className="text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">
+                                  /pax
                                 </div>
                               </div>
                             </div>
                           </div>
-                          <div className="self-stretch px-6 py-5 bg-white rounded-xl flex-col justify-center items-start gap-3 inline-flex">
-                            <div className="self-stretch justify-start items-center gap-2 inline-flex">
-                              <div className="w-[31.60px] h-[31.60px] relative">
-                                <LogoImage />
-                              </div>
-                              <div className="flex-col justify-center items-start inline-flex">
-                                <div className="text-center text-neutral-900 text-xs font-semibold font-['Plus Jakarta Sans'] leading-none">
-                                  SE 955
-                                </div>
-                                <div className="text-center text-gray-500 text-xs font-light font-['Plus Jakarta Sans'] leading-none">
-                                  Boeing 777-300ER
-                                </div>
-                              </div>
-                            </div>
-                            <div className="self-stretch justify-start items-center gap-1 inline-flex">
-                              <div className="text-primary text-xl font-bold font-['Plus Jakarta Sans'] leading-7">
-                                IDR 1,950K
-                              </div>
-                              <div className="text-gray-500 text-base font-medium font-['Plus Jakarta Sans'] leading-normal">
-                                /pax
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <Pagination
-                          className="text-center pt-8"
-                          onChange={onChangePage}
-                          defaultCurrent={1}
-                          total={schedules.length}
-                          pageSize={4}
-                        />
-                      </a>
-                    );
-                  })}
+                        </a>
+
+                      </>
+                    })}
                 </div>
+                {
+                  schedules.length > 0 ?
+                    <Pagination
+                      className="text-center pt-8"
+                      onChange={onChangePage}
+                      defaultCurrent={1}
+                      total={schedules.length}
+                      pageSize={4}
+                    />
+                    :
+                    <div></div>
+                }
               </div>
             )}
           </div>
@@ -901,6 +948,10 @@ const Index: React.FC = () => {
             </div>
           </div>
         }
+        maskClosable={true}
+        onCancel={() => {
+          setIsModalOpen(false);
+        }}
         closable={true}
         width={"fit-content"}
         footer={<div></div>}
@@ -908,8 +959,8 @@ const Index: React.FC = () => {
         <div className="w-full rounded-3xl flex-col justify-start items-start inline-flex">
           <div className="pt-8 px-8 justify-center items-center gap-8 inline-flex">
             <div className="self-stretch flex-col justify-start items-start gap-6 inline-flex">
-              <div className="w-[382px] h-6 text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                Jakarta (CGK) to Singapore (SIN)
+              <div className=" h-6 text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                {modalSched?.from.city + " (" + modalSched?.from.abv + ") to " + modalSched?.to.city + " (" + modalSched?.to.abv + ")"}
               </div>
               <div className="w-[428px] h-[391px] relative">
                 <div className="left-0 top-[4px] absolute text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
@@ -917,45 +968,51 @@ const Index: React.FC = () => {
                 </div>
                 <div className="px-3 py-1 left-[115px] top-0 absolute bg-emerald-100 rounded-lg justify-center items-center gap-2.5 inline-flex">
                   <div className="text-teal-700 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
-                    1h 45m
+                    {modalSched?.duration + "m"}
                   </div>
                 </div>
                 <div className="h-14 left-[2px] top-[48px] absolute flex-col justify-center items-center gap-2 inline-flex">
                   <div className="self-stretch text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                    10:25
+                    {modalSched?.departureDate.format("HH:mm")}
                   </div>
                   <div className="self-stretch text-center text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
-                    Jan 16
+                    {modalSched?.departureDate.format("MMM DD")}
+
                   </div>
                 </div>
                 <div className="h-14 left-0 top-[335px] absolute flex-col justify-center items-center gap-2 inline-flex">
                   <div className="self-stretch text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                    13:10
+                    {modalSched?.arrivalDate.format("HH:mm")}
+
                   </div>
                   <div className="self-stretch text-center text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
-                    Jan 16
+                    {modalSched?.arrivalDate.format("MMM DD")}
+
                   </div>
                 </div>
                 <div className="left-[146px] top-[48px] absolute flex-col justify-start items-start gap-1.5 inline-flex">
-                  <div className="w-[282px] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                    Jakarta (CGK), Indonesia
+                  <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                    {modalSched?.from.city + " (" + modalSched?.from.abv + "), Indonesia"}
                   </div>
-                  <div className="w-[282px] text-neutral-900 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
-                    Soekarno Hatta International
+                  <div className="text-neutral-900 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
+                    {modalSched?.from.name}
+
                   </div>
-                  <div className="w-[282px] text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
-                    Terminal 4
+                  <div className="text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
+                    Terminal X
                   </div>
                 </div>
                 <div className="left-[146px] top-[307px] absolute flex-col justify-start items-start gap-1.5 inline-flex">
-                  <div className="w-[282px] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                    Singapore (SIN), Singapore
+                  <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                    {modalSched?.to.city + " (" + modalSched?.to.abv + "), Indonesia"}
+
                   </div>
-                  <div className="w-[282px] text-neutral-900 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
-                    Changi
+                  <div className="text-neutral-900 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
+                    {modalSched?.to.name}
+
                   </div>
-                  <div className="w-[282px] text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
-                    Terminal 2
+                  <div className="text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
+                    Terminal X
                   </div>
                 </div>
                 <div className="w-5 h-[300px] left-[94px] top-[56px] absolute">
@@ -986,7 +1043,7 @@ const Index: React.FC = () => {
                     </div>
                     <div className="flex-col justify-center items-start gap-1.5 inline-flex">
                       <div className="text-slate-700 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
-                        SkyExplorer • SE 955
+                        {modalSched?.plane.name + " • " + modalSched?.plane.code}
                       </div>
                       <div className="flex-col justify-center items-start gap-1 flex">
                         <div className="text-center text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">
@@ -997,7 +1054,7 @@ const Index: React.FC = () => {
                   </div>
                 </div>
                 <div className="left-[8px] top-[199px] absolute text-center text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
-                  1h 45m
+                  {modalSched?.duration + "m"}
                 </div>
               </div>
             </div>

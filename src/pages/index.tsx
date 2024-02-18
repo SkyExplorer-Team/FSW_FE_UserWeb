@@ -44,7 +44,6 @@ interface Airport {
 }
 
 const Index: React.FC = () => {
-  const token = localStorage.getItem("access_token");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -117,11 +116,11 @@ const Index: React.FC = () => {
   }
 
   useEffect(() => {
+    if (accessToken === null) {
+      navigate("/login");
+    }
     if (toAirportDetails.length <= 0) {
       console.log(airports);
-      if (accessToken === null) {
-        navigate("/login");
-      }
       fetchInitialAirport();
       fetchName();
       fetchInitialAirport();
@@ -300,9 +299,8 @@ const Index: React.FC = () => {
                         )}
                       >
                         <a
-                          className={`hover:text-primary ${
-                            isClicked ? "clicked" : ""
-                          }`}
+                          className={`hover:text-primary ${isClicked ? "clicked" : ""
+                            }`}
                           onClick={handleButtonClick}
                         >
                           <Space>
@@ -331,9 +329,8 @@ const Index: React.FC = () => {
                         )}
                       >
                         <a
-                          className={`hover:text-primary ${
-                            isClicked ? "clicked" : ""
-                          }`}
+                          className={`hover:text-primary ${isClicked ? "clicked" : ""
+                            }`}
                           onClick={handleButtonClick}
                         >
                           <Space>
