@@ -288,7 +288,7 @@ const SignIn: React.FC = () => {
                     onClick={handleSignIn}
                     type="submit"
                     disabled={disabledLogin && password == ""}
-                    className="flex w-full mb-4 justify-center rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm"
+                    className="flex w-full mb-4 justify-center rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold text-white shadow-sm"
                   >
                     <p className="p-2">Sign In</p>
                   </button>

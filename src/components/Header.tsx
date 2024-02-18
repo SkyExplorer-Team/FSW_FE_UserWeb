@@ -101,7 +101,6 @@ const HeaderComponent: React.FC = () => {
       style={{
         top: 0,
         zIndex: 1,
-        marginBottom: "12px",
         paddingTop: "4px",
         paddingBottom: "8px",
         position: "sticky",

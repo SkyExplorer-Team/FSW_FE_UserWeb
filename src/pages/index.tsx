@@ -362,7 +362,7 @@ const Index: React.FC = () => {
                       <div className=" justify-center items-center gap-2 flex">
                         <div className="grow shrink basis-0 flex-col justify-start items-start gap-2 inline-flex">
                           <div className="bg-white justify-start items-start gap-2.5 inline-flex">
-                            <div className="text-neutral text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                            <div className="text-neutral text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
                               From
                             </div>
                           </div>
@@ -536,7 +536,7 @@ const Index: React.FC = () => {
                         <div className="flex-row ">
                           <div className="grow shrink basis-0 flex-col  justify-start items-start mr-3 gap-2 inline-flex">
                             <div className="bg-white justify-start items-start inline-flex">
-                              <div className="text-neutral text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                              <div className="text-neutral text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
                                 Departure Date
                               </div>
                             </div>
@@ -611,23 +611,20 @@ const Index: React.FC = () => {
         </Footer>
       </Layout>{" "}
       <Modal
-        className=" bg-white rounded-2xl "
+        className="font-['Plus Jakarta Sans']"
         open={isModalOpen}
-        title="Alternative Departure Date"
-        closable={true}
-        footer={[
-          <button
-            onClick={handleOk}
-            className="bg-white pr-6 border-neutral-light font-bold items-center justify-center"
-          >
-            <p className="p-2">Close</p>
-          </button>,
-        ]}
+        title={
+          <div style={{ textAlign: "center" }}>Alternative Departure Date</div>
+        }
+        closable={false}
+        onCancel={() => setIsModalOpen(false)}
+        footer={null}
+        style={{ borderRadius: "16px", border: "1px solid white" }}
       >
-        <div className="rounded-2xl">
+        <div>
           <div className="justify-start w-full items-start gap-6 ">
             <div className="flex-col justify-start items-center gap-3 w-full">
-              <div className="self-stretch h-[106px] py-4 flex-col justify-center items-center gap-2 flex">
+              <div className="self-stretch h-[106px]  flex-col justify-center items-center gap-2 flex">
                 <div className="justify-center items-center m-auto gap-5 inline-flex">
                   <div className="w-[100px] flex-col justify-start items-center inline-flex">
                     <div className="text-center text-neutral-900 text-4xl font-bold font-['Plus Jakarta Sans'] leading-[54px]">
@@ -669,8 +666,8 @@ const Index: React.FC = () => {
                   }}
                   className="self-stretch justify-start items-center inline-flex"
                 >
-                  <div className="w-[88px] self-stretch px-4 py-2.5 bg-emerald-400 flex-col justify-center items-start gap-1 inline-flex">
-                    <div className="self-stretch text-white text-xs font-medium font-['Plus Jakarta Sans'] leading-none">
+                  <div className="w-[88px] self-stretch px-4 py-2.5 bg-primary flex-col justify-center items-start gap-1 inline-flex">
+                    <div className="self-stretch text-white text-xs font-normal font-['Plus Jakarta Sans'] leading-none">
                       Depart
                     </div>
                     <div className="self-stretch text-white text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
@@ -680,9 +677,9 @@ const Index: React.FC = () => {
                       ).format("DD MMM [\n]ddd") ?? ""}
                     </div>
                   </div>
-                  <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-emerald-100 flex-col justify-center items-center gap-2 inline-flex">
+                  <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-primary-background flex-col justify-center items-center gap-2 inline-flex">
                     <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
-                      <div className="self-stretch text-teal-700 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                      <div className="self-stretch text-teal-700 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
                         From
                       </div>
                       <div className="self-stretch text-teal-700 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">
@@ -711,7 +708,7 @@ const Index: React.FC = () => {
                   className="self-stretch justify-start items-center inline-flex"
                 >
                   <div className="w-[88px] self-stretch px-4 py-2.5 bg-gray-100 flex-col justify-center items-start gap-1 inline-flex">
-                    <div className="self-stretch text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">
+                    <div className="self-stretch text-gray-500 text-xs font-normal font-['Plus Jakarta Sans'] leading-none">
                       Depart
                     </div>
                     <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
@@ -722,7 +719,7 @@ const Index: React.FC = () => {
                   </div>
                   <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-white flex-col justify-center items-center gap-2 inline-flex">
                     <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
-                      <div className="self-stretch text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                      <div className="self-stretch text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
                         From
                       </div>
                       <div className="self-stretch text-neutral-900 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">
@@ -752,7 +749,7 @@ const Index: React.FC = () => {
                 >
                   {" "}
                   <div className="w-[88px] self-stretch px-4 py-2.5 bg-gray-100 flex-col justify-center items-start gap-1 inline-flex">
-                    <div className="self-stretch text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">
+                    <div className="self-stretch text-gray-500 text-xs font-normal font-['Plus Jakarta Sans'] leading-none">
                       Depart
                     </div>
                     <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
@@ -763,7 +760,7 @@ const Index: React.FC = () => {
                   </div>
                   <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-white flex-col justify-center items-center gap-2 inline-flex">
                     <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
-                      <div className="self-stretch text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                      <div className="self-stretch text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
                         No Flight
                       </div>
                       <div className="self-stretch text-neutral-900 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">
@@ -793,7 +790,7 @@ const Index: React.FC = () => {
                 >
                   {" "}
                   <div className="w-[88px] self-stretch px-4 py-2.5 bg-gray-100 flex-col justify-center items-start gap-1 inline-flex">
-                    <div className="self-stretch text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">
+                    <div className="self-stretch text-gray-500 text-xs font-normal font-['Plus Jakarta Sans'] leading-none">
                       Depart
                     </div>
                     <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
@@ -804,7 +801,7 @@ const Index: React.FC = () => {
                   </div>
                   <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-white flex-col justify-center items-center gap-2 inline-flex">
                     <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
-                      <div className="self-stretch text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                      <div className="self-stretch text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
                         From
                       </div>
                       <div className="self-stretch text-neutral-900 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">
@@ -834,7 +831,7 @@ const Index: React.FC = () => {
                 >
                   {" "}
                   <div className="w-[88px] self-stretch px-4 py-2.5 bg-gray-100 flex-col justify-center items-start gap-1 inline-flex">
-                    <div className="self-stretch text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">
+                    <div className="self-stretch text-gray-500 text-xs font-normal font-['Plus Jakarta Sans'] leading-none">
                       Depart
                     </div>
                     <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
@@ -845,7 +842,7 @@ const Index: React.FC = () => {
                   </div>
                   <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-white flex-col justify-center items-center gap-2 inline-flex">
                     <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
-                      <div className="self-stretch text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                      <div className="self-stretch text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
                         From
                       </div>
                       <div className="self-stretch text-neutral-900 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">
@@ -875,7 +872,7 @@ const Index: React.FC = () => {
                 >
                   {" "}
                   <div className="w-[88px] self-stretch px-4 py-2.5 bg-gray-100 flex-col justify-center items-start gap-1 inline-flex">
-                    <div className="self-stretch text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">
+                    <div className="self-stretch text-gray-500 text-xs font-normal font-['Plus Jakarta Sans'] leading-none">
                       Depart
                     </div>
                     <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
@@ -886,7 +883,7 @@ const Index: React.FC = () => {
                   </div>
                   <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-white flex-col justify-center items-center gap-2 inline-flex">
                     <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
-                      <div className="self-stretch text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                      <div className="self-stretch text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
                         From
                       </div>
                       <div className="self-stretch text-neutral-900 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">
@@ -916,7 +913,7 @@ const Index: React.FC = () => {
                 >
                   {" "}
                   <div className="w-[88px] self-stretch px-4 py-2.5 bg-gray-100 flex-col justify-center items-start gap-1 inline-flex">
-                    <div className="self-stretch text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">
+                    <div className="self-stretch text-gray-500 text-xs font-normal font-['Plus Jakarta Sans'] leading-none">
                       Depart
                     </div>
                     <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
@@ -927,7 +924,7 @@ const Index: React.FC = () => {
                   </div>
                   <div className="grow shrink basis-0 self-stretch pl-[100px] pr-4 py-2 bg-white flex-col justify-center items-center gap-2 inline-flex">
                     <div className="self-stretch h-[52px] flex-col justify-center items-start gap-1 flex">
-                      <div className="self-stretch text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                      <div className="self-stretch text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
                         No Flight
                       </div>
                       <div className="self-stretch text-neutral-900 text-lg font-bold font-['Plus Jakarta Sans'] leading-7">
@@ -940,7 +937,7 @@ const Index: React.FC = () => {
             </div>
           </div>
           <div className="self-stretch pt-8 flex-col justify-start items-start gap-6 flex">
-            <div className=" text-center text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+            <div className=" text-center text-neutral text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
               The presented fare is the lowest available for each date and
               covers the entire journey, selected fare category, pertains to a
               single adult traveler.
