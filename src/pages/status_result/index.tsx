@@ -28,7 +28,7 @@ import HeaderComponent from "../../components/Header";
 import HomeFooter from "../../components/home_footer";
 import IconInfo from "/public/assets/info-circle.svg";
 
-import GambarPocket from "../../../public/assets/gambar-samping.png";
+import GambarPocket from "./assets/gambar-samping.png";
 import FlightCard from "../../components/FlightCard";
 import StatusFlightDetail from "../../components/StatusFlightDetail";
 

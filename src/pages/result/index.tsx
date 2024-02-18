@@ -35,7 +35,7 @@ import PassengerField from "../../components/passenger_field";
 import LogoImage from "../../components/LogoImage";
 import IconMenu from "../../../public/assets/menu.svg";
 import IconUser from "../../../public/assets/user.svg";
-import GambarPocket from "../../../public/assets/gambar-samping.png";
+import GambarPocket from "/assets/gambar-samping.png";
 
 import Airplane from "/assets/airplane.svg";
 
