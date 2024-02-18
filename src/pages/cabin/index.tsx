@@ -105,8 +105,8 @@ const AppLayout: React.FC = () => {
               <p className="text-neutral-link text-lg font-normal font-['Plus Jakarta Sans'] leading-7 mt-5 md:mt-0">
                 More in Cabin
               </p>
-              <div className="mt-5 flex-row md:flex-col overflow-x-auto md:overflow-hidden">
-                <a href="#" className="relative">
+              <div className="mt-5 flex-row md:flex-col overflow-x-auto md:overflow-hidden gap-3">
+                <a href="#" className="relative mb-0 md:mb-5">
                   <img
                     src="/public/assets/cabin-first-class.png"
                     alt="Link Gambar First Class"
@@ -129,7 +129,7 @@ const AppLayout: React.FC = () => {
                     />
                   </div>
                 </a>
-                <a href="#" className="relative">
+                <a href="#" className="relative mb-0 md:mb-5">
                   <img
                     src="/public/assets/cabin-bussiness-class.png"
                     alt="Link Gambar Bussiness Class"
@@ -152,7 +152,7 @@ const AppLayout: React.FC = () => {
                     />
                   </div>
                 </a>
-                <a href="#" className="relative">
+                <a href="#" className="relative mb-0 md:mb-5">
                   <img
                     src="/public/assets/cabin-economy-class.png"
                     alt="Link Gambar Economy Class"
