@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Select, Form, Input, Typography, DatePicker } from "antd";
 import type { DatePickerProps } from "antd";
 import { FlagIcon, FlagIconCode } from "react-flag-kit";
+import dayjs, { Dayjs } from "dayjs";
 
 interface ContactFormData {
   email: string;
@@ -11,9 +12,20 @@ interface ContactFormData {
 const { Option } = Select;
 
 const TravelDocument: React.FC = () => {
-    
-
   const nationalityOptions = [
+    { flag: "🇺🇸", name: "United States", value: "US" },
+    { flag: "🇬🇧", name: "United Kingdom", value: "GB" },
+    { flag: "🇨🇦", name: "Canada", value: "CA" },
+    { flag: "🇦🇺", name: "Australia", value: "AU" },
+    { flag: "🇩🇪", name: "Germany", value: "DE" },
+    { flag: "🇫🇷", name: "France", value: "FR" },
+    { flag: "🇯🇵", name: "Japan", value: "JP" },
+    { flag: "🇮🇳", name: "India", value: "IN" },
+    { flag: "🇧🇷", name: "Brazil", value: "BR" },
+    { flag: "🇮🇩", name: "Indonesia", value: "ID" },
+    // Add more nationality options as needed
+  ];
+  const nationalityOptionsPassport = [
     { flag: "🇺🇸", name: "United States", value: "US" },
     { flag: "🇬🇧", name: "United Kingdom", value: "GB" },
     { flag: "🇨🇦", name: "Canada", value: "CA" },
@@ -38,10 +50,16 @@ const TravelDocument: React.FC = () => {
       });
     };
 
+  const [selectedNationalityPassport, setSelectedNationalityPassport] =
+    useState<string>("");
   const [selectedNationality, setSelectedNationality] = useState<string>("");
 
   const handleChangeNationality = (value: string) => {
     setSelectedNationality(value);
+    // You may want to update your form values or state here
+  };
+  const handleChangeNationalityPassport = (value: string) => {
+    setSelectedNationalityPassport(value);
     // You may want to update your form values or state here
   };
 
@@ -62,11 +80,14 @@ const TravelDocument: React.FC = () => {
           >
             Passport Number
           </Typography.Title>
-          <Input
-            type="number"
-            placeholder="Enter your passport number"
-            style={{ height: "40px" }}
-          />
+          <Form.Item name="passport_number" style={{ margin: 0 }}>
+            <Input
+              type="number"
+              placeholder="Enter your passport number"
+              style={{ height: "40px" }}
+              defaultValue="912398712938987"
+            />
+          </Form.Item>
         </Form.Item>
         <Form.Item>
           <Typography.Title
@@ -75,11 +96,14 @@ const TravelDocument: React.FC = () => {
           >
             Issue Date
           </Typography.Title>
-          <DatePicker
-            onChange={onChange}
-            placeholder="Enter date of issue"
-            style={{ width: "100%", height: "40px" }}
-          />
+          <Form.Item style={{ margin: 0 }}>
+            <DatePicker
+              onChange={onChange}
+              placeholder="Enter date of issue"
+              style={{ width: "100%", height: "40px" }}
+              value={dayjs("2004-01-08")}
+            />
+          </Form.Item>
         </Form.Item>
         <Form.Item>
           <Typography.Title
@@ -92,6 +116,7 @@ const TravelDocument: React.FC = () => {
             onChange={onChange}
             placeholder="Enter date of expiry"
             style={{ width: "100%", height: "40px" }}
+            value={dayjs("2004-01-08")}
           />
         </Form.Item>
         <Form.Item>
@@ -104,14 +129,15 @@ const TravelDocument: React.FC = () => {
           <Select
             showSearch
             optionFilterProp="children"
-            onChange={handleChangeNationality}
-            value={selectedNationality}
+            onChange={handleChangeNationalityPassport}
+            // value={selectedNationalityPassport}
+            value="Indonesia"
             className="font-normal"
             placeholder="Select your nationality"
-            style={{ height: "40px" }}            
+            style={{ height: "40px" }}
           >
-            {nationalityOptions.map((option) => (
-              <Option key={option.value} value={option.value}>
+            {nationalityOptionsPassport.map((option) => (
+              <Option key={option.name} value={option.name}>
                 <div style={{ display: "flex", fontWeight: "bold" }}>
                   <FlagIcon
                     code={option.value as FlagIconCode}
@@ -123,9 +149,11 @@ const TravelDocument: React.FC = () => {
               </Option>
             ))}
           </Select>
-        </Form.Item>                
+        </Form.Item>
 
-        <h2 className="title-personal_info" style={{ marginBottom: "20px" }}>National Identity</h2>        
+        <h2 className="title-personal_info" style={{ marginBottom: "20px" }}>
+          National Identity
+        </h2>
         <Form.Item>
           <Typography.Title
             style={{ paddingBottom: 0, marginBottom: 0, marginTop: 10 }}
@@ -134,6 +162,7 @@ const TravelDocument: React.FC = () => {
             National ID Number
           </Typography.Title>
           <Input
+            value="9817298378917239"
             type="number"
             placeholder="Enter your National Identity Number"
             style={{ height: "40px" }}
@@ -150,13 +179,14 @@ const TravelDocument: React.FC = () => {
             showSearch
             optionFilterProp="children"
             onChange={handleChangeNationality}
-            value={selectedNationality}
+            // value={selectedNationality}
+            value="Indonesia"
             className="font-normal"
             placeholder="Select your nationality"
-            style={{ height: "40px" }}            
+            style={{ height: "40px" }}
           >
             {nationalityOptions.map((option) => (
-              <Option key={option.value} value={option.value}>
+              <Option key={option.name} value={option.name}>
                 <div style={{ display: "flex", fontWeight: "bold" }}>
                   <FlagIcon
                     code={option.value as FlagIconCode}
@@ -168,7 +198,7 @@ const TravelDocument: React.FC = () => {
               </Option>
             ))}
           </Select>
-        </Form.Item>   
+        </Form.Item>
         <h2 className="title-personal_info">Emergency Contact</h2>
         <Form.Item>
           <Typography.Title
@@ -178,12 +208,19 @@ const TravelDocument: React.FC = () => {
             First and Middle Name
           </Typography.Title>
           <Input
-            placeholder="Your First & Middle Name"            
+            value="Owenn"
+            placeholder="Your First & Middle Name"
             style={{ height: "40px" }}
           />
-          <label style={{ color: "var(--Neutral-400, #99A2B2)", fontSize: "14px", fontWeight: "400" }}>            
+          <label
+            style={{
+              color: "var(--Neutral-400, #99A2B2)",
+              fontSize: "14px",
+              fontWeight: "400",
+            }}
+          >
             Middle name is optional
-          </label>          
+          </label>
         </Form.Item>
         <Form.Item>
           <Typography.Title
@@ -193,12 +230,12 @@ const TravelDocument: React.FC = () => {
             Last Name
           </Typography.Title>
           <Input
-            placeholder="Your Last Name"            
+            placeholder="Your Last Name"
+            value="Susanto"
             style={{ height: "40px" }}
-          />          
+          />
         </Form.Item>
-        <Form.Item                    
-        >
+        <Form.Item>
           <Typography.Title
             style={{ paddingBottom: 0, marginBottom: 0 }}
             level={5}
@@ -238,7 +275,7 @@ const TravelDocument: React.FC = () => {
             style={{
               display: "inline-block",
               width: "80%",
-            }}            
+            }}
           >
             <Input
               size="large"
@@ -246,6 +283,7 @@ const TravelDocument: React.FC = () => {
               onChange={(e) =>
                 handleContactFormChange("phoneNumber")("+62" + e.target.value)
               }
+              defaultValue="85161644408"
             />
           </Form.Item>
         </Form.Item>
