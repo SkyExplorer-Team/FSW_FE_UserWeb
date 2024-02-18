@@ -1,9 +1,6 @@
 import React from "react";
 import { Layout, Breadcrumb } from "antd";
-import Logo from "../../components/Logo";
-import ReactCountryFlag from "react-country-flag";
 import { useNavigate } from "react-router-dom";
-import SkeletonAvatar from "antd/lib/skeleton/Avatar";
 import HeaderComponent from "../../components/Header";
 import HomeFooter from "../../components/home_footer";
 import IconExplore from "/public/assets/explore.svg";
@@ -19,13 +16,13 @@ const AppLayout: React.FC = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <HeaderComponent />
-      <Content style={{ position: "relative", zIndex: 1, height: "auto" }}>
+      <Content style={{ height: "auto" }}>
         <div className="bg-primary h-[200px] relative flex items-center justify-center z-2"></div>
         <div className="my-5 mx-[20px] bg-white rounded-lg p-5 h-auto mt-[-150px] z-3 relative">
           <div className="flex flex-col md:flex-row">
-            <div className="flex flex-col w-[60%]">
+            <div className="flex flex-col w-full md:w-[60%]">
               <Breadcrumb style={{ marginBottom: "16px" }}>
-                <Breadcrumb.Item>
+                <Breadcrumb.Item className="flex items-center">
                   <div
                     className="breadcrumb-item flex items-center gap-2 bg-neutral-background rounded-xl p-2"
                     onClick={() => navigate("/")}
@@ -57,7 +54,7 @@ const AppLayout: React.FC = () => {
                   alt="Gambar Personalized Services Pada Cabin"
                   className="w-[320px] h-[160px] rounded-xl"
                 />
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 items-center md:items-start">
                   <h2 className="text-2xl font-semibold font-['Plus Jakarta Sans']">
                     Personalized Services
                   </h2>
@@ -67,9 +64,9 @@ const AppLayout: React.FC = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col md:flex-row gap-5 mt-5">
+              <div className="flex flex-col-reverse md:flex-row gap-3 mt-5">
                 <div className="flex flex-col gap-3">
-                  <h2 className="text-2xl font-semibold font-['Plus Jakarta Sans']">
+                  <h2 className="text-2xl font-semibold font-['Plus Jakarta Sans'] flex justify-center md:justify-normal items-center md:items-start">
                     Eco-Friendly Travel
                   </h2>
                   <p className="text-md font-normal font-['Plus Jakarta Sans'] leading-7">
@@ -89,7 +86,7 @@ const AppLayout: React.FC = () => {
                   alt="Gambar Exceptional Cuisine Pada Cabin"
                   className="w-[320px] h-[160px] rounded-xl"
                 />
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 items-center md:items-start">
                   <h2 className="text-2xl font-semibold font-['Plus Jakarta Sans']">
                     Exceptional Cuisine
                   </h2>
@@ -104,17 +101,79 @@ const AppLayout: React.FC = () => {
               className="border-l border-gray-500 h-16 mx-4 hidden md:block"
               style={{ marginTop: "20px" }}
             ></div>
-            <div className="flex flex-row md:flex-col w-[35%]">
-              <p className="text-neutral-link text-lg font-normal font-['Plus Jakarta Sans'] leading-">
+            <div className="flex flex-col w-full md:w-[35%]">
+              <p className="text-neutral-link text-lg font-normal font-['Plus Jakarta Sans'] leading-7 mt-5 md:mt-0">
                 More in Cabin
               </p>
-              <div className="mt-5">
-                <a href="#">
+              <div className="mt-5 flex-row md:flex-col overflow-x-auto md:overflow-hidden">
+                <a href="#" className="relative">
                   <img
                     src="/public/assets/cabin-first-class.png"
-                    alt=""
+                    alt="Link Gambar First Class"
                     className="w-[280px] h-[160px] rounded-xl"
                   />
+                  <div
+                    className="absolute top-0 left-0 right-0 bottom-0 w-[280px] h-[175px] flex px-3 justify-start items-center gap-4"
+                    style={{
+                      background:
+                        "linear-gradient(to top, rgba(0,0,0,0.3), rgba(255,255,255,0.3))",
+                      borderRadius: "16px",
+                      paddingTop: "120px",
+                    }}
+                  >
+                    <p className="text-white">First Class</p>
+                    <img
+                      src="/public/assets/chevron-right-white.svg"
+                      alt="Icon Chevron"
+                      className="w-[20px] h-[20px]"
+                    />
+                  </div>
+                </a>
+                <a href="#" className="relative">
+                  <img
+                    src="/public/assets/cabin-bussiness-class.png"
+                    alt="Link Gambar Bussiness Class"
+                    className="w-[280px] h-[160px] rounded-xl"
+                  />
+                  <div
+                    className="absolute top-0 left-0 right-0 bottom-0 w-[280px] h-[175px] flex px-3 justify-start items-center gap-4"
+                    style={{
+                      background:
+                        "linear-gradient(to top, rgba(0,0,0,0.3), rgba(255,255,255,0.3))",
+                      borderRadius: "16px",
+                      paddingTop: "120px",
+                    }}
+                  >
+                    <p className="text-white">Business Class</p>
+                    <img
+                      src="/public/assets/chevron-right-white.svg"
+                      alt="Icon Chevron"
+                      className="w-[20px] h-[20px]"
+                    />
+                  </div>
+                </a>
+                <a href="#" className="relative">
+                  <img
+                    src="/public/assets/cabin-economy-class.png"
+                    alt="Link Gambar Economy Class"
+                    className="w-[280px] h-[160px] rounded-xl"
+                  />
+                  <div
+                    className="absolute top-0 left-0 right-0 bottom-0 w-[280px] h-[175px] flex px-3 justify-start items-center gap-4"
+                    style={{
+                      background:
+                        "linear-gradient(to top, rgba(0,0,0,0.3), rgba(255,255,255,0.3))",
+                      borderRadius: "16px",
+                      paddingTop: "120px",
+                    }}
+                  >
+                    <p className="text-white">Economy Class</p>
+                    <img
+                      src="/public/assets/chevron-right-white.svg"
+                      alt="Icon Chevron"
+                      className="w-[20px] h-[20px]"
+                    />
+                  </div>
                 </a>
               </div>
             </div>
