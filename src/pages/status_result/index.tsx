@@ -26,9 +26,9 @@ import SkeletonAvatar from "antd/lib/skeleton/Avatar";
 import Logo from "../../components/Logo";
 import HeaderComponent from "../../components/Header";
 import HomeFooter from "../../components/home_footer";
-import IconInfo from "/public/assets/info-circle.svg";
+import IconInfo from "/assets/info-circle.svg";
 
-import GambarPocket from "./assets/gambar-samping.png";
+import GambarPocket from "/assets/gambar-samping.png";
 import FlightCard from "../../components/FlightCard";
 import StatusFlightDetail from "../../components/StatusFlightDetail";
 
