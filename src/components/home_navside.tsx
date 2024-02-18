@@ -1,4 +1,4 @@
-import SkeletonAvatar from "antd/lib/skeleton/Avatar";
+import React from "react";
 
 const HomeNavSide: React.FC = () => {
   return (
@@ -20,7 +20,7 @@ const HomeNavSide: React.FC = () => {
         <div className="col-start-1 col-end-12">
           <div className="  bg-white text-sm leading-6 ring-gray-900/5">
             <div className="p-4">
-              <div className="group relative flex gap-x-6 rounded-lg p-3 hover:bg-[#EAFDF6]">
+              <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center">
                 <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-white group-hover:bg-[#EAFDF6]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +71,7 @@ const HomeNavSide: React.FC = () => {
                     />
                   </svg>
                 </div>
-                <div className="flex items-center justify-center text-center">
+                <div className="items-center">
                   <a
                     href="#"
                     className="font-medium text-base text-[#677084] group-hover:text-[#227879]"
@@ -80,7 +80,7 @@ const HomeNavSide: React.FC = () => {
                   </a>
                 </div>
               </div>
-              <div className="group relative flex gap-x-6 rounded-lg p-3 hover:bg-[#EAFDF6]">
+              <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center">
                 <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg group-hover:bg-[#EAFDF6]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +105,7 @@ const HomeNavSide: React.FC = () => {
                     />
                   </svg>
                 </div>
-                <div className="flex items-center justify-center text-center">
+                <div className="items-center">
                   <a
                     href="#"
                     className="font-medium text-base text-[#677084] group-hover:text-[#227879]"
@@ -114,7 +114,7 @@ const HomeNavSide: React.FC = () => {
                   </a>
                 </div>
               </div>
-              <div className="group relative flex gap-x-6 rounded-lg p-3 hover:bg-[#EAFDF6]">
+              <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center">
                 <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg group-hover:bg-[#EAFDF6]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -146,7 +146,7 @@ const HomeNavSide: React.FC = () => {
                     />
                   </svg>
                 </div>
-                <div className="flex items-center justify-center text-center">
+                <div className="items-center">
                   <a
                     href="#"
                     className="font-medium text-base text-[#677084] group-hover:text-[#227879]"
@@ -155,7 +155,7 @@ const HomeNavSide: React.FC = () => {
                   </a>
                 </div>
               </div>
-              <div className="group relative flex gap-x-6 rounded-lg p-3 hover:bg-[#EAFDF6]">
+              <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center">
                 <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg group-hover:bg-[#EAFDF6]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -187,7 +187,7 @@ const HomeNavSide: React.FC = () => {
                     />
                   </svg>
                 </div>
-                <div className="flex items-center justify-center text-center">
+                <div className="items-center">
                   <a
                     href="#"
                     className="font-medium text-base text-[#677084] group-hover:text-[#227879]"
@@ -196,7 +196,7 @@ const HomeNavSide: React.FC = () => {
                   </a>
                 </div>
               </div>
-              <div className="group relative flex gap-x-6 rounded-lg p-3 hover:bg-[#EAFDF6]">
+              <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center items-center">
                 <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg group-hover:bg-[#EAFDF6]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -221,7 +221,7 @@ const HomeNavSide: React.FC = () => {
                     />
                   </svg>
                 </div>
-                <div className="flex items-center justify-center text-center">
+                <div className="items-center">
                   <a
                     href="#"
                     className="font-medium text-base text-[#677084]  group-hover:text-[#227879]"
@@ -230,7 +230,7 @@ const HomeNavSide: React.FC = () => {
                   </a>
                 </div>
               </div>
-              <div className="group relative flex gap-x-6 rounded-lg p-3 hover:bg-[#EAFDF6]">
+              <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center items-center">
                 <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg group-hover:bg-[#EAFDF6]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -262,7 +262,7 @@ const HomeNavSide: React.FC = () => {
                     />
                   </svg>
                 </div>
-                <div className="flex items-center justify-center text-center">
+                <div className="items-center">
                   <p className="font-medium text-base text-[#677084] group-hover:text-[#227879]">
                     Sign Out
                   </p>

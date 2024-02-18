@@ -1,10 +1,10 @@
 import Logo from "./Logo";
-import planeImage from "../../public/assets/plane-footer.svg";
-import IG from "../../public/assets/medsos-ig.svg";
-import twitter from "../../public/assets/medsos-twitter.svg";
-import tiktok from "../../public/assets/medsos-tiktok.svg";
-import facebook from "../../public/assets/medsos-fb.svg";
-import youtube from "../../public/assets/medsos-ig.svg";
+import planeImage from "/assets/plane-footer.svg";
+import IG from "/assets/medsos-ig.svg";
+import twitter from "/assets/medsos-twitter.svg";
+import tiktok from "/assets/medsos-tiktok.svg";
+import facebook from "/assets/medsos-fb.svg";
+import youtube from "/assets/medsos-ig.svg";
 import { Link, useNavigate } from "react-router-dom";
 
 const HomeFooter: React.FC = () => {

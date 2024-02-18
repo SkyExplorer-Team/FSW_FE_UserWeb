@@ -28,14 +28,16 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import ReactCountryFlag from "react-country-flag";
 import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "../../components/Logo";
+import HeaderComponent from "../../components/Header";
 import HomeFooter from "../../components/home_footer";
 import CabinField from "../../components/cabin_field";
 import PassengerField from "../../components/passenger_field";
 import LogoImage from "../../components/LogoImage";
 import IconMenu from "../../../public/assets/menu.svg";
 import IconUser from "../../../public/assets/user.svg";
+import GambarPocket from "/assets/gambar-samping.png";
 
-import Airplane from "/public/assets/airplane.svg";
+import Airplane from "/assets/airplane.svg";
 
 dayjs.extend(customParseFormat);
 
@@ -60,6 +62,7 @@ const accessToken = localStorage.getItem("access_token");
 
 const Index: React.FC = () => {
   const location = useLocation();
+
   const token = localStorage.getItem("access_token");
   const navigate = useNavigate();
   const [fromAirportDetails, setFromAirportDetails] = useState<
@@ -68,11 +71,20 @@ const Index: React.FC = () => {
   const [toAirportDetails, setToAirportDetails] = useState<
     { label: string; value: string }[]
   >([]);
-  const [fromAirport, setFromAirport] = useState<Airport>(location.state.fromAirport);
+  const [fromAirport, setFromAirport] = useState<Airport>(
+    location.state.fromAirport
+  );
   const [toAirport, setToAirport] = useState<Airport>(location.state.toAirport);
 
-  const [departureDate, setDepartureDate] = useState<dayjs.Dayjs>(dayjs(location.state.departureDate, "YYYY-MM-DD"));
-  const [returnDate, setReturnDate] = useState<dayjs.Dayjs>(dayjs(location.state.returnDate, "YYYY-MM-DD"));
+  console.log(location.state.returnDate);
+  const [departureDate, setDepartureDate] = useState<dayjs.Dayjs>(
+    dayjs(location.state.departureDate, "YYYY-MM-DD")
+  );
+  const [returnDate, setReturnDate] = useState<dayjs.Dayjs>(
+    location.state.returnDate
+      ? dayjs(location.state.returnDate, "YYYY-MM-DD")
+      : dayjs()
+  );
 
   const [schedules, setSchedules] = useState<Schedule[]>([]);
   const [trip, setTrip] = useState<string>(location.state.trip);
@@ -91,7 +103,6 @@ const Index: React.FC = () => {
   const [airportDetails, setAirportDetails] = useState<
     { label: string; value: string }[]
   >([]);
-
 
   async function fetchName() {
     const myHeaders = new Headers();
@@ -113,7 +124,6 @@ const Index: React.FC = () => {
   }
 
   async function fetchInitialAirport() {
-
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + accessToken);
     myHeaders.append("Content-Type", "application/json");
@@ -136,42 +146,49 @@ const Index: React.FC = () => {
     setAirportDetails(det);
     setFromAirportDetails(det);
     setToAirportDetails(det);
-
   }
 
   useEffect(() => {
-    fetchInitialAirport();
-    handleSearch();
-    fetchName();
-  }, []);
+    if (toAirportDetails.length <= 0) {
+      console.log(airports);
+      if (accessToken === null) {
+        navigate("/login");
+      }
+      fetchInitialAirport();
+      handleSearch();
+      fetchName();
+    }
+  });
 
-  const cabinClass = [{
-    "name": "ECONOMY",
-    "id": "78324468-f3a8-45a2-b0bb-393979ad98ef"
-  },
-  {
-    "name": "BUSINESS",
-    "id": "c7697502-59af-42c1-ae07-cb4839207c2a"
-  },
-  {
-    "name": "FIRST",
-    "id": "16ca89c7-242d-4f5f-aabc-43504c4d4bfb"
-  }
-  ]
+  const cabinClass = [
+    {
+      name: "ECONOMY",
+      id: "78324468-f3a8-45a2-b0bb-393979ad98ef",
+    },
+    {
+      name: "BUSINESS",
+      id: "c7697502-59af-42c1-ae07-cb4839207c2a",
+    },
+    {
+      name: "FIRST",
+      id: "16ca89c7-242d-4f5f-aabc-43504c4d4bfb",
+    },
+  ];
 
-  const ticketType = [{
-    "name": "SAVER",
-    "id": "228aaef8-8dd1-45fa-8b0d-7b8e03abc765"
-  },
-  {
-    "name": "FLEXI",
-    "id": "1bed4209-2022-4f46-ab59-516a1ae6af15"
-  },
-  {
-    "name": "PLUS",
-    "id": "abe66727-0be4-405b-8b9b-f4798f5ab1a1"
-  }
-  ]
+  const ticketType = [
+    {
+      name: "SAVER",
+      id: "228aaef8-8dd1-45fa-8b0d-7b8e03abc765",
+    },
+    {
+      name: "FLEXI",
+      id: "1bed4209-2022-4f46-ab59-516a1ae6af15",
+    },
+    {
+      name: "PLUS",
+      id: "abe66727-0be4-405b-8b9b-f4798f5ab1a1",
+    },
+  ];
 
   const items: MenuProps["items"] = [
     {
@@ -211,21 +228,19 @@ const Index: React.FC = () => {
   const customFormat: DatePickerProps["format"] = (value) =>
     value.format(dateFormat);
 
-
   const fromChange = (value: string) => {
     setFromAirport(
       airports.find((obj) => {
-        return (obj.id == value);
+        return obj.id == value;
       })!
     );
   };
   const toChange = (value: string) => {
     setToAirport(
       airports.find((obj) => {
-        return (obj.id == value);
+        return obj.id == value;
       })!
     );
-
   };
 
   const fromSearch = (value: string) => {
@@ -244,7 +259,6 @@ const Index: React.FC = () => {
     );
   };
   const handleSearch = async () => {
-
     console.log("Searching...", dayjs.isDayjs(departureDate));
     //case found:
     const url = new URL(api_base_url + "/api/schedule-detail/getSchedules");
@@ -272,7 +286,6 @@ const Index: React.FC = () => {
     setSchedules(responseJson["schedules"]);
     setPage(1);
     if (responseJson["schedules"]) {
-
       setScheduleToRender(schedules.slice((page - 1) * 4, page * 4 - 1));
     }
   };
@@ -306,80 +319,7 @@ const Index: React.FC = () => {
       }}
     >
       <Layout className="">
-        <Header
-          style={{
-            top: 0,
-            zIndex: 1,
-            paddingTop: "4px",
-            paddingBottom: "8px",
-            position: "sticky",
-            display: "flex",
-            alignItems: "center",
-            backgroundColor: "white",
-          }}
-        >
-          <div className="justify-around flex w-full">
-            <div className="justify-start items-center gap-8 flex">
-              <Logo></Logo>
-              <div className="justify-start items-start gap-6 flex">
-                <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                  Explore
-                </div>
-                <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                  Status
-                </div>
-                <Dropdown
-                  className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7"
-                  menu={{ items }}
-                >
-                  <a onClick={(e) => e.preventDefault()}>
-                    <div className="pr-2">Cabin</div>
-                    <DownOutlined />
-                  </a>
-                </Dropdown>
-                <Dropdown
-                  className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7 "
-                  menu={{ items }}
-                >
-                  <a onClick={(e) => e.preventDefault()}>
-                    <div className="pr-2">Baggage</div>
-                    <DownOutlined />
-                  </a>
-                </Dropdown>
-              </div>
-            </div>
-            <div className="gap-8 flex">
-              <a className="snap-center self-center align-middle hover:text-primary text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                <div className="justify-start items-center gap-4 flex">
-                  <ReactCountryFlag countryCode="ID" svg />
-                  <div className="">IDR</div>
-                  <DownOutlined />
-                </div>
-              </a>
-
-              {token ? (
-                <div className="flex items-center justify-center gap-4 border rounded-lg p-2 hover:text-primary text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                  {/* <SkeletonAvatar className="mr-4" /> */}
-                  <div className="bg-[#D0D5DD] rounded-xl p-1">
-                    <img src={IconUser} alt="Icon Menu" className="h-4 w-4" />
-                  </div>
-                  {userName}
-                  <img src={IconMenu} alt="Icon Menu" className="h-4 w-4" />
-                </div>
-              ) : (
-                <button
-                  onClick={handleSignUp}
-                  type="submit"
-                  className="my-4 justify-center rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm"
-                >
-                  <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
-                    Sign Up
-                  </p>
-                </button>
-              )}
-            </div>
-          </div>
-        </Header>
+        <HeaderComponent />
 
         <Content className="flex-col">
           <div
@@ -498,9 +438,7 @@ const Index: React.FC = () => {
                         }}
                         className="w-full"
                         value={
-                          fromAirport == undefined
-                            ? null
-                            : fromAirport.name
+                          fromAirport == undefined ? null : fromAirport.name
                         }
                         optionFilterProp="children"
                         onChange={fromChange}
@@ -517,9 +455,7 @@ const Index: React.FC = () => {
                         }
                         optionRender={(_, i) => {
                           const target = toAirportDetails[i.index];
-                          const a = airports.find(
-                            (a) => a.id == target.value
-                          );
+                          const a = airports.find((a) => a.id == target.value);
                           return (
                             <div className="w-[382px] h-[68px] py-2 justify-center items-center gap-4 inline-flex">
                               <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
@@ -594,9 +530,7 @@ const Index: React.FC = () => {
                         filterOption={filterOption}
                         optionRender={(_, i) => {
                           const target = toAirportDetails[i.index];
-                          const a = airports.find(
-                            (a) => a.id == target.value
-                          );
+                          const a = airports.find((a) => a.id == target.value);
                           return (
                             <div className="w-[382px] h-[68px] py-2 justify-center items-center gap-4 inline-flex">
                               <div className="grow shrink basis-0 flex-col justify-start items-start gap-1 inline-flex">
@@ -692,47 +626,140 @@ const Index: React.FC = () => {
             </div>
           </div>
           <div className="relative min-h-[50vh] ">
-            <img className="absolute top-8 right-8 " src="../../public/assets/download.png" />
+            <img
+              className="absolute top-8 right-8 w-[309px] h-[345px]"
+              src={GambarPocket}
+            />
 
             <div className="content-center pt-8 pb-4 justify-center origin-center items-center text-center">
               <div className="w-[646px] h-[152px] content-center text-left px-4 pt-4 pb-2 bg-white rounded-2xl flex-col gap-2 inline-flex">
                 <div className="self-stretch justify-start items-start gap-4 inline-flex">
-                  <a onClick={() => {
-                    setCabin(0)
-                  }} className={"grow shrink basis-0 p-3 " + ((cabin == 0) ? "bg-primary" : " bg-white rounded-xl") + " rounded-xl flex-col justify-center items-start gap-3 inline-flex"}>
-                    <div className={"self-stretch " + ((cabin == 0) ? "text-white" : "text-neutral-900") + " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"}>ECONOMY SAVER</div>
+                  <a
+                    onClick={() => {
+                      setCabin(0);
+                    }}
+                    className={
+                      "grow shrink basis-0 p-3 " +
+                      (cabin == 0 ? "bg-primary" : " bg-white rounded-xl") +
+                      " rounded-xl flex-col justify-center items-start gap-3 inline-flex"
+                    }
+                  >
+                    <div
+                      className={
+                        "self-stretch " +
+                        (cabin == 0 ? "text-white" : "text-neutral-900") +
+                        " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"
+                      }
+                    >
+                      ECONOMY SAVER
+                    </div>
                     <div className="self-stretch justify-between items-center inline-flex">
-                      <div className={((cabin == 0) ? "text-white" : "text-gray-500") + " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"}>Start from</div>
-                      <div className={((cabin == 0) ? "text-white" : "text-neutral-900") + " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"}>IDR 1,570K</div>
+                      <div
+                        className={
+                          (cabin == 0 ? "text-white" : "text-gray-500") +
+                          " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"
+                        }
+                      >
+                        Start from
+                      </div>
+                      <div
+                        className={
+                          (cabin == 0 ? "text-white" : "text-neutral-900") +
+                          " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"
+                        }
+                      >
+                        IDR 1,570K
+                      </div>
                     </div>
                   </a>
-                  <a onClick={() => {
-                    setCabin(1)
-                  }} className={"grow shrink basis-0 p-3 " + ((cabin == 1) ? "bg-primary" : " bg-white rounded-xl") + " rounded-xl flex-col justify-center items-start gap-3 inline-flex"}>
-                    <div className={"self-stretch " + ((cabin == 1) ? "text-white" : "text-neutral-900") + " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"}>ECONOMY FLEXI</div>
+                  <a
+                    onClick={() => {
+                      setCabin(1);
+                    }}
+                    className={
+                      "grow shrink basis-0 p-3 " +
+                      (cabin == 1 ? "bg-primary" : " bg-white rounded-xl") +
+                      " rounded-xl flex-col justify-center items-start gap-3 inline-flex"
+                    }
+                  >
+                    <div
+                      className={
+                        "self-stretch " +
+                        (cabin == 1 ? "text-white" : "text-neutral-900") +
+                        " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"
+                      }
+                    >
+                      ECONOMY FLEXI
+                    </div>
                     <div className="self-stretch justify-between items-center inline-flex">
-                      <div className={((cabin == 1) ? "text-white" : "text-gray-500") + " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"}>Start from</div>
-                      <div className={((cabin == 1) ? "text-white" : "text-neutral-900") + " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"}>IDR 2,535K</div>
+                      <div
+                        className={
+                          (cabin == 1 ? "text-white" : "text-gray-500") +
+                          " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"
+                        }
+                      >
+                        Start from
+                      </div>
+                      <div
+                        className={
+                          (cabin == 1 ? "text-white" : "text-neutral-900") +
+                          " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"
+                        }
+                      >
+                        IDR 2,535K
+                      </div>
                     </div>
                   </a>
-                  <a onClick={() => {
-                    setCabin(2)
-                  }} className={"grow shrink basis-0 p-3 " + ((cabin == 2) ? "bg-primary" : " bg-white rounded-xl") + " rounded-xl flex-col justify-center items-start gap-3 inline-flex"}>
-                    <div className={"self-stretch " + ((cabin == 2) ? " text-white" : "text-neutral-900") + " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"}>ECONOMY PLUS</div>
+                  <a
+                    onClick={() => {
+                      setCabin(2);
+                    }}
+                    className={
+                      "grow shrink basis-0 p-3 " +
+                      (cabin == 2 ? "bg-primary" : " bg-white rounded-xl") +
+                      " rounded-xl flex-col justify-center items-start gap-3 inline-flex"
+                    }
+                  >
+                    <div
+                      className={
+                        "self-stretch " +
+                        (cabin == 2 ? " text-white" : "text-neutral-900") +
+                        " text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight"
+                      }
+                    >
+                      ECONOMY PLUS
+                    </div>
                     <div className="self-stretch justify-between items-center inline-flex">
-                      <div className={((cabin == 2) ? "text-white" : "text-gray-500") + " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"}>Start from</div>
-                      <div className={((cabin == 2) ? "text-white" : "text-neutral-900") + " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"}>IDR3,290K</div>
+                      <div
+                        className={
+                          (cabin == 2 ? "text-white" : "text-gray-500") +
+                          " text-xs font-medium font-['Plus Jakarta Sans'] leading-none"
+                        }
+                      >
+                        Start from
+                      </div>
+                      <div
+                        className={
+                          (cabin == 2 ? "text-white" : "text-neutral-900") +
+                          " text-base font-bold font-['Plus Jakarta Sans'] leading-normal"
+                        }
+                      >
+                        IDR3,290K
+                      </div>
                     </div>
                   </a>
                 </div>
                 <div className="self-stretch justify-between items-center inline-flex">
-                  <div className="w-[195px] text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">10 Seat(s) left</div>
+                  <div className="w-[195px] text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                    10 Seat(s) left
+                  </div>
                   <div className="py-3 rounded-lg flex-col justify-center items-center gap-3 inline-flex">
                     <div className="self-stretch justify-center items-center gap-3 inline-flex">
-                      <div className="text-center text-emerald-400 text-xs font-bold font-['Plus Jakarta Sans'] leading-none">Compare Fare</div>
+                      <div className="text-center text-emerald-400 text-xs font-bold font-['Plus Jakarta Sans'] leading-none">
+                        Compare Fare
+                      </div>
                       <div className="w-3 h-3 justify-center items-center flex">
-                        <div className="w-3 h-3 relative">
-                        </div>
+                        <div className="w-3 h-3 relative"></div>
                       </div>
                     </div>
                   </div>
@@ -754,10 +781,12 @@ const Index: React.FC = () => {
                     const hours = Math.floor(value.duration / 60);
                     const minutes = value.duration % 60;
                     return (
-                      <a onClick={() => {
-                        handleOk()
-                      }}
-                        className="justify-center items-center">
+                      <a
+                        onClick={() => {
+                          handleOk();
+                        }}
+                        className="justify-center items-center"
+                      >
                         <div className=" shadow justify-center items-center inline-flex">
                           <div className="grow shrink basis-0 px-6 pb-5 bg-white rounded-xl flex-col justify-center items-center gap-2.5 inline-flex">
                             <div className="self-stretch justify-start items-end gap-[5.01px] inline-flex">
@@ -775,7 +804,7 @@ const Index: React.FC = () => {
                               <div className="grow shrink basis-0 self-stretch pt-3 flex-col justify-between items-center inline-flex">
                                 <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Plus Jakarta Sans'] ">
                                   {" "}
-                                  {hours}h {minutes}m{ }
+                                  {hours}h {minutes}m{}
                                 </div>
                                 <div className="w-[225px] pt-3 justify-center items-center gap-1 inline-flex">
                                   <div className="w-[16.39px] h-[15.58px] relative">
@@ -867,47 +896,73 @@ const Index: React.FC = () => {
         open={isModalOpen}
         title={
           <div className="self-stretch w-full border-zinc-300 border-b  p-4 justify-start items-center gap-4 inline-flex">
-            <div className="grow shrink basis-0 text-center text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">Flight Detail</div>
+            <div className="grow shrink basis-0 text-center text-neutral-900 text-xl font-semibold font-['Plus Jakarta Sans'] leading-7">
+              Flight Detail
+            </div>
           </div>
         }
         closable={true}
         width={"fit-content"}
-
         footer={<div></div>}
       >
         <div className="w-full rounded-3xl flex-col justify-start items-start inline-flex">
           <div className="pt-8 px-8 justify-center items-center gap-8 inline-flex">
             <div className="self-stretch flex-col justify-start items-start gap-6 inline-flex">
-              <div className="w-[382px] h-6 text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Jakarta (CGK) to Singapore (SIN)</div>
+              <div className="w-[382px] h-6 text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                Jakarta (CGK) to Singapore (SIN)
+              </div>
               <div className="w-[428px] h-[391px] relative">
-                <div className="left-0 top-[4px] absolute text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Total travel time</div>
+                <div className="left-0 top-[4px] absolute text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                  Total travel time
+                </div>
                 <div className="px-3 py-1 left-[115px] top-0 absolute bg-emerald-100 rounded-lg justify-center items-center gap-2.5 inline-flex">
-                  <div className="text-teal-700 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">1h 45m</div>
+                  <div className="text-teal-700 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                    1h 45m
+                  </div>
                 </div>
                 <div className="h-14 left-[2px] top-[48px] absolute flex-col justify-center items-center gap-2 inline-flex">
-                  <div className="self-stretch text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">10:25</div>
-                  <div className="self-stretch text-center text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Jan 16</div>
+                  <div className="self-stretch text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                    10:25
+                  </div>
+                  <div className="self-stretch text-center text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                    Jan 16
+                  </div>
                 </div>
                 <div className="h-14 left-0 top-[335px] absolute flex-col justify-center items-center gap-2 inline-flex">
-                  <div className="self-stretch text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">13:10</div>
-                  <div className="self-stretch text-center text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Jan 16</div>
+                  <div className="self-stretch text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                    13:10
+                  </div>
+                  <div className="self-stretch text-center text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                    Jan 16
+                  </div>
                 </div>
                 <div className="left-[146px] top-[48px] absolute flex-col justify-start items-start gap-1.5 inline-flex">
-                  <div className="w-[282px] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Jakarta (CGK), Indonesia</div>
-                  <div className="w-[282px] text-neutral-900 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">Soekarno Hatta International</div>
-                  <div className="w-[282px] text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">Terminal 4</div>
+                  <div className="w-[282px] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                    Jakarta (CGK), Indonesia
+                  </div>
+                  <div className="w-[282px] text-neutral-900 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
+                    Soekarno Hatta International
+                  </div>
+                  <div className="w-[282px] text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
+                    Terminal 4
+                  </div>
                 </div>
                 <div className="left-[146px] top-[307px] absolute flex-col justify-start items-start gap-1.5 inline-flex">
-                  <div className="w-[282px] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">Singapore (SIN), Singapore</div>
-                  <div className="w-[282px] text-neutral-900 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">Changi</div>
-                  <div className="w-[282px] text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">Terminal 2</div>
+                  <div className="w-[282px] text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
+                    Singapore (SIN), Singapore
+                  </div>
+                  <div className="w-[282px] text-neutral-900 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
+                    Changi
+                  </div>
+                  <div className="w-[282px] text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
+                    Terminal 2
+                  </div>
                 </div>
                 <div className="w-5 h-[300px] left-[94px] top-[56px] absolute">
                   <div className="w-28 h-[0px] left-[5px] top-[173px] absolute origin-top-left rotate-90 border-2 border-emerald-400"></div>
                   <div className="w-28 h-[0px] left-[5px] top-[14px] absolute origin-top-left rotate-90 border-2 border-emerald-400"></div>
                   <div className="w-3 h-3 -left-[2px]  -top-[3px] absolute bg-white rounded-full border-2 border-emerald-400" />
                   <div className="w-8 h-8 -left-[12px] top-[135px] rounded-full rotate-90 bg-primary absolute">
-
                     <img
                       src={Airplane}
                       alt="Icon Airplane"
@@ -920,40 +975,50 @@ const Index: React.FC = () => {
                   <div className="justify-start items-start gap-1.5 inline-flex">
                     <div className="w-[18px] h-[18px] justify-center items-center gap-[3.72px] flex">
                       <div className="w-[17.77px] h-[17.77px] relative">
-                        <div className="w-[16.76px] h-[16.76px] left-[0.62px] top-[0.62px] absolute bg-primary rounded-full" >
+                        <div className="w-[16.76px] h-[16.76px] left-[0.62px] top-[0.62px] absolute bg-primary rounded-full">
                           <LogoImage />
                         </div>
 
                         <div className="w-[12.57px] h-[12.57px] left-[8.97px] top-0 absolute origin-top-left rotate-[45.56deg]">
-                          <div className="w-[12.57px] h-[12.57px] left-0 top-0 absolute">
-                          </div>
+                          <div className="w-[12.57px] h-[12.57px] left-0 top-0 absolute"></div>
                         </div>
                       </div>
                     </div>
                     <div className="flex-col justify-center items-start gap-1.5 inline-flex">
-                      <div className="text-slate-700 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">SkyExplorer • SE 955</div>
+                      <div className="text-slate-700 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                        SkyExplorer • SE 955
+                      </div>
                       <div className="flex-col justify-center items-start gap-1 flex">
-                        <div className="text-center text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">Boeing 777-300ER</div>
+                        <div className="text-center text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">
+                          Boeing 777-300ER
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="left-[8px] top-[199px] absolute text-center text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">1h 45m</div>
+                <div className="left-[8px] top-[199px] absolute text-center text-gray-500 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                  1h 45m
+                </div>
               </div>
             </div>
             <div className="self-stretch flex-col justify-between items-center inline-flex">
               <div className="h-[386px] flex-col justify-center items-start gap-4 flex">
                 <div className="self-stretch justify-start items-center gap-4 inline-flex">
                   <div className="grow shrink basis-0 flex-col justify-start items-start gap-0.5 inline-flex">
-                    <div className="text-primary text-lg font-bold font-['Plus Jakarta Sans'] leading-7">Economy Saver</div>
-                    <div className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal">Fare Conditions</div>
+                    <div className="text-primary text-lg font-bold font-['Plus Jakarta Sans'] leading-7">
+                      Economy Saver
+                    </div>
+                    <div className="text-neutral-900 text-base font-semibold font-['Plus Jakarta Sans'] leading-normal">
+                      Fare Conditions
+                    </div>
                   </div>
                   <div className="py-3 rounded-lg flex-col justify-center items-center gap-3 inline-flex">
                     <div className="self-stretch justify-center items-center gap-3 inline-flex">
-                      <div className="text-center text-primary text-xs font-bold font-['Plus Jakarta Sans'] leading-none">Compare Fare</div>
+                      <div className="text-center text-primary text-xs font-bold font-['Plus Jakarta Sans'] leading-none">
+                        Compare Fare
+                      </div>
                       <div className="w-3 h-3 justify-center items-center flex">
-                        <div className="w-3 h-3 relative">
-                        </div>
+                        <div className="w-3 h-3 relative"></div>
                       </div>
                     </div>
                   </div>
@@ -962,80 +1027,116 @@ const Index: React.FC = () => {
                   <div className="flex-col justify-start items-start gap-5 inline-flex">
                     <div className="self-stretch justify-start items-center gap-2 inline-flex">
                       <div className="w-5 h-5 relative" />
-                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Cabin Baggage</div>
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                        Cabin Baggage
+                      </div>
                     </div>
                     <div className="self-stretch justify-start items-start gap-2 inline-flex">
                       <div className="w-5 h-5 p-[1.67px] justify-center items-center flex">
-                        <div className="w-[16.67px] h-[16.67px] relative">
-                        </div>
+                        <div className="w-[16.67px] h-[16.67px] relative"></div>
                       </div>
-                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Checked Baggage</div>
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                        Checked Baggage
+                      </div>
                     </div>
                     <div className="self-stretch justify-start items-center gap-2 inline-flex">
                       <div className="w-5 h-5 relative" />
-                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Seat Selection</div>
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                        Seat Selection
+                      </div>
                     </div>
                     <div className="self-stretch justify-start items-center gap-2 inline-flex">
                       <div className="w-5 h-5 pl-[3.33px] pr-[1.67px] py-[1.67px] justify-center items-center flex">
-                        <div className="w-[15px] h-[16.67px] relative">
-                        </div>
+                        <div className="w-[15px] h-[16.67px] relative"></div>
                       </div>
-                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Baggage Delay Protection</div>
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                        Baggage Delay Protection
+                      </div>
                     </div>
                     <div className="self-stretch justify-start items-center gap-2 inline-flex">
                       <div className="w-5 h-5 relative" />
-                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Meal Pack</div>
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                        Meal Pack
+                      </div>
                     </div>
                     <div className="self-stretch justify-start items-center gap-2 inline-flex">
                       <div className="w-5 h-5 justify-center items-center flex">
-                        <div className="w-5 h-5 relative">
-                        </div>
+                        <div className="w-5 h-5 relative"></div>
                       </div>
-                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Cancellation</div>
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                        Cancellation
+                      </div>
                     </div>
                     <div className="self-stretch justify-start items-center gap-2 inline-flex">
                       <div className="w-5 h-5 justify-center items-center flex">
-                        <div className="w-5 h-5 relative">
-                        </div>
+                        <div className="w-5 h-5 relative"></div>
                       </div>
-                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">Flight Change</div>
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                        Flight Change
+                      </div>
                     </div>
                     <div className="self-stretch justify-start items-center gap-2 inline-flex">
                       <div className="w-5 h-5 justify-center items-center flex">
-                        <div className="w-5 h-5 relative">
-                        </div>
+                        <div className="w-5 h-5 relative"></div>
                       </div>
-                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">No Show</div>
+                      <div className="text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
+                        No Show
+                      </div>
                     </div>
                   </div>
                   <div className="grow shrink basis-0 flex-col justify-center items-start gap-5 inline-flex">
-                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">1 pc x 7 kg</div>
-                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">1 pc x 23 kg</div>
-                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Standard Seat</div>
-                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Not Include</div>
-                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Include</div>
-                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Not Allowed</div>
-                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Not Allowed</div>
-                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">Not Allowed</div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                      1 pc x 7 kg
+                    </div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                      1 pc x 23 kg
+                    </div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                      Standard Seat
+                    </div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                      Not Include
+                    </div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                      Include
+                    </div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                      Not Allowed
+                    </div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                      Not Allowed
+                    </div>
+                    <div className="self-stretch text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
+                      Not Allowed
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="justify-start items-center gap-[63px] inline-flex">
                 <div className="h-9 justify-start items-center gap-1 flex">
-                  <div className="text-primary text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">1,950K IDR </div>
-                  <div className="text-gray-500 text-xl font-medium font-['Plus Jakarta Sans'] leading-7">/pax</div>
+                  <div className="text-primary text-2xl font-bold font-['Plus Jakarta Sans'] leading-9">
+                    1,950K IDR{" "}
+                  </div>
+                  <div className="text-gray-500 text-xl font-medium font-['Plus Jakarta Sans'] leading-7">
+                    /pax
+                  </div>
                 </div>
-                <a onClick={() => {
-                  setIsModalOpen(false)
-                }} className="w-[136px] p-3.5 bg-primary rounded-[10px] flex-col justify-center items-center gap-3 inline-flex">
-                  <div className="self-stretch text-center text-white text-sm font-bold font-['Plus Jakarta Sans'] leading-tight">Select Flight</div>
+                <a
+                  onClick={() => {
+                    setIsModalOpen(false);
+                  }}
+                  className="w-[136px] p-3.5 bg-primary rounded-[10px] flex-col justify-center items-center gap-3 inline-flex"
+                >
+                  <div className="self-stretch text-center text-white text-sm font-bold font-['Plus Jakarta Sans'] leading-tight">
+                    Select Flight
+                  </div>
                 </a>
               </div>
             </div>
           </div>
         </div>
       </Modal>
-    </ConfigProvider >
+    </ConfigProvider>
   );
 };
 

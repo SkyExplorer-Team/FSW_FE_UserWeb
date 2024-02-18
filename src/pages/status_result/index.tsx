@@ -24,13 +24,11 @@ import ReactCountryFlag from "react-country-flag";
 import { useLocation, useNavigate } from "react-router-dom";
 import SkeletonAvatar from "antd/lib/skeleton/Avatar";
 import Logo from "../../components/Logo";
+import HeaderComponent from "../../components/Header";
 import HomeFooter from "../../components/home_footer";
-// import CabinField from "../../components/cabin_field";
-// import PassengerField from "../../components/passenger_field";
-// import LogoImage from "../../components/LogoImage";
-import IconInfo from "/public/assets/info-circle.svg";
+import IconInfo from "/assets/info-circle.svg";
 
-import GambarPocket from "../../../public/assets/gambar-samping.png";
+import GambarPocket from "/assets/gambar-samping.png";
 import FlightCard from "../../components/FlightCard";
 import StatusFlightDetail from "../../components/StatusFlightDetail";
 
@@ -316,77 +314,7 @@ const StatusResult: React.FC = () => {
 
   return (
     <Layout className="">
-      <Header
-        style={{
-          top: 0,
-          zIndex: 1,
-          paddingTop: "4px",
-          paddingBottom: "8px",
-          position: "sticky",
-          display: "flex",
-          alignItems: "center",
-          backgroundColor: "white",
-        }}
-      >
-        <div className="justify-around flex w-full">
-          <div className="justify-start items-center gap-8 flex">
-            <Logo></Logo>
-            <div className="justify-start items-start gap-6 flex">
-              <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                Explore
-              </div>
-              <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                Status
-              </div>
-              <Dropdown
-                className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7"
-                menu={{ items }}
-              >
-                <a onClick={(e) => e.preventDefault()}>
-                  <div className="pr-2">Cabin</div>
-                  <DownOutlined />
-                </a>
-              </Dropdown>
-              <Dropdown
-                className="flex hover:text-primary text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7 "
-                menu={{ items }}
-              >
-                <a onClick={(e) => e.preventDefault()}>
-                  <div className="pr-2">Baggage</div>
-                  <DownOutlined />
-                </a>
-              </Dropdown>
-            </div>
-          </div>
-          <div className="gap-8 flex">
-            <a className="snap-center self-center align-middle hover:text-primary text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-              <div className="justify-start items-center gap-4 flex">
-                <ReactCountryFlag countryCode="ID" svg />
-                <div className="">IDR</div>
-                <DownOutlined />
-              </div>
-            </a>
-
-            {token ? (
-              <div className="snap-center self-center align-middle hover:text-primary text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                <SkeletonAvatar className="mr-4" />
-                AAAAA
-                <DownOutlined />
-              </div>
-            ) : (
-              <button
-                onClick={handleSignUp}
-                type="submit"
-                className="my-4 justify-center rounded-md bg-primary disabled:bg-gray-400 hover:bg-primary-dark px-3 py-1.5 text-base font-bold leading-6 text-white shadow-sm"
-              >
-                <p className="self-stretch text-center text-white text-base font-bold font-['Plus Jakarta Sans'] leading-normal p-2">
-                  Sign Up
-                </p>
-              </button>
-            )}
-          </div>
-        </div>
-      </Header>
+      <HeaderComponent />
 
       <Content className="flex-col">
         <div
