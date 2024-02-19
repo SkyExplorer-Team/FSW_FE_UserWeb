@@ -81,7 +81,7 @@ const Index: React.FC = () => {
           <div className="my-5">
             <div className="grid grid-cols-10 gap-5">
               <HomeNavSide />
-              <div className="col-start-1 col-span-10 xl:col-start-4 xl:col-span-6 px-8 py-3 bg-white rounded-[16px] border border-gray-200 flex-col justify-center items-start inline-flex">
+              <div className="col-start-1 col-span-10 xl:col-start-4 xl:col-span-6 px-4 md:px-8 py-3 bg-white rounded-[16px] border border-gray-200 flex-col justify-center items-start inline-flex">
                 <div className="flex w-full justify-between items-center text-start font-['Plus Jakarta Sans']  mb-6">
                   <h1 className="text-black font-medium text-3xl">Profile</h1>
                   <button
