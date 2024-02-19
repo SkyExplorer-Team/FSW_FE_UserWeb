@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Logo from "../../components/Logo";
-import {
-  Card,
-  ConfigProvider,
-  Dropdown,
-  Layout,
-  Tabs,
-  Pagination,
-} from "antd/lib";
+import { Card, ConfigProvider, Layout, Tabs, Pagination } from "antd/lib";
 const { TabPane } = Tabs;
 import { MenuProps } from "antd/lib";
-import { RightOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { useNavigate } from "react-router-dom";
