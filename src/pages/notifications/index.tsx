@@ -177,7 +177,7 @@ const Index: React.FC = () => {
             <div className="grid grid-cols-10 gap-5">
               <HomeNavSide />
               <div className="col-start-1 col-span-10 xl:col-start-4 xl:col-span-6 px-8 py-3 bg-white rounded-[16px] border border-gray-200 flex-col justify-center items-start inline-flex">
-                <div className="text-start text-[#111] font-medium font-['Plus Jakarta Sans'] text-3xl mb-3">
+                <div className="text-start text-black font-medium font-['Plus Jakarta Sans'] text-3xl mb-3">
                   Notifications
                 </div>
                 <div className="w-full min-h-[562px]">

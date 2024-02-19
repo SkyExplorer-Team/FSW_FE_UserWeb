@@ -55,7 +55,7 @@ const AccountSettings: React.FC = () => {
               <HomeNavSide />
               <div className="col-start-1 col-span-10 xl:col-start-4 xl:col-span-6 px-8 py-3 bg-white rounded-[16px] shadow border border-gray-200 flex-col justify-center items-start inline-flex">
                 <div className="text-start font-['Plus Jakarta Sans']  mb-6">
-                  <h1 className="text-[#111] font-medium text-3xl mb-3">
+                  <h1 className="text-black font-medium text-3xl mb-3">
                     Account Settings
                   </h1>
                   <p className="text-neutral">
