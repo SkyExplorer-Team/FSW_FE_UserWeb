@@ -1,13 +1,8 @@
-import React, { useEffect, useState } from "react";
-import Logo from "../../components/Logo";
-import { ConfigProvider, Dropdown, Layout, Pagination, Menu } from "antd";
-import { MenuProps } from "antd/lib";
-import { DownOutlined, MenuOutlined, RightOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
+import { ConfigProvider, Layout, Menu, MenuProps, Switch } from "antd/lib";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import ReactCountryFlag from "react-country-flag";
 import { useNavigate } from "react-router-dom";
-import SkeletonAvatar from "antd/lib/skeleton/Avatar";
 import HomeFooter from "../../components/home_footer";
 import HomeNavSide from "../../components/home_navside";
 import HeaderComponent from "../../components/Header";
@@ -300,20 +295,15 @@ const AccountSettings: React.FC = () => {
     },
   ];
 
-  return (
-    <ConfigProvider
-      theme={{
-        token: {
-          // Seed Token
-          colorPrimary: "#38A993",
-          borderRadius: 2,
-          colorPrimaryTextHover: "#38A993",
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
-          // Alias Token
-          colorBgContainer: "#f6ffed",
-        },
-      }}
-    >
+  const onChange = (checked: boolean) => {
+    console.log(`switch to ${checked}`);
+    setIsChecked(checked);
+  };
+
+  return (
+    <ConfigProvider>
       <Layout>
         <HeaderComponent />
         <Content>
@@ -322,7 +312,7 @@ const AccountSettings: React.FC = () => {
               <HomeNavSide />
               <div className="col-start-1 col-span-10 xl:col-start-4 xl:col-span-6 px-8 py-3 bg-white rounded-[16px] shadow border border-gray-200 flex-col justify-center items-start inline-flex">
                 <div className="text-start font-['Plus Jakarta Sans']  mb-6">
-                  <h1 className="text-[#111] font-medium text-3xl">
+                  <h1 className="text-[#111] font-medium text-3xl mb-3">
                     Account Settings
                   </h1>
                   <p className="text-neutral">
@@ -332,27 +322,60 @@ const AccountSettings: React.FC = () => {
                 </div>
                 <div className="w-full min-h-[562px]">
                   <div className="w-full grid grid-cols-10 gap-1">
-                    <div className="w-full col-start-1 col-span-10 flex-col justify-center items-start inline-flex"></div>
+                    <div className="w-full col-start-1 col-span-10 flex-col justify-center items-start inline-flex">
+                      <div className="flex items-center justify-between w-full my-4">
+                        <div className="flex flex-col gap-2">
+                          <p className="font-medium text-black">
+                            Newsletter and promotion offers
+                          </p>
+                          <p className="text-black">
+                            Seasonal deals, new products, and exclusive partner
+                            offers.
+                          </p>
+                        </div>
+                        <div>
+                          <Switch
+                            checked={false}
+                            onChange={onChange}
+                            className="custom-switch" // Tambahkan kelas custom untuk styling
+                          />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between w-full my-4">
+                        <div className="flex flex-col gap-2">
+                          <p className="font-medium text-black">
+                            Email Booking info
+                          </p>
+                          <p className="text-black">
+                            Booking confirmation and trip changes and updates.
+                          </p>
+                        </div>
+                        <div>
+                          <Switch
+                            checked={false}
+                            onChange={onChange}
+                            className="custom-switch" // Tambahkan kelas custom untuk styling
+                          />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between w-full my-4">
+                        <div className="flex flex-col gap-2">
+                          <p className="font-medium text-black">
+                            Delete your account
+                          </p>
+                          <p className="text-black">
+                            Request to delete your account and data.
+                          </p>
+                        </div>
+                        <button className="bg-error-background text-error p-3 rounded-xl font-semibold">
+                          Delete Account
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div
-                  className="w-full col-start-1 col-span-10 flex-col justify-bottom items-bottom "
-                  style={{ textAlign: "center" }}
-                >
-                  {/* <Pagination
-                    total={notifications.length}
-                    defaultPageSize={pageSize}
-                    current={currentPageActive}
-                    onChange={handlePageChangeActive}
-                    showSizeChanger={false}
-                    showQuickJumper={false}
-                    hideOnSinglePage={true}
-                    className="my-1"
-                  /> */}
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-2"></div>
           </div>
         </Content>
         <Footer

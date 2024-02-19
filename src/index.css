@@ -18,3 +18,15 @@
 .custom-modal > .ant-modal-content > .ant-modal-footer {
   border-radius: 30px;
 }
+
+.custom-switch {
+  @apply bg-gray-300 border-gray-300; /* Warna abu-abu ketika tidak di-hover */
+}
+
+.custom-switch:hover {
+  @apply bg-gray-400 border-gray-400; /* Warna abu-abu ketika di-hover */
+}
+
+.custom-switch .ant-switch-checked {
+  @apply bg-primary border-primary-dark; /* Warna hijau ketika switch aktif */
+}
