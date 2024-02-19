@@ -25,7 +25,7 @@ dayjs.extend(customParseFormat);
 
 const { Header, Content, Footer } = Layout;
 
-const api_base_url = "https://be-java-production.up.railway.app";
+const api_base_url = "https://be-java-master-production.up.railway.app";
 
 const menu = <ProfileMenu />;
 

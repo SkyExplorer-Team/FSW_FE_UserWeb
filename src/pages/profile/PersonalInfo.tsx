@@ -71,7 +71,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
       }
 
       const api = axios.create({
-        baseURL: "https://be-java-production.up.railway.app/api",
+        baseURL: "https://be-java-master-production.up.railway.app/api",
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -101,7 +101,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
         const [year, month, day] = userData.data.dob;
         userData.data.dob = `${year}-${month.toString().padStart(2, "0")}-${day
           .toString()
-          .padStart(2, "0")}`;               
+          .padStart(2, "0")}`;
       } else {
         console.error("Failed to fetch user data:", userData.status);
       }
@@ -109,15 +109,14 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
       console.error("Error fetching user data:", error);
     }
   };
-  
-  
+
   const handleChange = (value: string) => {
     setFormValues((prevFormValues: FormValues) => ({
       ...prevFormValues,
       salutation: value,
     }));
   };
-  
+
   const nationalityOptions = [
     { flag: "🇺🇸", name: "Amerika Serikat", value: "US" },
     { flag: "🇬🇧", name: "Inggris", value: "GB" },
@@ -137,12 +136,12 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
   });
 
   const handleContactFormChange =
-  (fieldName: keyof ContactFormData) => (value: string) => {
-    setContactData({
-      ...contactData,
-      [fieldName]: value,
+    (fieldName: keyof ContactFormData) => (value: string) => {
+      setContactData({
+        ...contactData,
+        [fieldName]: value,
       });
-      
+
       // Meneruskan lebih banyak data ke komponen induk
       setFormValues((prevFormValues: FormValues) => ({
         ...prevFormValues,
@@ -150,14 +149,14 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
         // Tambahkan properti lainnya jika diperlukan
       }));
     };
-    
-    const [selectedNationality, setSelectedNationality] = useState<string>("");
-    
-    const handleChangeNationality = (value: string) => {
-      setSelectedNationality(value);
-      setFormValues((prevFormValues: FormValues) => ({
-        ...prevFormValues,
-        nationality: value,
+
+  const [selectedNationality, setSelectedNationality] = useState<string>("");
+
+  const handleChangeNationality = (value: string) => {
+    setSelectedNationality(value);
+    setFormValues((prevFormValues: FormValues) => ({
+      ...prevFormValues,
+      nationality: value,
     }));
   };
   const onChange: DatePickerProps["onChange"] = (date, dateString) => {
@@ -165,12 +164,12 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
       ...prevFormValues,
       dateOfBirth: dateString,
     }));
-  };  
+  };
   const defaultDate = userData.dob;
   console.log(typeof defaultDate);
-  
+
   const [form] = Form.useForm();
-  
+
   return (
     <>
       <h2 className="title-personal_info">Informasi Pribadi</h2>
@@ -299,11 +298,11 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
             Date of Birth
           </Typography.Title>
           <DatePicker
-          format={'YYYY/MM/DD'}
+            format={"YYYY/MM/DD"}
             onChange={onChange} // Perubahan di sini
             placeholder="7 Januari 1985"
             style={{ width: "100%", height: "40px" }}
-            defaultValue={dayjs('2004-01-08')}
+            defaultValue={dayjs("2004-01-08")}
           />
         </Form.Item>
 
@@ -339,7 +338,7 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
             />
           </Form.Item>
           <Form.Item
-            name="phoneNumber"            
+            name="phoneNumber"
             style={{
               display: "inline-block",
               width: "80%",
@@ -351,12 +350,11 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
               onChange={(e) =>
                 handleContactFormChange("phoneNumber")("+62" + e.target.value)
               }
-              defaultValue='085161644408'
+              defaultValue="085161644408"
             />
           </Form.Item>
         </Form.Item>
-        <Form.Item          
-        >
+        <Form.Item>
           <Typography.Title
             style={{ paddingBottom: 0, marginBottom: 0 }}
             level={5}

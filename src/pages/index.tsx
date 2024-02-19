@@ -34,7 +34,7 @@ dayjs.extend(customParseFormat);
 
 const { Header, Content, Footer } = Layout;
 
-const api_base_url = "https://be-java-production.up.railway.app";
+const api_base_url = "https://be-java-master-production.up.railway.app";
 
 interface Airport {
   id: string | undefined;
@@ -299,8 +299,9 @@ const Index: React.FC = () => {
                         )}
                       >
                         <a
-                          className={`hover:text-primary ${isClicked ? "clicked" : ""
-                            }`}
+                          className={`hover:text-primary ${
+                            isClicked ? "clicked" : ""
+                          }`}
                           onClick={handleButtonClick}
                         >
                           <Space>
@@ -329,8 +330,9 @@ const Index: React.FC = () => {
                         )}
                       >
                         <a
-                          className={`hover:text-primary ${isClicked ? "clicked" : ""
-                            }`}
+                          className={`hover:text-primary ${
+                            isClicked ? "clicked" : ""
+                          }`}
                           onClick={handleButtonClick}
                         >
                           <Space>

@@ -51,9 +51,9 @@ interface Schedule {
   to: Airport;
   departureDate: dayjs.Dayjs;
   plane: {
-    "id": string;
-    "code": string;
-    "name": string;
+    id: string;
+    code: string;
+    name: string;
   };
   arrivalDate: dayjs.Dayjs;
   duration: number;
@@ -66,14 +66,14 @@ interface ScheduleResult {
   to: Airport;
   timeDeparture: string[];
   airplane: {
-    "id": string;
-    "code": string;
-    "name": string;
+    id: string;
+    code: string;
+    name: string;
   };
   timeArrive: string[];
   price: number;
 }
-const api_base_url = "https://be-java-production.up.railway.app";
+const api_base_url = "https://be-java-master-production.up.railway.app";
 
 const accessToken = localStorage.getItem("access_token");
 
@@ -117,7 +117,7 @@ const Index: React.FC = () => {
   const handleOpen = (schedule: Schedule) => {
     setModalSched(schedule);
     setIsModalOpen(true);
-  }
+  };
 
   const [airportDetails, setAirportDetails] = useState<
     { label: string; value: string }[]
@@ -209,7 +209,6 @@ const Index: React.FC = () => {
     },
   ];
 
-
   const [cabin, setCabin] = useState<number>(0);
 
   const changeSeats = (targetMap: Map<string, number>) => {
@@ -289,12 +288,33 @@ const Index: React.FC = () => {
     }
     // implement get schedules ==============
 
-
     const res = responseJson["data"] as ScheduleResult[];
-    const target = res.map<Schedule>(val => {
-      const dep = dayjs(val.timeDeparture[0] + "-" + val.timeDeparture[1] + "-" + val.timeDeparture[2] + " " + val.timeDeparture[3] + ":" + val.timeDeparture[4], "YYYY-M-D H:m")
-      const ar = dayjs(val.timeArrive[0] + "-" + val.timeArrive[1] + "-" + val.timeArrive[2] + " " + val.timeArrive[3] + ":" + val.timeArrive[4], "YYYY-M-D H:m")
-      return ({
+    const target = res.map<Schedule>((val) => {
+      const dep = dayjs(
+        val.timeDeparture[0] +
+          "-" +
+          val.timeDeparture[1] +
+          "-" +
+          val.timeDeparture[2] +
+          " " +
+          val.timeDeparture[3] +
+          ":" +
+          val.timeDeparture[4],
+        "YYYY-M-D H:m"
+      );
+      const ar = dayjs(
+        val.timeArrive[0] +
+          "-" +
+          val.timeArrive[1] +
+          "-" +
+          val.timeArrive[2] +
+          " " +
+          val.timeArrive[3] +
+          ":" +
+          val.timeArrive[4],
+        "YYYY-M-D H:m"
+      );
+      return {
         id: val.id,
         name: val.name,
         from: val.from,
@@ -303,11 +323,9 @@ const Index: React.FC = () => {
         plane: val.airplane,
         arrivalDate: ar,
         duration: dep.diff(ar, "minute"),
-        price: val.price
-      })
-    })
-
-
+        price: val.price,
+      };
+    });
 
     await setSchedules(target);
     await setPage(1);
@@ -315,7 +333,6 @@ const Index: React.FC = () => {
     if (schedules.length != 0) {
       if (schedules.length > 4) {
         await setScheduleToRender(schedules.slice((page - 1) * 4, page * 4));
-
       } else {
         await setScheduleToRender(schedules.slice(0, schedules.length));
       }
@@ -799,7 +816,7 @@ const Index: React.FC = () => {
               </div>
             </div>
 
-            {(schedules.length == 0) ? (
+            {schedules.length == 0 ? (
               <div className="flex-col ">
                 <img
                   className="p-8 m-auto w-[430px]"
@@ -809,22 +826,25 @@ const Index: React.FC = () => {
             ) : (
               <div className="flex flex-col w-full">
                 <div className="w-full flex-col justify-center items-center gap-5 inline-flex py-8">
-                  {
-                    scheduleToRender.map((value) => {
-                      if (schedules.length > 0 && scheduleToRender.length == 0) {
-                        if (schedules.length > 4) {
-                          setScheduleToRender(schedules.slice((page - 1) * 4, page * 4));
-
-                        } else {
-                          setScheduleToRender(schedules.slice(0, schedules.length));
-                        }
+                  {scheduleToRender.map((value) => {
+                    if (schedules.length > 0 && scheduleToRender.length == 0) {
+                      if (schedules.length > 4) {
+                        setScheduleToRender(
+                          schedules.slice((page - 1) * 4, page * 4)
+                        );
+                      } else {
+                        setScheduleToRender(
+                          schedules.slice(0, schedules.length)
+                        );
                       }
-                      const hours = Math.floor(value.duration / 60);
-                      const minutes = value.duration % 60;
-                      return <>
+                    }
+                    const hours = Math.floor(value.duration / 60);
+                    const minutes = value.duration % 60;
+                    return (
+                      <>
                         <a
                           onClick={() => {
-                            handleOpen(value)
+                            handleOpen(value);
                           }}
                           className="justify-center items-center"
                         >
@@ -845,7 +865,7 @@ const Index: React.FC = () => {
                                 <div className="grow shrink basis-0 self-stretch pt-3 flex-col justify-between items-center inline-flex">
                                   <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Plus Jakarta Sans'] ">
                                     {" "}
-                                    {hours}h {minutes}m{ }
+                                    {hours}h {minutes}m{}
                                   </div>
                                   <div className="w-[225px] pt-3 justify-center items-center gap-1 inline-flex">
                                     <div className="w-[16.39px] h-[15.58px] relative">
@@ -909,22 +929,21 @@ const Index: React.FC = () => {
                             </div>
                           </div>
                         </a>
-
                       </>
-                    })}
+                    );
+                  })}
                 </div>
-                {
-                  schedules.length > 0 ?
-                    <Pagination
-                      className="text-center pt-8"
-                      onChange={onChangePage}
-                      defaultCurrent={1}
-                      total={schedules.length}
-                      pageSize={4}
-                    />
-                    :
-                    <div></div>
-                }
+                {schedules.length > 0 ? (
+                  <Pagination
+                    className="text-center pt-8"
+                    onChange={onChangePage}
+                    defaultCurrent={1}
+                    total={schedules.length}
+                    pageSize={4}
+                  />
+                ) : (
+                  <div></div>
+                )}
               </div>
             )}
           </div>
@@ -960,7 +979,14 @@ const Index: React.FC = () => {
           <div className="pt-8 px-8 justify-center items-center gap-8 inline-flex">
             <div className="self-stretch flex-col justify-start items-start gap-6 inline-flex">
               <div className=" h-6 text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                {modalSched?.from.city + " (" + modalSched?.from.abv + ") to " + modalSched?.to.city + " (" + modalSched?.to.abv + ")"}
+                {modalSched?.from.city +
+                  " (" +
+                  modalSched?.from.abv +
+                  ") to " +
+                  modalSched?.to.city +
+                  " (" +
+                  modalSched?.to.abv +
+                  ")"}
               </div>
               <div className="w-[428px] h-[391px] relative">
                 <div className="left-0 top-[4px] absolute text-neutral-900 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
@@ -977,26 +1003,25 @@ const Index: React.FC = () => {
                   </div>
                   <div className="self-stretch text-center text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
                     {modalSched?.departureDate.format("MMM DD")}
-
                   </div>
                 </div>
                 <div className="h-14 left-0 top-[335px] absolute flex-col justify-center items-center gap-2 inline-flex">
                   <div className="self-stretch text-center text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
                     {modalSched?.arrivalDate.format("HH:mm")}
-
                   </div>
                   <div className="self-stretch text-center text-slate-600 text-sm font-medium font-['Plus Jakarta Sans'] leading-tight">
                     {modalSched?.arrivalDate.format("MMM DD")}
-
                   </div>
                 </div>
                 <div className="left-[146px] top-[48px] absolute flex-col justify-start items-start gap-1.5 inline-flex">
                   <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                    {modalSched?.from.city + " (" + modalSched?.from.abv + "), Indonesia"}
+                    {modalSched?.from.city +
+                      " (" +
+                      modalSched?.from.abv +
+                      "), Indonesia"}
                   </div>
                   <div className="text-neutral-900 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
                     {modalSched?.from.name}
-
                   </div>
                   <div className="text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
                     Terminal X
@@ -1004,12 +1029,13 @@ const Index: React.FC = () => {
                 </div>
                 <div className="left-[146px] top-[307px] absolute flex-col justify-start items-start gap-1.5 inline-flex">
                   <div className="text-neutral-900 text-lg font-semibold font-['Plus Jakarta Sans'] leading-7">
-                    {modalSched?.to.city + " (" + modalSched?.to.abv + "), Indonesia"}
-
+                    {modalSched?.to.city +
+                      " (" +
+                      modalSched?.to.abv +
+                      "), Indonesia"}
                   </div>
                   <div className="text-neutral-900 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
                     {modalSched?.to.name}
-
                   </div>
                   <div className="text-gray-500 text-sm font-normal font-['Plus Jakarta Sans'] leading-tight">
                     Terminal X
@@ -1043,7 +1069,9 @@ const Index: React.FC = () => {
                     </div>
                     <div className="flex-col justify-center items-start gap-1.5 inline-flex">
                       <div className="text-slate-700 text-sm font-semibold font-['Plus Jakarta Sans'] leading-tight">
-                        {modalSched?.plane.name + " • " + modalSched?.plane.code}
+                        {modalSched?.plane.name +
+                          " • " +
+                          modalSched?.plane.code}
                       </div>
                       <div className="flex-col justify-center items-start gap-1 flex">
                         <div className="text-center text-gray-500 text-xs font-medium font-['Plus Jakarta Sans'] leading-none">
