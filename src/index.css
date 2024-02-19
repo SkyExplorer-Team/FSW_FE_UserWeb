@@ -30,3 +30,7 @@
 .custom-switch .ant-switch-checked {
   @apply bg-primary border-primary-dark; /* Warna hijau ketika switch aktif */
 }
+
+body {
+  font-family: "plus-jakarta-sans", sans-serif !important;
+}
