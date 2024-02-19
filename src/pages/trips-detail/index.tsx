@@ -229,7 +229,7 @@ const Index: React.FC = () => {
               <div className="col-start-1 col-span-10 xl:col-start-4 xl:col-span-6 px-6 py-3 bg-white rounded-[16px] shadow border border-gray-200 flex-col justify-center items-start inline-flex">
                 <div className="grid grid-cols-12 w-full">
                   <div className="col-start-1 col-end-9 md:col-start-1 md:col-end-5">
-                    <div className="text-start text-[#111] font-medium font-['Plus Jakarta Sans'] font-semibold text-3xl">
+                    <div className="text-start text-black font-medium font-['Plus Jakarta Sans'] font-semibold text-3xl">
                       Trips / Details
                     </div>
                   </div>
@@ -276,7 +276,7 @@ const Index: React.FC = () => {
                               </svg>
                             </div>
                             <div className="flex items-center justify-center text-center">
-                              <p className="font-medium text-base text-[#111]">
+                              <p className="font-medium text-base text-black">
                                 E-Ticket
                               </p>
                             </div>
@@ -420,8 +420,8 @@ const Index: React.FC = () => {
                                 />
                               </svg>
                             </div>
-                            <div className="flex items-center justify-center text-center">
-                              <p className="font-medium text-base text-[#111]">
+                            <div className="flex items-start md:items-center justify-center">
+                              <p className="font-medium text-base text-black">
                                 Travel Overview
                               </p>
                             </div>
@@ -429,7 +429,7 @@ const Index: React.FC = () => {
                           <div className="w-full col-start-6 col-end-13 flex justify-end items-center flex-none">
                             <button
                               onClick={handleSignUp}
-                              className="mx-4 justify-center rounded-md bg-white disabled:bg-gray-400 hover:text-base font-bold leading-6 text-primary-dark"
+                              className="mx-4 justify-center hover:text-base font-bold leading-6 text-primary-dark"
                             >
                               <p className="text-center text-primary text-base font-bold font-['Plus Jakarta Sans'] ">
                                 View Details
@@ -451,7 +451,7 @@ const Index: React.FC = () => {
                           <div className="w-full col-start-1 col-end-6 flex group relative flex rounded-lg px-2">
                             <div className="w-full">
                               <div className="grid grid-cols-5 gap-1">
-                                <div className="col-start-0 col-span-2 font-normal text-sm bg-white font-['Plus Jakarta Sans'] text-[#111] justify-start items-center inline-flex">
+                                <div className="col-start-0 col-span-2 font-normal text-sm bg-white font-['Plus Jakarta Sans'] text-black justify-start items-center inline-flex">
                                   {bookingDetail.schedule.from.city}
                                 </div>
                                 <div className="col-start-3 col-span-1 bg-white justify-start items-center inline-flex">
@@ -480,7 +480,7 @@ const Index: React.FC = () => {
                                     />
                                   </svg>
                                 </div>
-                                <div className="col-start-4 col-span-2 font-normal text-sm bg-white font-['Plus Jakarta Sans'] text-[#111] justify-start items-center inline-flex">
+                                <div className="col-start-4 col-span-2 font-normal text-sm bg-white font-['Plus Jakarta Sans'] text-black justify-start items-center inline-flex">
                                   {bookingDetail.schedule.to.city}
                                 </div>
                               </div>
@@ -490,7 +490,7 @@ const Index: React.FC = () => {
                         <div className="grid grid-cols-12 w-full p-3">
                           <div className="w-full col-start-1 col-end-8 flex group relative flex rounded-lg px-2">
                             <div className="w-full grid grid-cols-7 gap-1">
-                              <div className="col-start-0 col-span-3 font-normal text-sm bg-white font-['Plus Jakarta Sans'] text-[#111] justify-start items-center inline-flex">
+                              <div className="col-start-0 col-span-3 font-normal text-sm bg-white font-['Plus Jakarta Sans'] text-black justify-start items-center inline-flex">
                                 {bookingDetail.schedule.departureDate.format(
                                   "D MMMM YYYY"
                                 )}
@@ -498,7 +498,7 @@ const Index: React.FC = () => {
                               <div className="col-start-4 col-span-1 bg-white justify-start text-primary font-bolder text-sm items-center inline-flex">
                                 •
                               </div>
-                              <div className="col-start-5 col-span-3 font-normal text-sm bg-white font-['Plus Jakarta Sans'] text-[#111] justify-start items-center inline-flex">
+                              <div className="col-start-5 col-span-3 font-normal text-sm bg-white font-['Plus Jakarta Sans'] text-black justify-start items-center inline-flex">
                                 {bookingDetail.schedule.departureDate.format(
                                   "HH:mm"
                                 )}{" "}
@@ -540,8 +540,8 @@ const Index: React.FC = () => {
                                 />
                               </svg>
                             </div>
-                            <div className="flex items-center justify-center text-center">
-                              <p className="font-medium text-base text-[#111]">
+                            <div className="flex items-start md:items-center justify-center">
+                              <p className="font-medium text-base text-black">
                                 Passenger and Amenities
                               </p>
                             </div>
@@ -549,7 +549,7 @@ const Index: React.FC = () => {
                           <div className="w-full col-start-6 col-end-13 flex justify-end items-center flex-none">
                             <button
                               onClick={handleSignUp}
-                              className="mx-4 justify-center rounded-md bg-white disabled:bg-gray-400 hover:text-base font-bold leading-6 text-primary-dark"
+                              className="mx-4 justify-center rounded-md  hover:text-base font-bold leading-6 text-primary-dark"
                             >
                               <p className="text-center text-primary text-base font-bold font-['Plus Jakarta Sans'] ">
                                 View Details
@@ -579,7 +579,7 @@ const Index: React.FC = () => {
                                 key="1"
                                 header={
                                   <>
-                                    <div className="col-start-0 col-span-2 font-normal text-sm bg-white font-['Plus Jakarta Sans'] text-[#111] justify-start items-center inline-flex mr-3">
+                                    <div className="col-start-0 col-span-2 font-normal text-sm bg-white font-['Plus Jakarta Sans'] text-black justify-start items-center inline-flex mr-3">
                                       {bookingDetail.schedule.from.city}
                                     </div>
                                     <div className="col-start-3 col-span-1 bg-white justify-start items-center inline-flex mx-3">
@@ -608,7 +608,7 @@ const Index: React.FC = () => {
                                         />
                                       </svg>
                                     </div>
-                                    <div className="col-start-4 col-span-2 font-normal text-sm bg-white font-['Plus Jakarta Sans'] text-[#111] justify-start items-center inline-flex mx-3">
+                                    <div className="col-start-4 col-span-2 font-normal text-sm bg-white font-['Plus Jakarta Sans'] text-black justify-start items-center inline-flex mx-3">
                                       {bookingDetail.schedule.to.city}
                                     </div>
                                   </>
@@ -634,14 +634,14 @@ const Index: React.FC = () => {
                         <div className="grid grid-cols-12 w-full px-3 py-2">
                           <div className="w-full col-start-1 col-end-6 flex group relative flex rounded-lg px-4">
                             <div className="flex items-center justify-center text-center">
-                              <p className="font-semibold text-sm text-[#111]">
+                              <p className="font-semibold text-sm text-black">
                                 Seat
                               </p>
                             </div>
                           </div>
                           <div className="w-full col-start-7 col-end-13 flex group relative flex rounded-lg px-4 item-end justify-end text-right">
                             <div className="flex items-center ">
-                              <p className="font-semibold text-sm text-[#111]  text-right">
+                              <p className="font-semibold text-sm text-black  text-right">
                                 {bookingDetail.seat}
                               </p>
                             </div>
@@ -650,14 +650,14 @@ const Index: React.FC = () => {
                         <div className="grid grid-cols-12 w-full px-3 py-2">
                           <div className="w-full col-start-1 col-end-6 flex group relative flex rounded-lg px-4">
                             <div className="flex items-center justify-center text-center">
-                              <p className="font-semibold text-sm text-[#111]">
+                              <p className="font-semibold text-sm text-black">
                                 Baggage
                               </p>
                             </div>
                           </div>
                           <div className="w-full col-start-7 col-end-13 flex group relative flex rounded-lg px-4 item-end justify-end text-right">
                             <div className="flex items-center ">
-                              <p className="font-semibold text-sm text-[#111]  text-right">
+                              <p className="font-semibold text-sm text-black  text-right">
                                 {bookingDetail.bagage}kg
                               </p>
                             </div>
@@ -666,14 +666,14 @@ const Index: React.FC = () => {
                         <div className="grid grid-cols-12 w-full px-3 py-2">
                           <div className="w-full col-start-1 col-end-6 flex group relative flex rounded-lg px-4">
                             <div className="flex items-center justify-center text-center">
-                              <p className="font-semibold text-sm text-[#111]">
+                              <p className="font-semibold text-sm text-black">
                                 Meal
                               </p>
                             </div>
                           </div>
                           <div className="w-full col-start-7 col-end-13 flex group relative flex rounded-lg px-4 item-end justify-end text-right">
                             <div className="flex items-center ">
-                              <p className="font-semibold text-sm text-[#111]  text-right">
+                              <p className="font-semibold text-sm text-black  text-right">
                                 {bookingDetail.meal}
                               </p>
                             </div>
@@ -711,7 +711,7 @@ const Index: React.FC = () => {
                               </svg>
                             </div>
                             <div className="flex items-center justify-center text-center">
-                              <p className="font-medium text-base text-[#111]">
+                              <p className="font-medium text-base text-black">
                                 Booking Information
                               </p>
                             </div>
@@ -719,16 +719,16 @@ const Index: React.FC = () => {
                         </div>
                         <hr className="w-[95%] border-t-2 border border-[#EAECF0] mx-auto my-3" />
                         <div className="grid grid-cols-12 w-full px-3 pb-2">
-                          <div className="w-full col-start-1 col-end-6 flex group relative flex rounded-lg px-4">
-                            <div className="flex items-center justify-center text-center">
-                              <p className="font-medium text-sm text-[#111]">
+                          <div className="w-full col-start-1 col-end-6 flex group relative rounded-lg px-4">
+                            <div className="flex items-start justify-center">
+                              <p className="font-medium text-sm text-black">
                                 Booking Status
                               </p>
                             </div>
                           </div>
                           <div className="w-full col-start-7 col-end-13 flex group relative flex rounded-lg px-4 item-end justify-end text-right">
                             <div className="flex items-center ">
-                              <p className="font-medium text-sm text-[#111] text-right">
+                              <p className="font-medium text-sm text-black text-right">
                                 {bookingDetail.status ? (
                                   <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
                                     Confirmed
@@ -745,30 +745,30 @@ const Index: React.FC = () => {
                         <div className="grid grid-cols-12 w-full px-3 py-2">
                           <div className="w-full col-start-1 col-end-6 flex group relative flex rounded-lg px-4">
                             <div className="flex items-center justify-center text-center">
-                              <p className="font-medium text-sm text-[#111]">
+                              <p className="font-medium text-sm text-black">
                                 Booking ID
                               </p>
                             </div>
                           </div>
                           <div className="w-full col-start-7 col-end-13 flex group relative flex rounded-lg px-4 item-end justify-end text-right">
                             <div className="flex items-center ">
-                              <p className="font-medium text-sm text-[#111]  text-right">
+                              <p className="font-medium text-sm text-black  text-right">
                                 {bookingDetail.id}
                               </p>
                             </div>
                           </div>
                         </div>
                         <div className="grid grid-cols-12 w-full px-3 py-2">
-                          <div className="w-full col-start-1 col-end-6 flex group relative flex rounded-lg px-4">
-                            <div className="flex items-center justify-center text-center">
-                              <p className="font-medium text-sm text-[#111]">
+                          <div className="w-full col-start-1 col-end-6 flex group relative rounded-lg px-4">
+                            <div className="flex items-start justify-center">
+                              <p className="font-medium text-sm text-black">
                                 Total Transfer
                               </p>
                             </div>
                           </div>
-                          <div className="w-full col-start-7 col-end-13 flex group relative flex rounded-lg px-4 item-end justify-end text-right">
+                          <div className="w-full col-start-7 col-end-13 flex group relative rounded-lg px-4 item-end justify-end text-right">
                             <div className="flex items-center ">
-                              <p className="font-medium text-sm text-[#111]  text-right">
+                              <p className="font-medium text-sm text-black  text-right">
                                 {new Intl.NumberFormat("id-ID", {
                                   style: "currency",
                                   currency: "IDR",
@@ -792,15 +792,15 @@ const Index: React.FC = () => {
                     <div className="flex items-center justify-center text-center">
                       <button
                         onClick={() => setBoardingPassModal(false)}
-                        className="my-4 justify-center rounded-md text-[#111]  hover:bg-grey text-base font-bold leading-6 text-white shadow-sm"
+                        className="my-4 justify-center rounded-md text-black  hover:bg-grey text-base font-bold leading-6 text-white shadow-sm"
                       >
-                        <CloseOutlined className="text-[#111]" />
+                        <CloseOutlined className="text-black" />
                       </button>
                     </div>
                   </div>
                   <div className="w-full col-start-3 col-end-11 flex group relative flex rounded-lg  item-center justify-center text-center">
                     <div className="flex items-center ">
-                      <p className="font-semibold text-xl text-[#111]  text-right">
+                      <p className="font-semibold text-xl text-black  text-right">
                         Boarding Pass
                       </p>
                     </div>
@@ -916,7 +916,7 @@ const Index: React.FC = () => {
                           </p>
                         </div>
                         <div className="flex items-center">
-                          <p className="font-bold text-xs text-[#111] text-right">
+                          <p className="font-bold text-xs text-black text-right">
                             {bookingDetail.schedule.departureDate.format(
                               "D MMMM YYYY"
                             )}
@@ -925,7 +925,7 @@ const Index: React.FC = () => {
                       </div>
                       <div className=" col-start-1 col-end-4 bg-white flex-col justify-center items-center pl-5">
                         <div className="justify-center">
-                          <div className="text-center text-[#111] font-medium font-['Plus Jakarta Sans'] font-bold text-2xl">
+                          <div className="text-center text-black font-medium font-['Plus Jakarta Sans'] font-bold text-2xl">
                             {bookingDetail.schedule.departureDate.format(
                               "HH:mm"
                             )}
@@ -1024,7 +1024,7 @@ const Index: React.FC = () => {
                       </div>
                       <div className=" col-start-9 col-end-13 bg-white flex-col justify-center items-center pr-5">
                         <div className="justify-center">
-                          <div className="text-center text-[#111] font-medium font-['Plus Jakarta Sans'] font-bold text-2xl">
+                          <div className="text-center text-black font-medium font-['Plus Jakarta Sans'] font-bold text-2xl">
                             {bookingDetail.schedule.arrivalDate.format("HH:mm")}
                           </div>
                           <div className="text-center text-[#38A993] font-medium font-['Plus Jakarta Sans'] font-bold text-2xl">
@@ -1120,15 +1120,15 @@ const Index: React.FC = () => {
                     <div className="flex items-center justify-center text-center">
                       <button
                         onClick={() => setInvoiceModal(false)}
-                        className="my-4 justify-center rounded-md text-[#111]  hover:bg-grey text-base font-bold leading-6 text-white shadow-sm"
+                        className="my-4 justify-center rounded-md text-black  hover:bg-grey text-base font-bold leading-6 text-white shadow-sm"
                       >
-                        <CloseOutlined className="text-[#111]" />
+                        <CloseOutlined className="text-black" />
                       </button>
                     </div>
                   </div>
                   <div className="w-full col-start-3 col-end-11 flex group relative flex rounded-lg  item-center justify-center text-center">
                     <div className="flex items-center ">
-                      <p className="font-semibold text-xl text-[#111]  text-right">
+                      <p className="font-semibold text-xl text-black  text-right">
                         Invoice
                       </p>
                     </div>
@@ -1227,7 +1227,7 @@ const Index: React.FC = () => {
                           </p>
                         </div>
                         <div className="flex items-center">
-                          <p className="font-bold text-xs text-[#111] text-right">
+                          <p className="font-bold text-xs text-black text-right">
                             INV/SE/240116K204GE99
                           </p>
                         </div>
