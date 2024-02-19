@@ -93,10 +93,10 @@ const Index: React.FC = () => {
                 </div>
                 <div className="w-full min-h-[562px]">
                   <div className="container mx-auto">
-                    <div className="grid grid-cols-12 gap-4">
+                    <div className="grid w-full gap-4">
                       <div className="flex col-span-12">
                         <div
-                          className="bg-white p-8 rounded card"
+                          className="bg-white p-1 rounded card"
                           style={{
                             width: "100%",
                             height: "800px",
