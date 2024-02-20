@@ -71,7 +71,8 @@ const PersonalInfo: React.FC<PersonalInfoProps> = ({
       }
 
       const api = axios.create({
-        baseURL: "https://be-java-master-production.up.railway.app/api",
+        baseURL:
+          "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html/api",
         headers: {
           Authorization: `Bearer ${token}`,
         },

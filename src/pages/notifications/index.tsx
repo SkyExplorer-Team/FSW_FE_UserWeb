@@ -12,7 +12,8 @@ dayjs.extend(customParseFormat);
 
 const { Content, Footer } = Layout;
 
-const api_base_url = "https://be-java-master-production.up.railway.app";
+const api_base_url =
+  "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html";
 
 interface GroupedNotification {
   group: string;
@@ -157,19 +158,7 @@ const Index: React.FC = () => {
   });
 
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          // Seed Token
-          colorPrimary: "#38A993",
-          borderRadius: 2,
-          colorPrimaryTextHover: "#38A993",
-
-          // Alias Token
-          colorBgContainer: "#f6ffed",
-        },
-      }}
-    >
+    <ConfigProvider>
       <Layout>
         <HeaderComponent />
         <Content>

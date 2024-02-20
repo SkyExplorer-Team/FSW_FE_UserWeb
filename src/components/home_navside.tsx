@@ -1,4 +1,5 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const HomeNavSide: React.FC = () => {
   return (
@@ -106,12 +107,12 @@ const HomeNavSide: React.FC = () => {
                   </svg>
                 </div>
                 <div className="items-center">
-                  <a
-                    href="#"
+                  <Link
+                    to="/profile"
                     className="font-medium text-base text-[#677084] group-hover:text-[#227879]"
                   >
                     Profile
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center">
@@ -147,12 +148,12 @@ const HomeNavSide: React.FC = () => {
                   </svg>
                 </div>
                 <div className="items-center">
-                  <a
-                    href="#"
+                  <Link
+                    to="/notifications"
                     className="font-medium text-base text-[#677084] group-hover:text-[#227879]"
                   >
                     Notifications
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center">
@@ -188,12 +189,12 @@ const HomeNavSide: React.FC = () => {
                   </svg>
                 </div>
                 <div className="items-center">
-                  <a
-                    href="#"
+                  <Link
+                    to="/saved-travelers"
                     className="font-medium text-base text-[#677084] group-hover:text-[#227879]"
                   >
                     Saved Travelers
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center items-center">
@@ -222,12 +223,12 @@ const HomeNavSide: React.FC = () => {
                   </svg>
                 </div>
                 <div className="items-center">
-                  <a
-                    href="#"
+                  <Link
+                    to="/account-settings"
                     className="font-medium text-base text-[#677084]  group-hover:text-[#227879]"
                   >
                     Account Settings
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center items-center">

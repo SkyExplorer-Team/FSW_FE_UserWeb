@@ -50,7 +50,8 @@ interface Schedule {
   arrivalDate: dayjs.Dayjs;
   duration: number;
 }
-const api_base_url = "https://be-java-master-production.up.railway.app";
+const api_base_url =
+  "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html";
 
 const StatusResult: React.FC = () => {
   const token = localStorage.getItem("access_token");

@@ -16,7 +16,8 @@ dayjs.extend(customParseFormat);
 
 const { Header, Content, Footer } = Layout;
 
-const api_base_url = "https://be-java-master-production.up.railway.app";
+const api_base_url =
+  "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html";
 
 const menu = (
   <Menu>

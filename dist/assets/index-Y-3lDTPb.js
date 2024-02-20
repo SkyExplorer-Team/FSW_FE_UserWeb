@@ -69053,7 +69053,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       });
   fr.extend(xv);
   const { Header: Efe, Content: _fe, Footer: Rfe } = Pv,
-    Ofe = "https://be-java-master-production.up.railway.app",
+    Ofe =
+      "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html",
     Pfe = () => {
       const e = localStorage.getItem("access_token");
       let t = [],
@@ -69776,7 +69777,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
           try {
             const D = { email: v.value, password: l },
               L = await fetch(
-                "https://be-java-master-production.up.railway.app/api/auth/login",
+                "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html/api/auth/login",
                 {
                   method: "post",
                   mode: "cors",
@@ -70699,7 +70700,8 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       });
   fr.extend(xv);
   const { Header: qfe, Content: Yfe, Footer: Gfe } = Pv,
-    sP = "https://be-java-master-production.up.railway.app",
+    sP =
+      "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html",
     Kfe = () => {
       const e = localStorage.getItem("access_token"),
         t = Bc();
