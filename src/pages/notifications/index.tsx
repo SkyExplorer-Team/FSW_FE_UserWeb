@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { ConfigProvider, Layout, Pagination, MenuProps } from "antd/lib";
-import { RightOutlined } from "@ant-design/icons";
+import { ConfigProvider, Layout, Pagination } from "antd/lib";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { useNavigate } from "react-router-dom";
 import HomeFooter from "../../components/home_footer";
 import HomeNavSide from "../../components/home_navside";
 import HeaderComponent from "../../components/Header";
@@ -11,9 +9,6 @@ import HeaderComponent from "../../components/Header";
 dayjs.extend(customParseFormat);
 
 const { Content, Footer } = Layout;
-
-const api_base_url =
-  "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html";
 
 interface GroupedNotification {
   group: string;
@@ -70,8 +65,6 @@ interface Notification {
 }
 
 const Index: React.FC = () => {
-  const token = localStorage.getItem("access_token");
-
   const notifications: Notification[] = [
     {
       notificationTime: dayjs("2024-02-14T09:00:00"),
@@ -135,8 +128,6 @@ const Index: React.FC = () => {
   useEffect(() => {
     // fetchInitialAirport()
   });
-
-  const navigate = useNavigate();
 
   const [currentPageActive, setCurrentPageActive] = useState(1);
   const pageSize = 4;

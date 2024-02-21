@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../../styles/StylesProfile.css";
 import PersonalInfo from "./PersonalInfo";
 import TravelDocument from "./TravelDocument";
 import { ConfigProvider, Layout, Menu, MenuProps } from "antd/lib";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { useNavigate } from "react-router-dom";
 import HomeFooter from "../../components/home_footer";
 import HomeNavSide from "../../components/home_navside";
 import HeaderComponent from "../../components/Header";
@@ -25,14 +24,7 @@ dayjs.extend(customParseFormat);
 
 const { Content, Footer } = Layout;
 
-const api_base_url =
-  "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html";
-
 const Index: React.FC = () => {
-  const navigate = useNavigate();
-
-  const token = localStorage.getItem("access_token");
-
   const [activeNavigation, setActiveNavigation] = useState("personalInfo");
   const [current, setCurrent] = useState("personalInfo"); // Updated default value
   const [formValues, setFormValues] = useState({

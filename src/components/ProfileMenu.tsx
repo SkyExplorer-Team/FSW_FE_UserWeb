@@ -12,9 +12,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const ProfileMenu: React.FC = () => {
   const navigate = useNavigate();
-  const handleTrips = () => {
-    navigate("/trips");
-  };
+
 
   const handleProfile = () => {
     navigate("/profile");
