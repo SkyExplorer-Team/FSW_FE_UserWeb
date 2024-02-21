@@ -35,8 +35,7 @@ dayjs.extend(customParseFormat);
 
 const { Header, Content, Footer } = Layout;
 
-const api_base_url =
-  "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html";
+const api_base_url = "https://be-java-master-production.up.railway.app/api";
 
 interface Airport {
   id: string;
@@ -58,7 +57,7 @@ const StatusPage: React.FC = () => {
   async function fetchInitialAirport() {
     const payload = {};
 
-    const response = await fetch(api_base_url + "/api/airport", {
+    const response = await fetch(api_base_url + "/airport", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

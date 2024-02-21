@@ -34,8 +34,7 @@ dayjs.extend(customParseFormat);
 
 const { Header, Content, Footer } = Layout;
 
-const api_base_url =
-  "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html";
+const api_base_url = "https://be-java-master-production.up.railway.app";
 
 interface Airport {
   id: string | undefined;

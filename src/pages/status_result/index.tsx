@@ -50,8 +50,7 @@ interface Schedule {
   arrivalDate: dayjs.Dayjs;
   duration: number;
 }
-const api_base_url =
-  "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html";
+const api_base_url = "https://be-java-master-production.up.railway.app/api";
 
 const StatusResult: React.FC = () => {
   const token = localStorage.getItem("access_token");
@@ -94,7 +93,7 @@ const StatusResult: React.FC = () => {
       to: toAirport.nationalId,
       departure: departureDate.format("YYYY-MM-DD HH:mm:ss.sss"),
     };
-    const response = await fetch(api_base_url + "/api/airport", {
+    const response = await fetch(api_base_url + "/airport", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),

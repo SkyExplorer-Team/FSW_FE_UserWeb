@@ -8,7 +8,8 @@ import PrivacyPolicyModal from "../../components/PrivacyPolicyModal";
 
 import GoogleSvg from "../../assets/google.svg";
 const { Text } = Typography;
-// const api_base_url = "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html"
+// const api_base_url =
+// "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html";
 
 const SignIn: React.FC = () => {
   const navigate = useNavigate();
@@ -103,7 +104,7 @@ const SignIn: React.FC = () => {
         password: password,
       };
       const response = await fetch(
-        "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html/api/auth/login",
+        "https://be-java-master-production.up.railway.app/api/auth/login",
         {
           method: "post",
           mode: "cors",

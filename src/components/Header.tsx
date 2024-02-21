@@ -15,8 +15,8 @@ dayjs.extend(customParseFormat);
 
 const { Header } = Layout;
 
-const api_base_url =
-  "https://be-java-master-production.up.railway.app/api/swagger-ui/index.html";
+const api_base_url = "https://be-java-master-production.up.railway.app/api";
+// const api_base_url = "https://be-java-production.up.railway.app";
 
 const HeaderComponent: React.FC = () => {
   const token = localStorage.getItem("access_token");
@@ -56,7 +56,7 @@ const HeaderComponent: React.FC = () => {
       myHeaders.append("Authorization", "Bearer " + token!);
       myHeaders.append("Content-Type", "application/json");
 
-      const response = await fetch(api_base_url + "/api/users/me", {
+      const response = await fetch(api_base_url + "/users/me", {
         method: "get",
         headers: myHeaders,
       });
@@ -169,7 +169,7 @@ const HeaderComponent: React.FC = () => {
               {userName}
               <img src={IconMenu} alt="Icon Menu" className="h-4 w-4" />
               <Dropdown
-                visible={isProfileMenuVisible}
+                open={isProfileMenuVisible}
                 overlay={menu}
                 placement="bottomRight"
                 trigger={[]}
