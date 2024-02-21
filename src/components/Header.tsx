@@ -82,12 +82,55 @@ const HeaderComponent: React.FC = () => {
     navigate("/status");
   };
 
-  const items: MenuProps["items"] = [
+  const CabinItems: MenuProps["items"] = [
     {
-      key: "1",
+      key: "cabin-1",
       label: (
         <a target="_blank" rel="noopener noreferrer" href="/">
-          Items
+          Economy
+        </a>
+      ),
+    },
+    {
+      key: "cabin-2",
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="/">
+          Bussiness
+        </a>
+      ),
+    },
+    {
+      key: "cabin-3",
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="/">
+          First
+        </a>
+      ),
+    },
+  ];
+
+  const BaggageItems: MenuProps["items"] = [
+    {
+      key: "baggage-1",
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="/">
+          Checked Baggage
+        </a>
+      ),
+    },
+    {
+      key: "baggage-2",
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="/">
+          Cabin Baggage
+        </a>
+      ),
+    },
+    {
+      key: "baggage-3",
+      label: (
+        <a target="_blank" rel="noopener noreferrer" href="/">
+          Fare Types
         </a>
       ),
     },
@@ -96,6 +139,20 @@ const HeaderComponent: React.FC = () => {
   const handleSignUp = () => {
     navigate("/signup");
   };
+
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  const handleWindowResize = () => {
+    setIsMobile(window.innerWidth <= 768);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleWindowResize);
+    handleWindowResize(); // Mengecek ukuran jendela saat pertama kali dimuat
+    return () => {
+      window.removeEventListener("resize", handleWindowResize);
+    };
+  }, []);
 
   return (
     <Header
@@ -125,7 +182,7 @@ const HeaderComponent: React.FC = () => {
             </div>
             <Dropdown
               className="flex hover:text-primary text-neutral-900 text-lg font-medium font-['Plus Jakarta Sans'] leading-7"
-              menu={{ items }}
+              menu={{ items: CabinItems }}
             >
               <button
                 onClick={(e) => e.preventDefault()}
@@ -137,7 +194,7 @@ const HeaderComponent: React.FC = () => {
             </Dropdown>
             <Dropdown
               className="flex hover:text-primary text-neutral-900 text-lg font-medium font-['Plus Jakarta Sans'] leading-7 "
-              menu={{ items }}
+              menu={{ items: BaggageItems }}
             >
               <button
                 onClick={(e) => e.preventDefault()}
