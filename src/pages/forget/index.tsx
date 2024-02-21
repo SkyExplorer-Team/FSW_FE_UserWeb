@@ -35,7 +35,7 @@ const validateEmail = (
   };
 };
 
-const api_base_url = "https://be-java-master-production.up.railway.app";
+const api_base_url = "https://be-java-master-production.up.railway.app/api";
 
 const Index: React.FC = () => {
   const [step, setStep] = useState<number>(1);
