@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const HomeNavSide: React.FC = () => {
   return (
@@ -11,7 +11,7 @@ const HomeNavSide: React.FC = () => {
             alt="Gambar Profil Dummy"
             className="my-4"
           />
-          <div className="font-semibold text-lg font-normal font-['Plus Jakarta Sans'] text-xl leading-7 text-[#227879]">
+          <div className="font-semibold text-lg  font-['Plus Jakarta Sans'] text-xl leading-7 text-[#227879]">
             Lewis Carl Davidson
           </div>
           <div className="text-neutral-500 text-md font-normal font-['Plus Jakarta Sans']  text-[#485466]">
@@ -197,7 +197,7 @@ const HomeNavSide: React.FC = () => {
                   </Link>
                 </div>
               </div>
-              <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center items-center">
+              <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center">
                 <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg group-hover:bg-[#EAFDF6]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -231,7 +231,7 @@ const HomeNavSide: React.FC = () => {
                   </Link>
                 </div>
               </div>
-              <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center items-center">
+              <div className="group relative flex gap-3 rounded-lg p-3 hover:bg-[#EAFDF6] items-center">
                 <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg group-hover:bg-[#EAFDF6]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

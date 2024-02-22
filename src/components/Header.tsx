@@ -140,7 +140,7 @@ const HeaderComponent: React.FC = () => {
     navigate("/signup");
   };
 
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [, setIsMobile] = useState<boolean>(false);
 
   const handleWindowResize = () => {
     setIsMobile(window.innerWidth <= 768);
