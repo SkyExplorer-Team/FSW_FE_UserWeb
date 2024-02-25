@@ -169,7 +169,6 @@ const Index: React.FC = () => {
 
   useEffect(() => {
     if (toAirportDetails.length <= 0) {
-      console.log(airports);
       if (accessToken === null) {
         navigate("/login");
       }
@@ -182,30 +181,30 @@ const Index: React.FC = () => {
   const cabinClass = [
     {
       name: "ECONOMY",
-      id: "78324468-f3a8-45a2-b0bb-393979ad98ef",
+      id: "b63c5634-e450-475b-9486-92be63c11d20",
     },
     {
       name: "BUSINESS",
-      id: "c7697502-59af-42c1-ae07-cb4839207c2a",
+      id: "35db795c-ec06-454b-a760-7d21e3862062",
     },
     {
       name: "FIRST",
-      id: "16ca89c7-242d-4f5f-aabc-43504c4d4bfb",
+      id: "5597d2a4-6933-454f-a942-47b3c8a8f7bf",
     },
   ];
 
   const ticketType = [
     {
       name: "SAVER",
-      id: "228aaef8-8dd1-45fa-8b0d-7b8e03abc765",
+      id: "cd8bd0ff-3b92-4229-af3e-e9d75768bc1a",
     },
     {
       name: "FLEXI",
-      id: "1bed4209-2022-4f46-ab59-516a1ae6af15",
+      id: "159e1a36-b96d-40b4-bf95-f2e9cfa84fbc",
     },
     {
       name: "PLUS",
-      id: "abe66727-0be4-405b-8b9b-f4798f5ab1a1",
+      id: "f9855c5a-c46f-402b-a1c8-7642302cab5a",
     },
   ];
 
@@ -266,7 +265,7 @@ const Index: React.FC = () => {
     console.log("Searching...", dayjs.isDayjs(departureDate));
     //case found:
     const url = new URL(api_base_url + "/schedule-detail/getSchedules");
-    url.searchParams.append("cabinClassId", cabinClass[0].id);
+    url.searchParams.append("cabinClassId", cabinClass[cabin].id);
     url.searchParams.append("ticketTypeId", ticketType[0].id);
     url.searchParams.append("date", departureDate?.format("YYYY-MM-DD") ?? "");
     url.searchParams.append("fromAirportId", fromAirport?.id ?? "");
@@ -289,29 +288,31 @@ const Index: React.FC = () => {
     // implement get schedules ==============
 
     const res = responseJson["data"] as ScheduleResult[];
+    console.log(departureDate?.format("YYYY-MM-DD"))
+
     const target = res.map<Schedule>((val) => {
       const dep = dayjs(
         val.timeDeparture[0] +
-          "-" +
-          val.timeDeparture[1] +
-          "-" +
-          val.timeDeparture[2] +
-          " " +
-          val.timeDeparture[3] +
-          ":" +
-          val.timeDeparture[4],
+        "-" +
+        val.timeDeparture[1] +
+        "-" +
+        val.timeDeparture[2] +
+        " " +
+        val.timeDeparture[3] +
+        ":" +
+        val.timeDeparture[4],
         "YYYY-M-D H:m"
       );
       const ar = dayjs(
         val.timeArrive[0] +
-          "-" +
-          val.timeArrive[1] +
-          "-" +
-          val.timeArrive[2] +
-          " " +
-          val.timeArrive[3] +
-          ":" +
-          val.timeArrive[4],
+        "-" +
+        val.timeArrive[1] +
+        "-" +
+        val.timeArrive[2] +
+        " " +
+        val.timeArrive[3] +
+        ":" +
+        val.timeArrive[4],
         "YYYY-M-D H:m"
       );
       return {
@@ -326,7 +327,6 @@ const Index: React.FC = () => {
         price: val.price,
       };
     });
-
     await setSchedules(target);
     await setPage(1);
 
@@ -865,7 +865,7 @@ const Index: React.FC = () => {
                                 <div className="grow shrink basis-0 self-stretch pt-3 flex-col justify-between items-center inline-flex">
                                   <div className="text-center text-slate-800 text-[15.03px] font-medium font-['Plus Jakarta Sans'] ">
                                     {" "}
-                                    {hours}h {minutes}m{}
+                                    {hours}h {minutes}m{ }
                                   </div>
                                   <div className="w-[225px] pt-3 justify-center items-center gap-1 inline-flex">
                                     <div className="w-[16.39px] h-[15.58px] relative">

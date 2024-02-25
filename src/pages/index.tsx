@@ -116,7 +116,6 @@ const Index: React.FC = () => {
       console.log(airports);
       fetchInitialAirport();
       fetchName();
-      fetchInitialAirport();
     }
   });
   const [seat, setSeat] = useState(
@@ -273,9 +272,8 @@ const Index: React.FC = () => {
                         )}
                       >
                         <a
-                          className={`hover:text-primary ${
-                            isClicked ? "clicked" : ""
-                          }`}
+                          className={`hover:text-primary ${isClicked ? "clicked" : ""
+                            }`}
                           onClick={handleButtonClick}
                         >
                           <Space>
@@ -304,9 +302,8 @@ const Index: React.FC = () => {
                         )}
                       >
                         <a
-                          className={`hover:text-primary ${
-                            isClicked ? "clicked" : ""
-                          }`}
+                          className={`hover:text-primary ${isClicked ? "clicked" : ""
+                            }`}
                           onClick={handleButtonClick}
                         >
                           <Space>
